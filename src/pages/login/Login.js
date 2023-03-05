@@ -11,6 +11,7 @@ import { useHistory, withRouter } from "react-router-dom";
 import useStyles from "./styles";
 import logo from "./logo.svg";
 import { login } from "../../apis";
+import {storage} from "../../utils";
 
 function Login(props) {
   var classes = useStyles();
@@ -27,9 +28,9 @@ function Login(props) {
     const res = await login(loginValue, passwordValue);
     if (res.status === 200) {
       const data = await res.json();
-      console.log('===data', data)
-      localStorage.setItem("auth", JSON.stringify(data));
-      history.push("/app/dashboard");
+      //localStorage.setItem("auth", JSON.stringify(data));
+      storage.save('auth', data)
+      history.push("/dashboard");
     } else {
       setError(true);
     }

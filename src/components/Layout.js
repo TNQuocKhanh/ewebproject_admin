@@ -6,13 +6,10 @@ import {
 } from "react-router-dom";
 import classnames from "classnames";
 import { makeStyles } from "@material-ui/styles";
-
 import Header from './Header'
 import Sidebar from "./Sidebar";
-
 import Dashboard from "../pages/dashboard/Dashboard";
-import UserList from "../pages/users/UserList";
-
+import { UserList, UserEdit, UserCreate, UserDetail } from "../pages/users";
 import { useLayoutState } from "../context/LayoutContext";
 
 const useStyles =  makeStyles(theme => ({
@@ -46,7 +43,7 @@ function Layout(props) {
   return (
     <div className={classes.root}>
         <>
-          <Header history={props.history} />
+          <Header  />
           <Sidebar />
           <div
             className={classnames(classes.content, {
@@ -55,8 +52,11 @@ function Layout(props) {
           >
             <div className={classes.fakeToolbar} />
             <Switch>
-              <Route path="/app/dashboard" component={Dashboard} />
-              <Route path="/app/user" component={UserList} />
+              <Route path="/dashboard" component={Dashboard} />
+              <Route path="/users" exact component={UserList} />
+              <Route path="/user/create" exact component={UserCreate} />
+              <Route path="/user/:id/edit" exact component={UserEdit} />
+              <Route path="/user/:id/detail" exact component={UserDetail} />
             </Switch>
           </div>
         </>

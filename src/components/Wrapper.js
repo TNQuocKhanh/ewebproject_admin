@@ -32,7 +32,8 @@ function Badge({ children, colorBrightness, color, ...props }) {
           classes={{
             badge: classnames(classes.badge, styledProps.classes.badge),
           }}
-          {...props}
+        {...props}
+        overlap="rectangular"
         >
           {children}
         </BadgeBase>

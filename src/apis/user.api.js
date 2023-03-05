@@ -1,10 +1,14 @@
+import {storage} from '../utils'
+
+const API_URL = process.env.REACT_APP_API_URL
+
 export const login = async (email, password) => {
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
 
   const data = JSON.stringify({ email, password });
 
-  const res = await fetch("http://localhost:8080/api/login", {
+  const res = await fetch(`${API_URL}/login`, {
     method: "POST",
     headers,
     body: data,
@@ -12,100 +16,95 @@ export const login = async (email, password) => {
   return res;
 };
 
-export const logout = async (id) => {
-  const res = await fetch(`http://localhost:8080/api/logout/${id}`, {
-    method: "POST",
+export const logout = async () => {
+  const auth = storage.load('auth')
+  const token = auth.accessToken
+
+  const headers = new Headers();
+  headers.append("Authorization", `Bearer ${token}`);
+
+  const res = await fetch(`${API_URL}/logout`, {
+    method: "GET",
   });
   return res.json();
 };
 
 export const getListUsers = async () => {
-  const token = JSON.parse(localStorage.getItem("auth")).accessToken;
+  const auth = storage.load('auth')
+  const token = auth.accessToken
 
   const headers = new Headers();
   headers.append("Authorization", `Bearer ${token}`);
-  const res = await fetch("http://localhost:8080/api/users", {
+
+  const res = await fetch(`${API_URL}/users`, {
     method: "GET",
     headers,
   });
 
   return res.json();
-  };
+};
 
+export const createUser = async (data) => {
+  const auth = storage.load('auth')
+  const token = auth.accessToken
 
-//import React from "react";
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
+  headers.append("Authorization", `Bearer ${token}`);
 
-//var UserStateContext = React.createContext();
-//var UserDispatchContext = React.createContext();
+  const res = await fetch(`${API_URL}/user/create`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(data)
+  });
 
-//function userReducer(state, action) {
-  //switch (action.type) {
-    //case "LOGIN_SUCCESS":
-      //return { ...state, isAuthenticated: true };
-    //case "SIGN_OUT_SUCCESS":
-      //return { ...state, isAuthenticated: false };
-    //default: {
-      //throw new Error(`Unhandled action type: ${action.type}`);
-    //}
-  //}
-//}
+  return res.json();
+};
 
-//function UserProvider({ children }) {
-  //var [state, dispatch] = React.useReducer(userReducer, {
-    //isAuthenticated: !!localStorage.getItem("id_token"),
-  //});
+export const getUserById = async (id) => {
+  const auth = storage.load('auth')
+  const token = auth.accessToken
 
-  //return (
-    //<UserStateContext.Provider value={state}>
-      //<UserDispatchContext.Provider value={dispatch}>
-        //{children}
-      //</UserDispatchContext.Provider>
-    //</UserStateContext.Provider>
-  //);
-//}
+  const headers = new Headers();
+  headers.append("Authorization", `Bearer ${token}`);
 
-//function useUserState() {
-  //var context = React.useContext(UserStateContext);
-  //if (context === undefined) {
-    //throw new Error("useUserState must be used within a UserProvider");
-  //}
-  //return context;
-//}
+  const res = await fetch(`${API_URL}/user/${id}`, {
+    method: "GET",
+    headers,
+  });
 
-//function useUserDispatch() {
-  //var context = React.useContext(UserDispatchContext);
-  //if (context === undefined) {
-    //throw new Error("useUserDispatch must be used within a UserProvider");
-  //}
-  //return context;
-//}
+  return res.json();
+};
 
-//export { UserProvider, useUserState, useUserDispatch, loginUser, signOut };
+export const updateUser = async (id, data) => {
+  const auth = storage.load('auth')
+  const token = auth.accessToken
 
-//// ###########################################################
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
+  headers.append("Authorization", `Bearer ${token}`);
 
-//function loginUser(dispatch, login, password, history, setIsLoading, setError) {
-  //setError(false);
-  //setIsLoading(true);
+  const res = await fetch(`${API_URL}/user/${id}`, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(data)
+  });
 
-  //if (!!login && !!password) {
-    //setTimeout(() => {
-      //localStorage.setItem('id_token', 1)
-      //setError(null)
-      //setIsLoading(false)
-      //dispatch({ type: 'LOGIN_SUCCESS' })
+  return res.json();
+}
 
-      //history.push('/app/dashboard')
-    //}, 2000);
-  //} else {
-    //dispatch({ type: "LOGIN_FAILURE" });
-    //setError(true);
-    //setIsLoading(false);
-  //}
-//}
+export const downloadUserList = async () => {
+  const auth = storage.load('auth')
+  const token = auth.accessToken
 
-//function signOut(dispatch, history) {
-  //localStorage.removeItem("id_token");
-  //dispatch({ type: "SIGN_OUT_SUCCESS" });
-  //history.push("/login");
-//}
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
+  headers.append("Authorization", `Bearer ${token}`);
+
+  const res = await fetch(`${API_URL}/users/export/excel`, {
+    method: "GET",
+    headers,
+  });
+
+  return res.json();
+}

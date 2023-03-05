@@ -137,7 +137,7 @@ const notifications = [
   },
 ];
 
-export default function Header(props) {
+export default function Header() {
   var classes = useStyles();
 
   var layoutState = useLayoutState();
@@ -149,16 +149,8 @@ export default function Header(props) {
 
   const history = useHistory();
 
-  let userId;
-
-  if (!localStorage.getItem("auth")) {
-    history.push("/login");
-  } else {
-    userId = localStorage.getItem("auth").id;
-  }
-
   const handleLogout = async () => {
-    const res = await logout(userId);
+    const res = await logout();
     if (res) {
       localStorage.removeItem("auth");
       history.push("/login");

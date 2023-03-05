@@ -20,8 +20,8 @@ import {
 } from "../context/LayoutContext";
 
 const structure = [
-  { id: 0, label: "Dashboard", link: "/app/dashboard", icon: <HomeIcon /> },
-  { id: 1, label: "User", link: "/app/user", icon: <GroupIcon /> },
+  { id: 0, label: "Dashboard", link: "/dashboard", icon: <HomeIcon /> },
+  { id: 1, label: "User", link: "/users", icon: <GroupIcon /> },
   { id: 3, type: "divider" },
   { id: 4, type: "title", label: "Config" },
   { id: 5, label: "Config", link: "https://flatlogic.com/forum", icon: <SettingsIcon /> },
