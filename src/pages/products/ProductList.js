@@ -9,7 +9,7 @@ import { getListProducts } from "../../apis";
 
 const columns = [
   { id: "name", label: "Tên sản phẩm", minWidth: 170 },
-  { id: "category.name", label: "Danh mục", minWidth: 100 },
+  { id: "category", label: "Danh mục", minWidth: 100 },
   { id: "cost", label: "Giá nhập", minWidth: 100 },
   { id: "price", label: "Giá bán", minWidth: 100 },
   { id: "discountPercent", label: "Discount", minWidth: 100 },
@@ -22,7 +22,11 @@ export const ProductList = () => {
   const getAllProducts = async () => {
     const res = await getListProducts();
 
-    setData(res);
+    const transform = res.map(item => ({
+      ...item, category: item.category?.name})
+    )
+
+    setData(transform);
   };
 
   const isLogin = storage.load("auth");

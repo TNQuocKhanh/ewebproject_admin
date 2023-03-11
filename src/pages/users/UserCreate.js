@@ -85,11 +85,7 @@ export const UserCreate = () => {
                   native
                   value={roles}
                   onChange={(e) => setRoles(e.target.value)}
-                  label="Age"
-                  inputProps={{
-                    name: "age",
-                    id: "outlined-age-native-simple",
-                  }}
+                  label="Roles"
                 >
                   <option aria-label="None" value="" />
                   <option value="ROLE_ADMIN">ADMIN</option>

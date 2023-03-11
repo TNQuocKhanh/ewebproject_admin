@@ -25,6 +25,7 @@ export const logout = async () => {
 
   const res = await fetch(`${API_URL}/logout`, {
     method: "GET",
+    headers
   });
   return res.json();
 };

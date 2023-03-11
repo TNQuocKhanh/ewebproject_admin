@@ -189,7 +189,7 @@ export default function Header() {
           )}
         </IconButton>
         <Typography variant="h6" weight="medium" className={classes.logotype}>
-          Admin Panel
+          HDKShop Admin
         </Typography>
         <div className={classes.grow} />
         <IconButton

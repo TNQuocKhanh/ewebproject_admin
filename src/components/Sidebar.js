@@ -11,6 +11,11 @@ import { useTheme } from "@material-ui/styles";
 import { withRouter } from "react-router-dom";
 import classNames from "classnames";
 import SidebarLink from './SidebarLink'
+import PersonIcon from '@material-ui/icons/Person';
+import CategoryIcon from '@material-ui/icons/Category';
+import BookIcon from '@material-ui/icons/Book';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
 
 import {makeStyles} from "@material-ui/styles";
 import {
@@ -22,10 +27,14 @@ import {
 const structure = [
   { id: 0, label: "Dashboard", link: "/dashboard", icon: <HomeIcon /> },
   { id: 1, label: "User", link: "/users", icon: <GroupIcon /> },
-  { id: 2, label: "Product", link: "/products", icon: <GroupIcon /> },
-  { id: 3, type: "divider" },
-  { id: 4, type: "title", label: "Config" },
-  { id: 5, label: "Config", link: "https://flatlogic.com/forum", icon: <SettingsIcon /> },
+  { id: 2, label: "Category", link: "/categories", icon: <CategoryIcon /> },
+  { id: 3, label: "Product", link: "/products", icon: <BookIcon /> },
+  { id: 4, label: "Customer", link: "/customers", icon: <PersonIcon /> },
+  { id: 5, label: "Order", link: "/orders", icon: <AddShoppingCartIcon /> },
+  { id: 6, label: "Statistic", link: "/statistics", icon: <EqualizerIcon /> },
+  { id: 6, type: "divider" },
+  { id: 7, type: "title", label: "Config" },
+  { id: 8, label: "Config", link: "https://www.google.com", icon: <SettingsIcon /> },
 ];
 
 const drawerWidth = 240;

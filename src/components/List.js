@@ -101,8 +101,9 @@ export default function List({ data, title, columns, filter, resource }) {
         bodyClass={classes.tableOverflow}
       >
         {filter && cloneElement(filter)}
-        <hr />
-        <Typography>Tổng số bản ghi: {data.length} </Typography>
+      <hr />
+      {data.length > 0 &&
+        <Typography>Tổng số bản ghi: {data.length} </Typography>}
         {data.length > 0 ? (
           <TableContainer className={classes.container}>
             <Table stickyHeader aria-label="sticky table">
@@ -122,7 +123,7 @@ export default function List({ data, title, columns, filter, resource }) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.length > 0 ? (
+                {
                   data
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, idx) => {
@@ -161,15 +162,14 @@ export default function List({ data, title, columns, filter, resource }) {
                         </TableRow>
                       );
                     })
-                ) : (
-                  <>Khong co ban ghi nao</>
-                )}
+                 }
               </TableBody>
             </Table>
           </TableContainer>
         ) : (
-          <>No record</>
+          <>Không có bản ghi nào</>
         )}
+      {data.length > 0 &&
         <TablePagination
           labelRowsPerPage="Hiển thị"
           rowsPerPageOptions={[5, 10, 15]}
@@ -179,7 +179,8 @@ export default function List({ data, title, columns, filter, resource }) {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+      />
+      }
       </Widget>
     </>
   );
