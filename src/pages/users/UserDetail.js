@@ -1,22 +1,37 @@
 import { getUserById } from "../../apis";
 import { useState, useEffect } from "react";
-import {useParams} from "react-router";
-import { Select, TextField, InputLabel, FormControl } from "@material-ui/core";
+import { useParams } from "react-router";
+import {
+  Select,
+  TextField,
+  InputLabel,
+  FormControl,
+  Typography,
+  Card,
+  Grid,
+} from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { ButtonCustom } from "../../components/Button";
+import _ from "lodash";
+
+const headers = [
+  { id: "fullName", label: "Fullname" },
+  { id: "email", label: "Email" },
+  { id: "roles", label: "Roles" },
+];
 
 export const UserDetail = () => {
-  const [fullName, setFullName] = useState();
-  const [email, setEmail] = useState();
-  const [roles, setRoles] = useState();
+  const params = useParams();
+  const id = params.id;
 
-  const params = useParams()
-  const id = params.id
+  const [data, setData] = useState();
 
   const getUserDetail = async () => {
     const res = await getUserById(Number(id));
-    setFullName(res.fullName);
-    setEmail(res.email);
-    setRoles(res.roles[0].name);
+    console.log("==res", res);
+    if (res) {
+      setData(res);
+    }
   };
 
   useEffect(() => {
@@ -24,46 +39,28 @@ export const UserDetail = () => {
   }, []);
 
   return (
-    <form>
-      <TextField
-        style={{ width: "200px", margin: "5px" }}
-        type="text"
-        label="Full Name"
-        variant="outlined"
-        value={fullName}
-        onChange={(e) => setFullName(e.target.value)}
-      />
-      <TextField
-        style={{ width: "200px", margin: "5px" }}
-        type="text"
-        label="Email"
-        variant="outlined"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <FormControl variant="outlined">
-        <InputLabel htmlFor="outlined-age-native-simple">Roles</InputLabel>
-        <Select
-          style={{ width: "200px", margin: "5px" }}
-          native
-          value={roles}
-          onChange={(e) => setRoles(e.target.value)}
-          label="Age"
-          inputProps={{
-            name: "age",
-            id: "outlined-age-native-simple",
-          }}
-        >
-          <option aria-label="None" value="" />
-          <option value="ROLE_ADMIN">ADMIN</option>
-          <option value="ROLE_SALESPERSON">sale person</option>
-          <option value="ROLE_EDITOR">editor</option>
-          <option value="ROLE_ASSISTANT">assistant</option>
-        </Select>
-      </FormControl>
-      <Link to={"/users"}>
-        <button>Back</button>
-      </Link>
-    </form>
+    <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          margin: 10,
+        }}
+      >
+        <Typography>Chi tiết</Typography>
+        <Link to={"/users"} style={{ textDecoration: "none" }}>
+          <ButtonCustom variant="contained" title="Quay lại" />
+        </Link>
+      </div>
+      <Card style={{ padding: 10 }}>
+        <Grid container spacing={2}>
+          {headers.map((item) => {
+            const val = item?.id;
+            return <Grid item md={6}>{`${item.label}: ${_.get(data, val, "")}`}</Grid>;
+          })}
+        </Grid>
+      </Card>
+    </div>
   );
 };

@@ -9,6 +9,7 @@
     "classnames": "^2.2.6",
     "final-form": "^4.20.9",
     "font-awesome": "^4.7.0",
+    "lodash": "^4.17.21",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-final-form": "^6.5.9",
@@ -16,7 +17,6 @@
     "react-scripts": "4.0.1",
     "react-toastify": "^7.0.3",
     "tinycolor2": "^1.4.2"
-
   },
   "scripts": {
     "start": "react-scripts start",

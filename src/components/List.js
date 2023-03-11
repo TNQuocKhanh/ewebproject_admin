@@ -14,13 +14,13 @@ import {
 import Widget from "./Widget";
 import { makeStyles } from "@material-ui/styles";
 import { ButtonCustom } from "./Button";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { HeaderAction } from "./HeaderAction";
 import EditIcon from "@material-ui/icons/Edit";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import AddIcon from "@material-ui/icons/Add";
 import GetAppIcon from "@material-ui/icons/GetApp";
-//import { downloadUserList } from "../apis/user.api";
+import { downloadUserList } from "../apis/user.api";
 
 const useStyles = makeStyles((theme) => ({
   tableOverflow: {
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function List({ data, title, columns, filter }) {
+export default function List({ data, title, columns, filter, resource }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -49,11 +49,22 @@ export default function List({ data, title, columns, filter }) {
     setPage(0);
   };
 
-  //const handleDownload =async () => {
-  //const res = await downloadUserList()
+  const handleDownload = async () => {
+    const res = await downloadUserList();
 
-  //console.log('===res', res)
-  //}
+    console.log("===res", res);
+  };
+
+  const getStatus = (value) => {
+     if(value === 'STATUS_ACTIVE'){
+       return {text: 'Hoạt động', color: '#eaf6f9'}
+     }
+    else if(value === 'STATUS_LOGOUT'){
+       return {text: 'Đã đăng xuất', color: '#a2dea7'}
+    }else{
+       return {text: 'Không xác định', color: '#d7d8da'}
+    }
+  }
 
   return (
     <>
@@ -61,15 +72,21 @@ export default function List({ data, title, columns, filter }) {
         title={title}
         actions={
           <div className={classes.actions}>
-            <Link to="/user/create" style={{ textDecoration: "none" }}>
+            <Link to={`/${resource}/create`} style={{ textDecoration: "none" }}>
               <ButtonCustom
+                style={{ backgroundColor: "#556afe", color: "#fff" }}
                 icon={<AddIcon />}
                 title="Tạo mới"
                 variant="contained"
               />
             </Link>
             <ButtonCustom
-              //handleClick={handleDownload}
+              style={{
+                backgroundColor: "#556afe",
+                color: "#fff",
+                marginLeft: 5,
+              }}
+              handleClick={handleDownload}
               icon={<GetAppIcon />}
               title="Export"
               variant="contained"
@@ -86,72 +103,73 @@ export default function List({ data, title, columns, filter }) {
         {filter && cloneElement(filter)}
         <hr />
         <Typography>Tổng số bản ghi: {data.length} </Typography>
-        { 
-          data.length > 0 ? 
-        <TableContainer className={classes.container}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                <TableCell>STT</TableCell>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-                <TableCell>Thao tác</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data.length > 0 ? (
-                data
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, idx) => {
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={row.id}
-                      >
-                        <TableCell>{idx + 1}</TableCell>
-                        {columns.map((column) => {
-                          const value = row[column.id];
-                          return (
-                            <TableCell key={column.id} align={column.align}>
-                              {column.customField ? (
-                                <Chip label={value} />
-                              ) : (
-                                value
-                              )}
-                            </TableCell>
-                          );
-                        })}
-                        <TableCell>
-                          <Link to={`/user/${row.id}/edit`}>
-                            <IconButton>
-                              <EditIcon fontSize="small" />
-                            </IconButton>
-                          </Link>
-                          <Link to={`/user/${row.id}/detail`}>
-                            <IconButton>
-                              <VisibilityIcon fontSize="small" />
-                            </IconButton>
-                          </Link>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })
-              ) : (
-                <>Khong co ban ghi nao</>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer> : <>No record</>
-        }
+        {data.length > 0 ? (
+          <TableContainer className={classes.container}>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>STT</TableCell>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ minWidth: column.minWidth }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                  <TableCell>Thao tác</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.length > 0 ? (
+                  data
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, idx) => {
+                      return (
+                        <TableRow
+                          hover
+                          role="checkbox"
+                          tabIndex={-1}
+                          key={row.id}
+                        >
+                          <TableCell>{idx + 1}</TableCell>
+                          {columns.map((column) => {
+                            const value = row[column.id];
+                            return (
+                              <TableCell key={column.id} align={column.align}>
+                                {column.customField ? (
+                                  <Chip label={getStatus(value).text} style={{backgroundColor: `${getStatus(value).color}`}} />
+                                ) : (
+                                  value
+                                )}
+                              </TableCell>
+                            );
+                          })}
+                          <TableCell>
+                            <Link to={`/${resource}/${row.id}/edit`}>
+                              <IconButton>
+                                <EditIcon fontSize="small" color="primary" />
+                              </IconButton>
+                            </Link>
+                            <Link to={`/${resource}/${row.id}/detail`}>
+                              <IconButton>
+                                <VisibilityIcon fontSize="small" color="primary" />
+                              </IconButton>
+                            </Link>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
+                ) : (
+                  <>Khong co ban ghi nao</>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <>No record</>
+        )}
         <TablePagination
           labelRowsPerPage="Hiển thị"
           rowsPerPageOptions={[5, 10, 15]}

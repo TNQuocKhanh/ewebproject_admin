@@ -11,6 +11,7 @@ import Sidebar from "./Sidebar";
 import Dashboard from "../pages/dashboard/Dashboard";
 import { UserList, UserEdit, UserCreate, UserDetail } from "../pages/users";
 import { useLayoutState } from "../context/LayoutContext";
+import { ProductList } from "../pages/products/ProductList";
 
 const useStyles =  makeStyles(theme => ({
   root: {
@@ -54,9 +55,10 @@ function Layout(props) {
             <Switch>
               <Route path="/dashboard" component={Dashboard} />
               <Route path="/users" exact component={UserList} />
-              <Route path="/user/create" exact component={UserCreate} />
-              <Route path="/user/:id/edit" exact component={UserEdit} />
-              <Route path="/user/:id/detail" exact component={UserDetail} />
+              <Route path="/users/create" exact component={UserCreate} />
+              <Route path="/users/:id/edit" exact component={UserEdit} />
+              <Route path="/users/:id/detail" exact component={UserDetail} />
+              <Route path="/products" exact component={ProductList} />
             </Switch>
           </div>
         </>

@@ -13,6 +13,7 @@ export const ButtonCustom= (props) => {
 
   return (
     <Button
+    {...props}
     disabled={disabled}
       variant={variant}
       size={size}

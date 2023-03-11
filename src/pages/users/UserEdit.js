@@ -1,7 +1,16 @@
-import { Select, TextField, InputLabel, FormControl } from "@material-ui/core";
+import {
+  Select,
+  TextField,
+  InputLabel,
+  FormControl,
+  Typography,
+  Card,
+  Grid,
+} from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { getUserById, updateUser } from "../../apis";
+import { ButtonCustom } from "../../components/Button";
 
 export const UserEdit = () => {
   const [fullName, setFullName] = useState();
@@ -11,70 +20,98 @@ export const UserEdit = () => {
   const params = useParams();
   const id = params.id;
 
-  const history = useHistory()
+  const history = useHistory();
 
   const getUserDetail = async () => {
     const res = await getUserById(Number(id));
-    setFullName(res.fullName)
-    setEmail(res.email)
-    setRoles(res.roles[0]?.name || '')
-
+    setFullName(res.fullName);
+    setEmail(res.email);
+    setRoles(res.roles[0]?.name || "");
   };
 
   useEffect(() => {
     getUserDetail();
   }, []);
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    const res = updateUser(Number(id), {fullName, email})
+    const res = updateUser(Number(id), { fullName, email });
 
-    history.push('/users')
+    history.push("/users");
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <TextField
-        style={{ width: "200px", margin: "5px" }}
-        type="text"
-        label="Full Name"
-        variant="outlined"
-        value={fullName}
-        onChange={(e) => setFullName(e.target.value)}
-      />
-      <TextField
-        style={{ width: "200px", margin: "5px" }}
-        type="text"
-        label="Email"
-        variant="outlined"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <FormControl variant="outlined">
-        <InputLabel htmlFor="outlined-age-native-simple">Roles</InputLabel>
-        <Select
-          style={{ width: "200px", margin: "5px" }}
-          native
-          value={roles}
-          onChange={(e) => setRoles(e.target.value)}
-          label="Age"
-          inputProps={{
-            name: "age",
-            id: "outlined-age-native-simple",
-          }}
-        >
-          <option aria-label="None" value="" />
-          <option value="ROLE_ADMIN">ADMIN</option>
-          <option value="ROLE_SALESPERSON">sale person</option>
-          <option value="ROLE_EDITOR">editor</option>
-          <option value="ROLE_ASSISTANT">assistant</option>
-        </Select>
-      </FormControl>
-      <Link to={"/users"}>
-        <button>Back</button>
-      </Link>
-      <button type="submit">Save</button>
-    </form>
+    <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          margin: 10,
+        }}
+      >
+        <Typography>Cập nhật</Typography>
+        <Link to={"/users"} style={{ textDecoration: "none" }}>
+          <ButtonCustom variant="contained" title="Quay lại" />
+        </Link>
+      </div>
+      <Card style={{ padding: 10 }}>
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={2}>
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                type="text"
+                label="Full Name"
+                variant="outlined"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <TextField
+              disabled
+                fullWidth
+                type="text"
+                label="Email"
+                variant="outlined"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <FormControl fullWidth variant="outlined">
+                <InputLabel shrink htmlFor="outlined-age-native-simple">
+                  Roles
+                </InputLabel>
+                <Select
+                  notched
+                  native
+                  value={roles}
+                  onChange={(e) => setRoles(e.target.value)}
+                  label="Age"
+                  InputLabelProps={{ shrink: true }}
+                >
+                  <option aria-label="None" value="" />
+                  <option value="ROLE_ADMIN">ADMIN</option>
+                  <option value="ROLE_SALESPERSON">sale person</option>
+                  <option value="ROLE_EDITOR">editor</option>
+                  <option value="ROLE_ASSISTANT">assistant</option>
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+          <div style={{ margin: "20px 0" }}>
+            <ButtonCustom
+            variant='contained'
+              type="submit"
+              title="Lưu"
+            />
+          </div>
+        </form>
+      </Card>
+    </div>
   );
 };

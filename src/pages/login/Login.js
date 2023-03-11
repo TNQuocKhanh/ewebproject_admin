@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Grid,
   CircularProgress,
@@ -23,12 +23,16 @@ function Login(props) {
 
   const history = useHistory();
 
+  useEffect(() => {
+    storage.load('auth') && history.push("/dashboard")
+  }, [])
+
   const handleLogin = async () => {
     setIsLoading(true);
     const res = await login(loginValue, passwordValue);
+
     if (res.status === 200) {
       const data = await res.json();
-      //localStorage.setItem("auth", JSON.stringify(data));
       storage.save('auth', data)
       history.push("/dashboard");
     } else {

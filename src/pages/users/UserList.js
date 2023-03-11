@@ -117,7 +117,8 @@ export const UserList = () => {
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <List
-            filter={<FilterForm setFilterValues={setFilterValues} />}
+          //filter={<FilterForm setFilterValues={setFilterValues} />}
+    resource="users"
             columns={columns}
             data={data}
             title="Danh sách người dùng"
