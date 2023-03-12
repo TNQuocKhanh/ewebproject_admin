@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -25,7 +25,7 @@ import {
   useLayoutDispatch,
   toggleSidebar,
 } from "../context/LayoutContext";
-import { logout } from "../apis";
+import { getProfile, logout } from "../apis";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -147,6 +147,8 @@ export default function Header() {
   var [isNotificationsUnread, setIsNotificationsUnread] = useState(true);
   var [profileMenu, setProfileMenu] = useState(null);
 
+  const [username, setUserName] =useState()
+
   const history = useHistory();
 
   const handleLogout = async () => {
@@ -157,6 +159,17 @@ export default function Header() {
     }
   };
 
+  const getUserProfile = async () => {
+    const res= await getProfile()
+    if(res){
+   setUserName(res.fullName)
+    }
+  }
+
+  useEffect(() => {
+    getUserProfile()
+  })
+  
   return (
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
@@ -276,7 +289,7 @@ export default function Header() {
             </Typography>
           </div>
         </Menu>
-        <UserAvatar name="Khanh Quoc" />
+        <UserAvatar name={username} />
       </Toolbar>
     </AppBar>
   );

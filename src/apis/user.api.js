@@ -109,3 +109,19 @@ export const downloadUserList = async () => {
 
   return res.json();
 }
+
+export const getProfile = async () => {
+  const auth = storage.load('auth')
+  const token = auth.accessToken
+
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
+  headers.append("Authorization", `Bearer ${token}`);
+
+  const res = await fetch(`${API_URL}/user/profile`, {
+    method: "GET",
+    headers,
+  });
+
+  return res.json();
+}

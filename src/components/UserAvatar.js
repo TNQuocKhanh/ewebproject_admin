@@ -11,6 +11,7 @@ const useStyles =  makeStyles(() => ({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: "50%",
+    margin: '0 10px'
   },
   text: {
     color: "white",
@@ -20,17 +21,17 @@ export default function UserAvatar({ color = "primary", ...props }) {
   var classes = useStyles();
   var theme = useTheme();
 
-  var letters = props.name
-    .split(" ")
-    .map(word => word[0])
-    .join("");
+  //var letters = props.name
+    //.split(" ")
+    //.map(word => word[0])
+    //.join("");
 
   return (
     <div
       className={classes.avatar}
       style={{ backgroundColor: theme.palette[color].main }}
     >
-      <Typography className={classes.text}>{letters}</Typography>
+      <Typography className={classes.text}>{props.name}</Typography>
     </div>
   );
 }

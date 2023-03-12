@@ -7,7 +7,7 @@ import {
   TextField,
   Fade,
 } from "@material-ui/core";
-import { useHistory, withRouter } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import useStyles from "./styles";
 import logo from "./logo.svg";
 import { login } from "../../apis";
@@ -25,7 +25,7 @@ function Login(props) {
 
   useEffect(() => {
     storage.load('auth') && history.push("/dashboard")
-  }, [])
+  })
 
   const handleLogin = async () => {
     setIsLoading(true);
@@ -45,17 +45,17 @@ function Login(props) {
     <Grid container className={classes.container}>
       <div className={classes.logotypeContainer}>
         <img src={logo} alt="logo" className={classes.logotypeImage} />
-        <Typography className={classes.logotypeText}>Material Admin</Typography>
+        <Typography className={classes.logotypeText}>HDKShop Admin</Typography>
       </div>
       <div className={classes.formContainer}>
         <div className={classes.form}>
           <React.Fragment>
-            <Typography variant="h1" className={classes.greeting}>
-              Welcome to Administrator
+            <Typography variant="h2" className={classes.greeting}>
+              Chào mừng đến trang quản trị
             </Typography>
             <Fade in={error}>
               <Typography color="secondary" className={classes.errorMessage}>
-                Something is wrong with your login or password :(
+                 Có lỗi xảy ra, vui lòng thử lại!
               </Typography>
             </Fade>
             <TextField
@@ -69,7 +69,7 @@ function Login(props) {
               value={loginValue}
               onChange={(e) => setLoginValue(e.target.value)}
               margin="normal"
-              placeholder="Email Adress"
+              placeholder="Email"
               type="email"
               fullWidth
             />
@@ -84,7 +84,7 @@ function Login(props) {
               value={passwordValue}
               onChange={(e) => setPasswordValue(e.target.value)}
               margin="normal"
-              placeholder="Password"
+              placeholder="Mật khẩu"
               type="password"
               fullWidth
             />
@@ -101,7 +101,7 @@ function Login(props) {
                   color="primary"
                   size="large"
                 >
-                  Login
+                  Đăng nhập
                 </Button>
               )}
               <Button
@@ -109,7 +109,7 @@ function Login(props) {
                 size="large"
                 className={classes.forgetButton}
               >
-                Forget Password
+                Quên mật khẩu
               </Button>
             </div>
           </React.Fragment>

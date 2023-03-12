@@ -26,7 +26,11 @@ export const UserDetail = () => {
     const res = await getUserById(Number(id));
     console.log("==res", res);
     if (res) {
-      setData(res);
+      const transform = {
+        ...res, 
+        roles: res.roles[0]?.name
+      }
+      setData(transform);
     }
   };
 
@@ -51,9 +55,9 @@ export const UserDetail = () => {
       </div>
       <Card style={{ padding: 10 }}>
         <Grid container spacing={2}>
-          {headers.map((item) => {
+          {headers.map((item, idx) => {
             const val = item?.id;
-            return <Grid item md={6}>{`${item.label}: ${_.get(data, val, "")}`}</Grid>;
+            return <Grid key={idx} item md={6}>{`${item.label}: ${_.get(data, val, "")}`}</Grid>;
           })}
         </Grid>
       </Card>

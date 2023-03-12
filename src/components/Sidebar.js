@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Drawer, IconButton, List } from "@material-ui/core";
 import {
@@ -23,6 +22,10 @@ import {
   useLayoutDispatch,
   toggleSidebar,
 } from "../context/LayoutContext";
+//import {storage} from "../utils";
+
+//const auth = storage.load('auth')
+//console.log('===', auth.roles[0])
 
 const structure = [
   { id: 0, label: "Dashboard", link: "/dashboard", icon: <HomeIcon /> },
@@ -32,9 +35,9 @@ const structure = [
   { id: 4, label: "Customer", link: "/customers", icon: <PersonIcon /> },
   { id: 5, label: "Order", link: "/orders", icon: <AddShoppingCartIcon /> },
   { id: 6, label: "Statistic", link: "/statistics", icon: <EqualizerIcon /> },
-  { id: 6, type: "divider" },
-  { id: 7, type: "title", label: "Config" },
-  { id: 8, label: "Config", link: "https://www.google.com", icon: <SettingsIcon /> },
+  { id: 7, type: "divider" },
+  { id: 8, type: "title", label: "Config" },
+  { id: 9, label: "Config", link: "https://www.google.com", icon: <SettingsIcon /> },
 ];
 
 const drawerWidth = 240;

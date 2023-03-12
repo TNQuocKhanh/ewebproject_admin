@@ -32,7 +32,7 @@ export const CategoryList = () => {
     } else {
       history.push("/login");
     }
-  }, []);
+  });
 
   return (
     <>

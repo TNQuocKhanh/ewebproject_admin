@@ -62,6 +62,7 @@ export const UserEdit = () => {
               <TextField
                 fullWidth
                 type="text"
+                required
                 label="Full Name"
                 variant="outlined"
                 value={fullName}
@@ -71,7 +72,7 @@ export const UserEdit = () => {
             </Grid>
             <Grid item md={6} xs={12}>
               <TextField
-              disabled
+                disabled
                 fullWidth
                 type="text"
                 label="Email"
@@ -82,7 +83,7 @@ export const UserEdit = () => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <FormControl fullWidth variant="outlined">
+              <FormControl required fullWidth variant="outlined">
                 <InputLabel shrink htmlFor="outlined-age-native-simple">
                   Roles
                 </InputLabel>
@@ -104,11 +105,7 @@ export const UserEdit = () => {
             </Grid>
           </Grid>
           <div style={{ margin: "20px 0" }}>
-            <ButtonCustom
-            variant='contained'
-              type="submit"
-              title="Lưu"
-            />
+            <ButtonCustom variant="contained" type="submit" title="Lưu" />
           </div>
         </form>
       </Card>

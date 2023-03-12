@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { getCategoryById, getUserById, updateCategory, updateUser } from "../../apis";
+import { getCategoryById, updateCategory } from "../../apis";
 import { ButtonCustom } from "../../components/Button";
 
 export const CategoryEdit = () => {
@@ -29,12 +29,12 @@ export const CategoryEdit = () => {
 
   useEffect(() => {
     getUserDetail();
-  }, []);
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('==', enabled)
-    const res = updateCategory(Number(id), { name, enabled: enabled==='true' ? true : false });
+    updateCategory(Number(id), { name, enabled: enabled==='true' ? true : false });
 
     history.push("/categories");
   };

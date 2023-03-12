@@ -53,10 +53,10 @@ export const ProductDetail = () => {
       </div>
       <Card style={{ padding: 10 }}>
         <Grid container spacing={2}>
-          {headers.map((item) => {
+          {headers.map((item, idx) => {
             const val = item?.id;
             return (
-              <Grid item md={6}>{`${item.label}: ${_.get(
+              <Grid key={idx} item md={6}>{`${item.label}: ${_.get(
                 data,
                 val,
                 ""

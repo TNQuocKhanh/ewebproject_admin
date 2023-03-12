@@ -5,9 +5,6 @@ import {
   FormControl,
   Card,
   Grid,
-  Input,
-  InputAdornment,
-  Box,
   Typography,
 } from "@material-ui/core";
 import { useState } from "react";
@@ -28,7 +25,6 @@ export const UserCreate = () => {
     const data = { email, fullName, password, roles: [roles] };
 
     const res = await createUser(data);
-    console.log("==res", res);
     if (res) {
       history.push("/users");
     }
@@ -48,40 +44,42 @@ export const UserCreate = () => {
             <Grid item md={6} xs={12}>
               <TextField
                 type="text"
-                label="Full Name"
+                label="Tên người dùng"
                 variant="outlined"
-                value={fullName}
+              value={fullName}
+              required
                 fullWidth
                 onChange={(e) => setFullName(e.target.value)}
               />
             </Grid>
-            <Grid item md={6}>
+            <Grid item md={6} xs={12}>
               <TextField
                 type="text"
-                label="Email"
+              label="Email"
+              required
                 variant="outlined"
                 value={email}
                 fullWidth
                 onChange={(e) => setEmail(e.target.value)}
               />
             </Grid>
-            <Grid item md={6}>
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                type="text"
-                label="Password"
+              type="password"
+              required
+                label="Mật khẩu"
                 variant="outlined"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Grid>
-            <Grid item md={6}>
-              <FormControl fullWidth variant="outlined">
+            <Grid item md={6} xs={12}>
+              <FormControl required fullWidth variant="outlined">
                 <InputLabel htmlFor="outlined-age-native-simple">
                   Roles
                 </InputLabel>
                 <Select
-                  //style={{ width: "200px", margin: "5px" }}
                   native
                   value={roles}
                   onChange={(e) => setRoles(e.target.value)}

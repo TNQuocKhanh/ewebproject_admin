@@ -1,4 +1,4 @@
-import { getCategoryById, getProductById } from "../../apis";
+import { getCategoryById } from "../../apis";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { Typography, Card, Grid } from "@material-ui/core";
@@ -31,7 +31,7 @@ export const CategoryDetail = () => {
 
   useEffect(() => {
     getCategoryDetail();
-  }, []);
+  });
 
   return (
     <div>
@@ -50,10 +50,10 @@ export const CategoryDetail = () => {
       </div>
       <Card style={{ padding: 10 }}>
         <Grid container spacing={2}>
-          {headers.map((item) => {
+          {headers.map((item, idx) => {
             const val = item?.id;
             return (
-              <Grid item md={6} xs={12}>{`${item.label}: ${_.get(
+              <Grid key={idx} item md={6} xs={12}>{`${item.label}: ${_.get(
                 data,
                 val,
                 ""

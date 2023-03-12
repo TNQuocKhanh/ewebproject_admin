@@ -20,7 +20,6 @@ import EditIcon from "@material-ui/icons/Edit";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import AddIcon from "@material-ui/icons/Add";
 import GetAppIcon from "@material-ui/icons/GetApp";
-import { downloadUserList } from "../apis/user.api";
 
 const useStyles = makeStyles((theme) => ({
   tableOverflow: {
@@ -47,12 +46,6 @@ export default function List({ data, title, columns, filter, resource }) {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
-  };
-
-  const handleDownload = async () => {
-    const res = await downloadUserList();
-
-    console.log("===res", res);
   };
 
   const getStatus = (value) => {
@@ -90,7 +83,6 @@ export default function List({ data, title, columns, filter, resource }) {
                 color: "#fff",
                 marginLeft: 5,
               }}
-              handleClick={handleDownload}
               icon={<GetAppIcon />}
               title="Export"
               variant="contained"

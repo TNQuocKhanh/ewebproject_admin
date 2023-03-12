@@ -6,6 +6,7 @@ import { Form, Field } from "react-final-form";
 import { ButtonCustom } from "../../components/Button";
 import { storage } from "../../utils";
 import { getListUsers } from "../../apis";
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const columns = [
   { id: "fullName", label: "Tên người dùng", minWidth: 170 },
@@ -94,12 +95,16 @@ const FilterForm = (props) => {
 export const UserList = () => {
   const history = useHistory();
   const [data, setData] = useState([]);
-  const [filterValues, setFilterValues] = useState();
+  const [loading, setLoading] = useState(false)
+  //const [filterValues, setFilterValues] = useState();
 
   const getAllUsers = async () => {
+    setLoading(true)
     const res = await getListUsers();
-
-    setData(res);
+    if(res){
+      setLoading(false)
+      setData(res);
+    }
   };
 
   const isLogin = storage.load("auth");
@@ -112,13 +117,15 @@ export const UserList = () => {
     }
   }, []);
 
+  if(loading) return <LinearProgress />
+
   return (
     <>
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <List
-          //filter={<FilterForm setFilterValues={setFilterValues} />}
-    resource="users"
+            //filter={<FilterForm setFilterValues={setFilterValues} />}
+            resource="users"
             columns={columns}
             data={data}
             title="Danh sách người dùng"

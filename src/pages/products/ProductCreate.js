@@ -58,7 +58,7 @@ export const ProductCreate = () => {
                 onChange={(e) => setName(e.target.value)}
               />
             </Grid>
-            <Grid item md={6}>
+            <Grid item md={6} xs={12}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel htmlFor="outlined-age-native-simple">
                   Danh mục
@@ -77,7 +77,7 @@ export const ProductCreate = () => {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item md={6}>
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 type="text"
@@ -87,7 +87,7 @@ export const ProductCreate = () => {
                 onChange={(e) => setCost(e.target.value)}
               />
             </Grid>
-            <Grid item md={6}>
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 type="text"
@@ -97,7 +97,7 @@ export const ProductCreate = () => {
                 onChange={(e) => setPrice(e.target.value)}
               />
             </Grid>
-            <Grid item md={6}>
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 type="number"
