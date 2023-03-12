@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { createUser } from "../../apis/user.api";
+import { createProduct } from "../../apis/product.api";
 import { ButtonCustom } from "../../components/Button";
 
 export const ProductCreate = () => {
@@ -24,12 +24,10 @@ export const ProductCreate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = { name, cost, price, discount, categoryId };
-    console.log("===", data);
-    //const res = await createUser(data);
-    //console.log("==res", res);
-    //if (res) {
-    //history.push("/products");
-    //}
+    const res = await createProduct(data);
+    if (res) {
+      history.push("/products");
+    }
   };
 
   return (
@@ -53,7 +51,7 @@ export const ProductCreate = () => {
             <Grid item md={6} xs={12}>
               <TextField
                 type="text"
-                label="Ten san pham"
+                label="Tên sản phẩm"
                 variant="outlined"
                 value={name}
                 fullWidth
@@ -63,13 +61,13 @@ export const ProductCreate = () => {
             <Grid item md={6}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel htmlFor="outlined-age-native-simple">
-                  Danh muc
+                  Danh mục
                 </InputLabel>
                 <Select
                   native
                   value={categoryId}
                   onChange={(e) => setCategoryId(e.target.value)}
-                  label="Danh muc"
+                  label="Danh mục"
                 >
                   <option aria-label="None" value="" />
                   <option value="1">Laptop</option>
@@ -83,7 +81,7 @@ export const ProductCreate = () => {
               <TextField
                 fullWidth
                 type="text"
-                label="Gia nhap"
+                label="Giá nhập"
                 variant="outlined"
                 value={cost}
                 onChange={(e) => setCost(e.target.value)}
@@ -93,7 +91,7 @@ export const ProductCreate = () => {
               <TextField
                 fullWidth
                 type="text"
-                label="Gia ban"
+                label="Giá bán"
                 variant="outlined"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
@@ -102,7 +100,8 @@ export const ProductCreate = () => {
             <Grid item md={6}>
               <TextField
                 fullWidth
-                type="text"
+                type="number"
+                InputProps={{ inputProps: { min: 0 } }}
                 label="Discount"
                 variant="outlined"
                 value={discount}

@@ -2,10 +2,6 @@ import { getUserById } from "../../apis";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import {
-  Select,
-  TextField,
-  InputLabel,
-  FormControl,
   Typography,
   Card,
   Grid,

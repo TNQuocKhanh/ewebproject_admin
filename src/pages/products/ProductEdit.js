@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { getUserById, updateUser } from "../../apis";
+import { getProductById, updateProduct, updateUser } from "../../apis";
 import { ButtonCustom } from "../../components/Button";
 
 export const ProductEdit = () => {
@@ -25,10 +25,12 @@ export const ProductEdit = () => {
   const history = useHistory();
 
   const getUserDetail = async () => {
-    //const res = await getUserById(Number(id));
-    //setFullName(res.fullName);
-    //setEmail(res.email);
-    //setRoles(res.roles[0]?.name || "");
+    const res = await getProductById(Number(id));
+    setName(res.name)
+    setCost(res.cost)
+    setPrice(res.price)
+    setDiscount(res.discountPercent)
+    setCategoryId(res.category?.id)
   };
 
   useEffect(() => {
@@ -37,9 +39,9 @@ export const ProductEdit = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    //const res = updateUser(Number(id), { fullName, email });
+    const res = updateProduct(Number(id), { name, cost, price, discount, categoryId });
 
-    //history.push("/users");
+    history.push("/products");
   };
 
   return (
@@ -106,7 +108,6 @@ export const ProductEdit = () => {
             </Grid>
             <Grid item md={6} xs={12}>
               <TextField
-              disabled
                 fullWidth
                 type="text"
                 label="Giá bán"
@@ -118,7 +119,6 @@ export const ProductEdit = () => {
             </Grid>
             <Grid item md={6} xs={12}>
               <TextField
-              disabled
                 fullWidth
                 type="text"
                 label="Discount"

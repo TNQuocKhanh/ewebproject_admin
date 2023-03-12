@@ -2,14 +2,14 @@ import { storage } from "../utils";
 
 const API_URL = process.env.REACT_APP_API_URL
 
-export const getListProducts = async () => {
+export const getListCategories = async () => {
   const auth = storage.load('auth')
   const token = auth.accessToken
 
   const headers = new Headers();
   headers.append("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${API_URL}/products`, {
+  const res = await fetch(`${API_URL}/categories`, {
     method: "GET",
     headers,
   });
@@ -17,22 +17,7 @@ export const getListProducts = async () => {
   return res.json();
 };
 
-export const getProductById = async (id) => {
-  const auth = storage.load('auth')
-  const token = auth.accessToken
-
-  const headers = new Headers();
-  headers.append("Authorization", `Bearer ${token}`);
-
-  const res = await fetch(`${API_URL}/product/${id}`, {
-    method: "GET",
-    headers,
-  });
-
-  return res.json();
-};
-
-export const createProduct = async (data) => {
+export const createCategory = async (data) => {
   const auth = storage.load('auth')
   const token = auth.accessToken
 
@@ -40,7 +25,7 @@ export const createProduct = async (data) => {
   headers.append("Content-Type", "application/json");
   headers.append("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${API_URL}/product/create`, {
+  const res = await fetch(`${API_URL}/category/create`, {
     method: "POST",
     headers,
     body: JSON.stringify(data)
@@ -49,19 +34,33 @@ export const createProduct = async (data) => {
   return res.json();
 };
 
-export const updateProduct = async (id, data) => {
+export const getCategoryById = async (id) => {
   const auth = storage.load('auth')
   const token = auth.accessToken
 
   const headers = new Headers();
-  headers.append("Content-Type", "application/json");
   headers.append("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${API_URL}/product/${id}`, {
+  const res = await fetch(`${API_URL}/category/${id}`, {
+    method: "GET",
+    headers,
+  });
+
+  return res.json();
+};
+
+export const updateCategory = async (id, data) => {
+  const auth = storage.load('auth')
+  const token = auth.accessToken
+
+  const headers = new Headers();
+  headers.append("Authorization", `Bearer ${token}`);
+
+  const res = await fetch(`${API_URL}/category/${id}`, {
     method: "PUT",
     headers,
     body: JSON.stringify(data)
   });
 
   return res.json();
-}
+};

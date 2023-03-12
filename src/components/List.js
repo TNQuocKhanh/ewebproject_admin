@@ -56,15 +56,19 @@ export default function List({ data, title, columns, filter, resource }) {
   };
 
   const getStatus = (value) => {
-     if(value === 'STATUS_ACTIVE'){
-       return {text: 'Hoạt động', color: '#eaf6f9'}
-     }
-    else if(value === 'STATUS_LOGOUT'){
-       return {text: 'Đã đăng xuất', color: '#a2dea7'}
-    }else{
-       return {text: 'Không xác định', color: '#d7d8da'}
+    switch (value) {
+      case "STATUS_ACTIVE":
+        return { text: "Hoạt động", color: "#eaf6f9" };
+      case "STATUS_LOGOUT":
+        return { text: "Đã đăng xuất", color: "#a2dea7" };
+      case "true":
+        return { text: "Hoạt động", color: "#eaf6f9" };
+      case "false":
+        return { text: "Không hoạt động", color: "#d7d8da" };
+      default:
+        return { text: "Không xác định", color: "#d7d8da" };
     }
-  }
+  };
 
   return (
     <>
@@ -101,9 +105,10 @@ export default function List({ data, title, columns, filter, resource }) {
         bodyClass={classes.tableOverflow}
       >
         {filter && cloneElement(filter)}
-      <hr />
-      {data.length > 0 &&
-        <Typography>Tổng số bản ghi: {data.length} </Typography>}
+        <hr />
+        {data.length > 0 && (
+          <Typography style={{margin: '10px'}}>Tổng số bản ghi: {data.length} </Typography>
+        )}
         {data.length > 0 ? (
           <TableContainer className={classes.container}>
             <Table stickyHeader aria-label="sticky table">
@@ -123,64 +128,72 @@ export default function List({ data, title, columns, filter, resource }) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {
-                  data
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, idx) => {
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={row.id}
-                        >
-                          <TableCell>{idx + 1}</TableCell>
-                          {columns.map((column) => {
-                            const value = row[column.id];
-                            return (
-                              <TableCell key={column.id} align={column.align}>
-                                {column.customField ? (
-                                  <Chip label={getStatus(value).text} style={{backgroundColor: `${getStatus(value).color}`}} />
-                                ) : (
-                                  value
-                                )}
-                              </TableCell>
-                            );
-                          })}
-                          <TableCell>
-                            <Link to={`/${resource}/${row.id}/edit`}>
-                              <IconButton>
-                                <EditIcon fontSize="small" color="primary" />
-                              </IconButton>
-                            </Link>
-                            <Link to={`/${resource}/${row.id}/detail`}>
-                              <IconButton>
-                                <VisibilityIcon fontSize="small" color="primary" />
-                              </IconButton>
-                            </Link>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })
-                 }
+                {data
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, idx) => {
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={row.id}
+                      >
+                        <TableCell>{idx + 1}</TableCell>
+                        {columns.map((column) => {
+                          const value = row[column.id];
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              {column.customField ? (
+                                <Chip
+                                  label={getStatus(value).text}
+                                  style={{
+                                    backgroundColor: `${
+                                      getStatus(value).color
+                                    }`,
+                                  }}
+                                />
+                              ) : (
+                                value
+                              )}
+                            </TableCell>
+                          );
+                        })}
+                        <TableCell>
+                          <Link to={`/${resource}/${row.id}/edit`}>
+                            <IconButton>
+                              <EditIcon fontSize="small" color="primary" />
+                            </IconButton>
+                          </Link>
+                          <Link to={`/${resource}/${row.id}/detail`}>
+                            <IconButton>
+                              <VisibilityIcon
+                                fontSize="small"
+                                color="primary"
+                              />
+                            </IconButton>
+                          </Link>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
               </TableBody>
             </Table>
           </TableContainer>
         ) : (
           <>Không có bản ghi nào</>
         )}
-      {data.length > 0 &&
-        <TablePagination
-          labelRowsPerPage="Hiển thị"
-          rowsPerPageOptions={[5, 10, 15]}
-          component="div"
-          count={data.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-      }
+        {data.length > 0 && (
+          <TablePagination
+            labelRowsPerPage="Hiển thị"
+            rowsPerPageOptions={[5, 10, 15]}
+            component="div"
+            count={data.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        )}
       </Widget>
     </>
   );
