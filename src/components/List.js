@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function List({ data, title, columns, filter, resource }) {
+export default function List({ data, title, columns, filter, resource, isCreate = true }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -69,6 +69,7 @@ export default function List({ data, title, columns, filter, resource }) {
         title={title}
         actions={
           <div className={classes.actions}>
+            {isCreate &&
             <Link to={`/${resource}/create`} style={{ textDecoration: "none" }}>
               <ButtonCustom
                 style={{ backgroundColor: "#556afe", color: "#fff" }}
@@ -76,7 +77,8 @@ export default function List({ data, title, columns, filter, resource }) {
                 title="Tạo mới"
                 variant="contained"
               />
-            </Link>
+                </Link>
+            }
             <ButtonCustom
               style={{
                 backgroundColor: "#556afe",
