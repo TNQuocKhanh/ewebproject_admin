@@ -10,7 +10,11 @@ import {
   TablePagination,
   TableContainer,
   IconButton,
+  Grid,
+  Card,
 } from "@material-ui/core";
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Widget from "./Widget";
 import { makeStyles } from "@material-ui/styles";
 import { ButtonCustom } from "./Button";
@@ -20,6 +24,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import AddIcon from "@material-ui/icons/Add";
 import GetAppIcon from "@material-ui/icons/GetApp";
+import _ from "lodash";
 
 const useStyles = makeStyles((theme) => ({
   tableOverflow: {
@@ -33,7 +38,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function List({ data, title, columns, filter, resource, isCreate = true }) {
+export default function List({
+  data,
+  title,
+  columns,
+  filter,
+  resource,
+  isCreate = true,
+}) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -63,132 +75,219 @@ export default function List({ data, title, columns, filter, resource, isCreate 
     }
   };
 
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
     <>
-      <HeaderAction
-        title={title}
-        actions={
-          <div className={classes.actions}>
-            {isCreate &&
-            <Link to={`/${resource}/create`} style={{ textDecoration: "none" }}>
-              <ButtonCustom
-                style={{ backgroundColor: "#556afe", color: "#fff" }}
-                icon={<AddIcon />}
-                title="Tạo mới"
-                variant="contained"
-              />
-                </Link>
+      {!isSmall ? (
+        <>
+          <HeaderAction
+            title={title}
+            actions={
+              <div className={classes.actions}>
+                {isCreate && (
+                  <Link
+                    to={`/${resource}/create`}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <ButtonCustom
+                      style={{ backgroundColor: "#556afe", color: "#fff" }}
+                      icon={<AddIcon />}
+                      title="Tạo mới"
+                      variant="contained"
+                    />
+                  </Link>
+                )}
+                <ButtonCustom
+                  style={{
+                    backgroundColor: "#556afe",
+                    color: "#fff",
+                    marginLeft: 5,
+                  }}
+                  icon={<GetAppIcon />}
+                  title="Export"
+                  variant="contained"
+                />
+              </div>
             }
-            <ButtonCustom
-              style={{
-                backgroundColor: "#556afe",
-                color: "#fff",
-                marginLeft: 5,
-              }}
-              icon={<GetAppIcon />}
-              title="Export"
-              variant="contained"
-            />
-          </div>
-        }
-      />
-
-      <Widget
-        noBodyPadding
-        disableWidgetMenu={true}
-        bodyClass={classes.tableOverflow}
-      >
-        {filter && cloneElement(filter)}
-        <hr />
-        {data.length > 0 && (
-          <Typography style={{margin: '10px'}}>Tổng số bản ghi: {data.length} </Typography>
-        )}
-        {data.length > 0 ? (
-          <TableContainer className={classes.container}>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>STT</TableCell>
-                  {columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                      align={column.align}
-                      style={{ minWidth: column.minWidth }}
-                    >
-                      {column.label}
-                    </TableCell>
-                  ))}
-                  <TableCell>Thao tác</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, idx) => {
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={row.id}
-                      >
-                        <TableCell>{idx + 1}</TableCell>
-                        {columns.map((column) => {
-                          const value = row[column.id];
-                          return (
-                            <TableCell key={column.id} align={column.align}>
-                              {column.customField ? (
-                                <Chip
-                                  label={getStatus(value).text}
-                                  style={{
-                                    backgroundColor: `${
-                                      getStatus(value).color
-                                    }`,
-                                  }}
-                                />
-                              ) : (
-                                value
-                              )}
-                            </TableCell>
-                          );
-                        })}
-                        <TableCell>
-                          <Link to={`/${resource}/${row.id}/edit`}>
-                            <IconButton>
-                              <EditIcon fontSize="small" color="primary" />
-                            </IconButton>
-                          </Link>
-                          <Link to={`/${resource}/${row.id}/detail`}>
-                            <IconButton>
-                              <VisibilityIcon
-                                fontSize="small"
-                                color="primary"
-                              />
-                            </IconButton>
-                          </Link>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        ) : (
-          <>Không có bản ghi nào</>
-        )}
-        {data.length > 0 && (
-          <TablePagination
-            labelRowsPerPage="Hiển thị"
-            rowsPerPageOptions={[5, 10, 15]}
-            component="div"
-            count={data.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
           />
-        )}
-      </Widget>
+
+          <Widget
+            noBodyPadding
+            disableWidgetMenu={true}
+            bodyClass={classes.tableOverflow}
+          >
+            {filter && cloneElement(filter)}
+            <hr />
+            {data && data.length > 0 && (
+              <Typography style={{ margin: "10px" }}>
+                Tổng số bản ghi: {data?.length || 0}
+              </Typography>
+            )}
+            {data.length > 0 ? (
+              <TableContainer className={classes.container}>
+                <Table stickyHeader aria-label="sticky table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>STT</TableCell>
+                      {columns.map((column) => (
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          style={{ minWidth: column.minWidth }}
+                        >
+                          {column.label}
+                        </TableCell>
+                      ))}
+                      <TableCell>Thao tác</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {data
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((row, idx) => {
+                        return (
+                          <TableRow
+                            hover
+                            role="checkbox"
+                            tabIndex={-1}
+                            key={row.id}
+                          >
+                            <TableCell>{idx + 1}</TableCell>
+                            {columns.map((column) => {
+                              const value = row[column.id];
+                              return (
+                                <TableCell key={column.id} align={column.align}>
+                                  {column.customField ? (
+                                    <Chip
+                                      label={getStatus(value).text}
+                                      style={{
+                                        backgroundColor: `${
+                                          getStatus(value).color
+                                        }`,
+                                      }}
+                                    />
+                                  ) : (
+                                    value
+                                  )}
+                                </TableCell>
+                              );
+                            })}
+                            <TableCell>
+                              <Link to={`/${resource}/${row.id}/edit`}>
+                                <IconButton>
+                                  <EditIcon fontSize="small" color="primary" />
+                                </IconButton>
+                              </Link>
+                              <Link to={`/${resource}/${row.id}/detail`}>
+                                <IconButton>
+                                  <VisibilityIcon
+                                    fontSize="small"
+                                    color="primary"
+                                  />
+                                </IconButton>
+                              </Link>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            ) : (
+              <>Không có bản ghi nào</>
+            )}
+            {data.length > 0 && (
+              <TablePagination
+                labelRowsPerPage="Hiển thị"
+                rowsPerPageOptions={[5, 10, 15]}
+                component="div"
+                count={data.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            )}
+          </Widget>
+        </>
+      ) : (
+        <>
+          <HeaderAction
+            title={title}
+            actions={
+              <div className={classes.actions}>
+                {isCreate && (
+                  <Link
+                    to={`/${resource}/create`}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <ButtonCustom
+                      style={{
+                        backgroundColor: "#556afe",
+                        color: "#fff",
+                        width: "fit-content",
+                      }}
+                      icon={<AddIcon />}
+                      title="Tạo mới"
+                      variant="contained"
+                    />
+                  </Link>
+                )}
+                <ButtonCustom
+                  style={{
+                    backgroundColor: "#556afe",
+                    color: "#fff",
+                    marginLeft: 5,
+                  }}
+                  icon={<GetAppIcon />}
+                  title="Export"
+                  variant="contained"
+                />
+              </div>
+            }
+          />
+
+          <Widget
+            noBodyPadding
+            disableWidgetMenu={true}
+            bodyClass={classes.tableOverflow}
+          >
+            {filter && cloneElement(filter)}
+            <Typography style={{ margin: "10px" }}>
+              Tổng số bản ghi: {data.length}{" "}
+            </Typography>
+            <hr />
+            {data.length > 0 ? (
+              data.map((it, idx) => (
+                <Card key={idx} style={{ padding: 10, margin: 10 }}>
+                  <Grid container spacing={2}>
+                    {columns.map((item, idx) => {
+                      const val = item?.id;
+                      const result = item.customField
+                        ? getStatus(it.status).text
+                        : _.get(it, val, "");
+                      return (
+                        <Grid
+                          key={idx}
+                          item
+                          xs={12}
+                        >{`${item.label}: ${result}`}</Grid>
+                      );
+                    })}
+                  </Grid>
+                </Card>
+              ))
+            ) : (
+              <div>Không có bản ghi nào</div>
+            )}
+          </Widget>
+        </>
+      )}
     </>
   );
 }
