@@ -65,3 +65,37 @@ export const updateProduct = async (id, data) => {
 
   return res.json();
 }
+
+export const updateImageProduct = async (id, data) => {
+  const auth = storage.load('auth')
+  const token = auth.accessToken
+
+  const headers = new Headers();
+  const formdata = new FormData()
+  formdata.append("mainImage", data)
+  formdata.append("extraImage", data)
+  headers.append("Authorization", `Bearer ${token}`);
+
+  const res = await fetch(`${API_URL}/product/update-image/${id}`, {
+    method: "PUT",
+    headers,
+    body: formdata 
+  });
+
+  return res.json();
+}
+
+export const getListExtraProducts = async () => {
+  const auth = storage.load('auth')
+  const token = auth.accessToken
+
+  const headers = new Headers();
+  headers.append("Authorization", `Bearer ${token}`);
+
+  const res = await fetch(`${API_URL}/products/extra`, {
+    method: "GET",
+    headers,
+  });
+
+  return res.json();
+};

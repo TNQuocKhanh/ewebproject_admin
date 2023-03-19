@@ -11,6 +11,8 @@ import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { createProduct } from "../../apis/product.api";
 import { ButtonCustom } from "../../components/Button";
+import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
+import SaveIcon from "@material-ui/icons/Save";
 
 export const ProductCreate = () => {
   const [name, setName] = useState();
@@ -20,7 +22,6 @@ export const ProductCreate = () => {
   const [categoryId, setCategoryId] = useState();
 
   const history = useHistory();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = { name, cost, price, discount, categoryId };
@@ -29,7 +30,6 @@ export const ProductCreate = () => {
       history.push("/products");
     }
   };
-
   return (
     <div>
       <div
@@ -42,7 +42,12 @@ export const ProductCreate = () => {
       >
         <Typography>Thêm mới</Typography>
         <Link to={"/products"} style={{ textDecoration: "none" }}>
-          <ButtonCustom variant="contained" title="Quay lại" />
+          <ButtonCustom
+            variant="contained"
+            style={{ backgroundColor: "#556afe", color: "#fff" }}
+            title="Quay lại"
+            icon={<KeyboardBackspaceIcon fontSize="small" />}
+          />
         </Link>
       </div>
       <Card style={{ padding: 10 }}>
@@ -110,7 +115,13 @@ export const ProductCreate = () => {
             </Grid>
           </Grid>
           <div style={{ margin: "20px 0" }}>
-            <ButtonCustom variant="contained" type="submit" title="Lưu" />
+            <ButtonCustom
+              icon={<SaveIcon />}
+              style={{ backgroundColor: "#556afe", color: "#fff" }}
+              variant="contained"
+              type="submit"
+              title="Lưu"
+            />
           </div>
         </form>
       </Card>

@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { getUserById, updateUser } from "../../apis";
+import { getUserById, updateRole, updateUser } from "../../apis";
 import { ButtonCustom } from "../../components/Button";
 
 export const UserEdit = () => {
@@ -36,7 +36,8 @@ export const UserEdit = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const res = updateUser(Number(id), { fullName, email });
-
+ 
+    //updateRole(id, {roles: [roles]})
     history.push("/users");
   };
 

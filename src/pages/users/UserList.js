@@ -6,7 +6,10 @@ import { Form, Field } from "react-final-form";
 import { ButtonCustom } from "../../components/Button";
 import { storage } from "../../utils";
 import { getListUsers } from "../../apis";
-import LinearProgress from '@material-ui/core/LinearProgress';
+import LinearProgress from "@material-ui/core/LinearProgress";
+import { ExportToCsv } from "export-to-csv";
+import _ from "lodash";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const columns = [
   { id: "fullName", label: "Tên người dùng", minWidth: 170 },
@@ -95,14 +98,14 @@ const FilterForm = (props) => {
 export const UserList = () => {
   const history = useHistory();
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   //const [filterValues, setFilterValues] = useState();
 
   const getAllUsers = async () => {
-    setLoading(true)
+    setLoading(true);
     const res = await getListUsers();
-    if(res){
-      setLoading(false)
+    if (res) {
+      setLoading(false);
       setData(res);
     }
   };
@@ -117,15 +120,38 @@ export const UserList = () => {
     }
   }, []);
 
-  if(loading) return <LinearProgress />
+  const csvOptions = {
+    fieldSeparator: ",",
+    quoteStrings: '"',
+    decimalSeparator: ".",
+    showLabels: true,
+    useBom: true,
+    useKeysAsHeaders: false,
+    headers: columns.map((c) => c.id),
+  };
+
+  const csvExporter = new ExportToCsv(csvOptions);
+
+  let trans = [];
+  data.map((it) =>
+    trans.push({ fullName: it.fullName, email: it.email, status: it.status })
+  );
+
+  const handleExportData = () => {
+    csvExporter.generateCsv(trans);
+  };
+
+  if (loading) return <LinearProgress />;
 
   return (
     <>
       <Grid container spacing={4}>
+        <button onClick={handleExportData}>Export</button>
         <Grid item xs={12}>
           <List
             //filter={<FilterForm setFilterValues={setFilterValues} />}
             resource="users"
+            isBlock={true}
             columns={columns}
             data={data}
             title="Danh sách người dùng"

@@ -9,7 +9,7 @@ import { makeStyles } from "@material-ui/styles";
 import Header from './Header'
 import Sidebar from "./Sidebar";
 import Dashboard from "../pages/dashboard/Dashboard";
-import { UserList, UserEdit, UserCreate, UserDetail } from "../pages/users";
+import { UserList, UserEdit, UserCreate, UserDetail, Profile, ChangePassword } from "../pages/users";
 import { useLayoutState } from "../context/LayoutContext";
 import { ProductList, ProductCreate, ProductEdit, ProductDetail } from "../pages/products";
 import {CategoryList, CategoryCreate, CategoryEdit, CategoryDetail } from '../pages/categories'
@@ -71,6 +71,8 @@ function Layout(props) {
               <Route path="/customers" exact component={CustomerList} />
               <Route path="/customers/:id/edit" exact component={CustomerEdit} />
               <Route path="/customers/:id/detail" exact component={CustomerDetail} />
+              <Route path="/profile" exact component={Profile}/>
+              <Route path="/change-password" exact component={ChangePassword}/>
             </Switch>
           </div>
         </>

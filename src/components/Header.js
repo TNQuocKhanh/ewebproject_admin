@@ -26,7 +26,7 @@ import {
   toggleSidebar,
 } from "../context/LayoutContext";
 import { getProfile, logout } from "../apis";
-import { useHistory } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   logotype: {
@@ -260,7 +260,7 @@ export default function Header() {
         >
           <div className={classes.profileMenuUser}>
             <Typography variant="h4" weight="medium">
-              John Smith
+              {username || ' '} 
             </Typography>
           </div>
           <MenuItem
@@ -268,16 +268,20 @@ export default function Header() {
               classes.profileMenuItem,
               classes.headerMenuItem,
             )}
-          >
+        >
+            <NavLink to={'/profile'} style={{textDecoration: 'none'}}>
             <AccountIcon className={classes.profileMenuIcon} /> Profile
+            </NavLink>
           </MenuItem>
           <MenuItem
             className={classNames(
               classes.profileMenuItem,
               classes.headerMenuItem,
             )}
-          >
-            <AccountIcon className={classes.profileMenuIcon} /> Change
+        >
+            <NavLink to={'change-password'} style={{ textDecoration: 'none'}}>
+            <AccountIcon className={classes.profileMenuIcon} /> Change password
+            </NavLink>
           </MenuItem>
           <div className={classes.profileMenuUser}>
             <Typography

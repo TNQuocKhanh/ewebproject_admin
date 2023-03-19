@@ -37,7 +37,7 @@ const structure = [
   { id: 6, label: "Statistic", link: "/statistics", icon: <EqualizerIcon /> },
   { id: 7, type: "divider" },
   { id: 8, type: "title", label: "Config" },
-  { id: 9, label: "Config", link: "https://www.google.com", icon: <SettingsIcon /> },
+  { id: 9, label: "Config", link: "/settings", icon: <SettingsIcon /> },
 ];
 
 const drawerWidth = 240;

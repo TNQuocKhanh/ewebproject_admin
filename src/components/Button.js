@@ -26,7 +26,7 @@ export const ButtonCustom = (props) => {
       onClick={handleClick}
       sx={mLeft ? { marginLeft: 2 } : {}}
   >
-      {!isSmall && title}
+      {title}
     </Button>
   );
 };
