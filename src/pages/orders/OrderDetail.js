@@ -1,37 +1,42 @@
-import { getUserById } from "../../apis";
+import { getOrderById } from "../../apis";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { Typography, Card, Grid } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { ButtonCustom } from "../../components/Button";
 import _ from "lodash";
+import {getStatus} from "../../utils";
 
 const headers = [
-  { id: "fullName", label: "Fullname" },
-  { id: "email", label: "Email" },
-  { id: "roles", label: "Roles" },
+  { id: "name", label: "Tên danh mục" },
+  { id: "email", label: "Trạng thái" },
+  { id: "paymentMethod", label: "Phuong thuc" },
+  { id: "orderTime", label: "Ngay dat" },
+  { id: "status", label: "Trạng thái" },
 ];
 
-export const UserDetail = () => {
+export const OrderDetail = () => {
   const params = useParams();
   const id = params.id;
 
   const [data, setData] = useState();
 
-  const getUserDetail = async () => {
-    const res = await getUserById(Number(id));
-    console.log("==res", res);
+  const getOrderDetail = async () => {
+    const res = await getOrderById(Number(id));
+
     if (res) {
       const transform = {
         ...res,
-        roles: res.roles[0]?.name,
+        name: res.customer.fullName,
+        email: res.customer.email,
+        status: getStatus(res.status).text
       };
       setData(transform);
     }
   };
 
   useEffect(() => {
-    getUserDetail();
+    getOrderDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -46,7 +51,7 @@ export const UserDetail = () => {
         }}
       >
         <Typography>Chi tiết</Typography>
-        <Link to={"/users"} style={{ textDecoration: "none" }}>
+        <Link to={"/orders"} style={{ textDecoration: "none" }}>
           <ButtonCustom variant="contained" title="Quay lại" />
         </Link>
       </div>
@@ -55,7 +60,7 @@ export const UserDetail = () => {
           {headers.map((item, idx) => {
             const val = item?.id;
             return (
-              <Grid key={idx} item md={6}>{`${item.label}: ${_.get(
+              <Grid key={idx} item md={6} xs={12}>{`${item.label}: ${_.get(
                 data,
                 val,
                 ""

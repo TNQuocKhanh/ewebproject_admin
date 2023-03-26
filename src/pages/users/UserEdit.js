@@ -13,9 +13,9 @@ import { getUserById, updateRole, updateUser } from "../../apis";
 import { ButtonCustom } from "../../components/Button";
 
 export const UserEdit = () => {
-  const [fullName, setFullName] = useState();
-  const [email, setEmail] = useState();
-  const [roles, setRoles] = useState();
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [roles, setRoles] = useState('');
 
   const params = useParams();
   const id = params.id;
@@ -31,13 +31,14 @@ export const UserEdit = () => {
 
   useEffect(() => {
     getUserDetail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const res = updateUser(Number(id), { fullName, email });
- 
-    //updateRole(id, {roles: [roles]})
+    updateUser(Number(id), { fullName, email });
+
+    updateRole(id, {roles: [roles]})
     history.push("/users");
   };
 
@@ -98,9 +99,9 @@ export const UserEdit = () => {
                 >
                   <option aria-label="None" value="" />
                   <option value="ROLE_ADMIN">ADMIN</option>
-                  <option value="ROLE_SALESPERSON">sale person</option>
-                  <option value="ROLE_EDITOR">editor</option>
-                  <option value="ROLE_ASSISTANT">assistant</option>
+                  <option value="ROLE_SALESPERSON">Sales person</option>
+                  <option value="ROLE_EDITOR">Editor</option>
+                  <option value="ROLE_ASSISTANT">Assistant</option>
                 </Select>
               </FormControl>
             </Grid>

@@ -1,7 +1,7 @@
 import { TextField, Typography, Card, Grid, Box } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { getProfile, updateProfile, updateUserPhoto } from "../../apis";
+import { Link } from "react-router-dom";
+import { getProfile, updatePhotoProfile, updateProfile } from "../../apis";
 import { ButtonCustom } from "../../components/Button";
 
 export const Profile = () => {
@@ -20,7 +20,7 @@ export const Profile = () => {
     }
     const objectUrl = URL.createObjectURL(selectedFile);
     setPhoto(objectUrl);
-    updateUserPhoto(6, selectedFile)
+    updatePhotoProfile(selectedFile)
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 

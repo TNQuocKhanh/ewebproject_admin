@@ -25,7 +25,7 @@ export const ProductCreate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = { name, cost, price, discount, categoryId };
-    const res = await createProduct(data);
+    const res = await createProduct({...data, supplierId: '1'});
     if (res) {
       history.push("/products");
     }

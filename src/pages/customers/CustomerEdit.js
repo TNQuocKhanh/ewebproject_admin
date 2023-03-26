@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { getCustomerById, updateCustomer } from "../../apis";
+import { getCustomerById } from "../../apis";
 import { ButtonCustom } from "../../components/Button";
 
 export const CustomerEdit = () => {
@@ -26,20 +26,19 @@ export const CustomerEdit = () => {
     const res = await getCustomerById(Number(id));
     setFullName(res.fullName);
     setEmail(res.email);
-    setStatus(res.status)
+    setStatus(res.status);
   };
 
   useEffect(() => {
     getCustomerDetail();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    //updateCustomer(Number(id), { name, enabled: enabled==='true' ? true : false });
-
-    history.push("/categories");
+    history.push('/customers')
   };
-  
+
   return (
     <div>
       <div
@@ -68,6 +67,8 @@ export const CustomerEdit = () => {
                 onChange={(e) => setFullName(e.target.value)}
                 InputLabelProps={{ shrink: true }}
               />
+            </Grid>
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 type="text"
@@ -98,14 +99,10 @@ export const CustomerEdit = () => {
             </Grid>
           </Grid>
           <div style={{ margin: "20px 0" }}>
-            <ButtonCustom
-            variant='contained'
-              type="submit"
-              title="Lưu"
-            />
+            <ButtonCustom variant="contained" type="submit" title="Lưu" />
           </div>
         </form>
       </Card>
     </div>
   );
-}
+};

@@ -7,7 +7,13 @@ import { getListCategories } from "../../apis";
 
 const columns = [
   { id: "name", label: "Tên danh mục", minWidth: 170 },
-  { id: "enabled", label: "Trạng thái", minWidth: 170, customField: true,  align: 'center' },
+  {
+    id: "enabled",
+    label: "Trạng thái",
+    minWidth: 170,
+    customField: true,
+    align: "center",
+  },
 ];
 
 export const CategoryList = () => {
@@ -17,9 +23,10 @@ export const CategoryList = () => {
   const getAllCategories = async () => {
     const res = await getListCategories();
 
-    const transform = res.map(item => ({
-      ...item, enabled: item.enabled ? 'true' : 'false'})
-    )
+    const transform = res.map((item) => ({
+      ...item,
+      enabled: item.enabled ? "true" : "false",
+    }));
 
     setData(transform);
   };
@@ -32,6 +39,7 @@ export const CategoryList = () => {
     } else {
       history.push("/login");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -48,4 +56,4 @@ export const CategoryList = () => {
       </Grid>
     </>
   );
-}
+};

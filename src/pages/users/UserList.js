@@ -8,8 +8,6 @@ import { storage } from "../../utils";
 import { getListUsers } from "../../apis";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { ExportToCsv } from "export-to-csv";
-import _ from "lodash";
-import CircularProgress from "@material-ui/core/CircularProgress";
 
 const columns = [
   { id: "fullName", label: "Tên người dùng", minWidth: 170 },
@@ -118,6 +116,7 @@ export const UserList = () => {
     } else {
       history.push("/login");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const csvOptions = {

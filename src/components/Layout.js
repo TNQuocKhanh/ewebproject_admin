@@ -14,6 +14,7 @@ import { useLayoutState } from "../context/LayoutContext";
 import { ProductList, ProductCreate, ProductEdit, ProductDetail } from "../pages/products";
 import {CategoryList, CategoryCreate, CategoryEdit, CategoryDetail } from '../pages/categories'
 import { CustomerList, CustomerEdit, CustomerDetail }  from '../pages/customers'
+import { OrderDetail, OrderEdit, OrderList } from '../pages/orders'
 
 const useStyles =  makeStyles(theme => ({
   root: {
@@ -71,6 +72,9 @@ function Layout(props) {
               <Route path="/customers" exact component={CustomerList} />
               <Route path="/customers/:id/edit" exact component={CustomerEdit} />
               <Route path="/customers/:id/detail" exact component={CustomerDetail} />
+              <Route path="/orders" exact component={OrderList} />
+              <Route path="/orders/:id/edit" exact component={OrderEdit} />
+              <Route path="/orders/:id/detail" exact component={OrderDetail} />
               <Route path="/profile" exact component={Profile}/>
               <Route path="/change-password" exact component={ChangePassword}/>
             </Switch>

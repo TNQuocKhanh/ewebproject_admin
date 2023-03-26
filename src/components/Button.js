@@ -1,6 +1,6 @@
 import { Button } from "@material-ui/core";
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { useTheme } from '@material-ui/core/styles';
+//import useMediaQuery from '@material-ui/core/useMediaQuery';
+//import { useTheme } from '@material-ui/core/styles';
 
 export const ButtonCustom = (props) => {
   const {
@@ -13,8 +13,8 @@ export const ButtonCustom = (props) => {
     disabled,
   } = props;
 
-  const theme = useTheme()
-  const isSmall = useMediaQuery(theme.breakpoints.down('sm'))
+  //const theme = useTheme()
+  //const isSmall = useMediaQuery(theme.breakpoints.down('sm'))
 
   return (
     <Button

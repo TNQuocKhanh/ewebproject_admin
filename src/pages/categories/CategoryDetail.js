@@ -23,7 +23,7 @@ export const CategoryDetail = () => {
     if (res) {
       const transform = {
         ...res,
-        enabled: res.enabled ? 'Hoạt động' : 'Không hoạt động',
+        enabled: res.enabled ? "Hoạt động" : "Không hoạt động",
       };
       setData(transform);
     }
@@ -31,7 +31,8 @@ export const CategoryDetail = () => {
 
   useEffect(() => {
     getCategoryDetail();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div>
@@ -64,4 +65,4 @@ export const CategoryDetail = () => {
       </Card>
     </div>
   );
-}
+};

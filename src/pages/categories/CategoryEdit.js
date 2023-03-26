@@ -13,28 +13,31 @@ import { getCategoryById, updateCategory } from "../../apis";
 import { ButtonCustom } from "../../components/Button";
 
 export const CategoryEdit = () => {
-  const [name, setName] = useState();
-  const [enabled, setEnabled] = useState();
+  const [name, setName] = useState("");
+  const [enabled, setEnabled] = useState("");
 
   const params = useParams();
   const id = params.id;
 
   const history = useHistory();
 
-  const getUserDetail = async () => {
+  const getCategoryDetail = async () => {
     const res = await getCategoryById(Number(id));
     setName(res.name);
     setEnabled(res.enabled);
   };
 
   useEffect(() => {
-    getUserDetail();
-  });
+    getCategoryDetail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('==', enabled)
-    updateCategory(Number(id), { name, enabled: enabled==='true' ? true : false });
+    updateCategory(Number(id), {
+      name,
+      enabled: enabled === "true" ? true : false,
+    });
 
     history.push("/categories");
   };
@@ -88,14 +91,10 @@ export const CategoryEdit = () => {
             </Grid>
           </Grid>
           <div style={{ margin: "20px 0" }}>
-            <ButtonCustom
-            variant='contained'
-              type="submit"
-              title="Lưu"
-            />
+            <ButtonCustom variant="contained" type="submit" title="Lưu" />
           </div>
         </form>
       </Card>
     </div>
   );
-}
+};

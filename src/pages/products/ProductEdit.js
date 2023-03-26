@@ -36,11 +36,11 @@ function TabPanel(props) {
 }
 
 const ProductForm = () => {
-  const [name, setName] = useState();
-  const [cost, setCost] = useState();
-  const [price, setPrice] = useState();
-  const [discount, setDiscount] = useState();
-  const [categoryId, setCategoryId] = useState();
+  const [name, setName] = useState("");
+  const [cost, setCost] = useState("");
+  const [price, setPrice] = useState("");
+  const [discount, setDiscount] = useState("");
+  const [categoryId, setCategoryId] = useState("");
 
   const params = useParams();
   const id = params.id;
@@ -58,11 +58,12 @@ const ProductForm = () => {
 
   useEffect(() => {
     getUserDetail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const res = updateProduct(Number(id), {
+    updateProduct(Number(id), {
       name,
       cost,
       price,

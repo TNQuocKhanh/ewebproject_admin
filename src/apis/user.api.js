@@ -150,14 +150,30 @@ export const updateUserPhoto = async (id, data) => {
   const auth = storage.load('auth')
   const token = auth.accessToken
 
-  console.log('===data', data)
-
   const headers = new Headers();
   const formdata = new FormData()
   formdata.append("image", data)
   headers.append("Authorization", `Bearer ${token}`);
 
   const res = await fetch(`${API_URL}/user/update-photo/${id}`, {
+    method: "PUT",
+    headers,
+    body: formdata 
+  });
+
+  return res.json();
+}
+
+export const updatePhotoProfile  =async (data) => {
+  const auth = storage.load('auth')
+  const token = auth.accessToken
+
+  const headers = new Headers();
+  const formdata = new FormData()
+  formdata.append("image", data)
+  headers.append("Authorization", `Bearer ${token}`);
+
+  const res = await fetch(`${API_URL}/user/update-photo`, {
     method: "PUT",
     headers,
     body: formdata 

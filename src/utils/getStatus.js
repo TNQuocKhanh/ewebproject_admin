@@ -12,6 +12,18 @@ export const getStatus = (value) => {
       return { text: "Hoạt động", color: "#eaf6f9" };
     case "false":
       return { text: "Không hoạt động", color: "#d7d8da" };
+    case "NEW":
+      return { text: "NEW", color: "#eaf6f9" };
+    case "PAID":
+      return { text: "PAID", color: "#eaf6f9" };
+    case "DELIVERED":
+      return { text: "DELIVERED", color: "#eaf6f9" };
+    case "PROCESSING":
+      return { text: "PROCESSING", color: "#eaf6f9" };
+    case "PACKAGED":
+      return { text: "PACKAGED", color: "#eaf6f9" };
+    case "SHIPPING":
+      return { text: "SHIPPING", color: "#eaf6f9" };
     default:
       return { text: "Không xác định", color: "#d7d8da" };
   }
