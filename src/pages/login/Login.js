@@ -6,12 +6,16 @@ import {
   Button,
   TextField,
   Fade,
+  InputAdornment,
+  IconButton,
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import useStyles from "./styles";
 import logo from "./logo.svg";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import { login } from "../../apis";
-import {storage} from "../../utils";
+import { storage } from "../../utils";
 
 function Login(props) {
   var classes = useStyles();
@@ -21,11 +25,13 @@ function Login(props) {
   var [loginValue, setLoginValue] = useState("");
   var [passwordValue, setPasswordValue] = useState("");
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const history = useHistory();
 
   useEffect(() => {
-    storage.load('auth') && history.push("/dashboard")
-  })
+    storage.load("auth") && history.push("/dashboard");
+  });
 
   const handleLogin = async () => {
     setIsLoading(true);
@@ -33,7 +39,7 @@ function Login(props) {
 
     if (res.status === 200) {
       const data = await res.json();
-      storage.save('auth', data)
+      storage.save("auth", data);
       history.push("/dashboard");
     } else {
       setError(true);
@@ -55,7 +61,7 @@ function Login(props) {
             </Typography>
             <Fade in={error}>
               <Typography color="secondary" className={classes.errorMessage}>
-                 Có lỗi xảy ra, vui lòng thử lại!
+                Có lỗi xảy ra, vui lòng thử lại!
               </Typography>
             </Fade>
             <TextField
@@ -75,17 +81,32 @@ function Login(props) {
             />
             <TextField
               id="password"
+              type={showPassword ? "text" : "password"}
               InputProps={{
                 classes: {
                   underline: classes.textFieldUnderline,
                   input: classes.textField,
                 },
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword(!showPassword)}
+                      onMouseDown={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <VisibilityIcon />
+                      ) : (
+                        <VisibilityOffIcon />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
               }}
               value={passwordValue}
               onChange={(e) => setPasswordValue(e.target.value)}
               margin="normal"
               placeholder="Mật khẩu"
-              type="password"
               fullWidth
             />
             <div className={classes.formButtons}>

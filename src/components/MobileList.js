@@ -2,13 +2,8 @@ import React, { cloneElement } from "react";
 import { Typography, IconButton, Grid, Card } from "@material-ui/core";
 import Widget from "./Widget";
 import { makeStyles } from "@material-ui/styles";
-import { ButtonCustom } from "./Button";
-import { Link } from "react-router-dom";
+import { ButtonCreate, IconButtonDetail, IconButtonEdit } from "./Button";
 import { HeaderAction } from "./HeaderAction";
-import EditIcon from "@material-ui/icons/Edit";
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import AddIcon from "@material-ui/icons/Add";
-import GetAppIcon from "@material-ui/icons/GetApp";
 import _ from "lodash";
 import LockIcon from "@material-ui/icons/Lock";
 import { blockUser, unblockUser } from "../apis";
@@ -38,7 +33,6 @@ export const MobileList = ({
 }) => {
   const classes = useStyles();
   const handleBlock = (row) => {
-    console.log("===", row);
     blockUser(row.id);
   };
 
@@ -49,37 +43,7 @@ export const MobileList = ({
     <>
       <HeaderAction
         title={title}
-        actions={
-          <div>
-            {isCreate && (
-              <Link
-                to={`/${resource}/create`}
-                style={{ textDecoration: "none" }}
-              >
-                <ButtonCustom
-                  style={{
-                    backgroundColor: "#556afe",
-                    color: "#fff",
-                    width: "fit-content",
-                  }}
-                  icon={<AddIcon />}
-                  title="Tạo mới"
-                  variant="contained"
-                />
-              </Link>
-            )}
-            <ButtonCustom
-              style={{
-                backgroundColor: "#556afe",
-                color: "#fff",
-                marginLeft: 5,
-              }}
-              icon={<GetAppIcon />}
-              title="Export"
-              variant="contained"
-            />
-          </div>
-        }
+        actions={<div>{isCreate && <ButtonCreate resource={resource} />}</div>}
       />
 
       <Widget
@@ -109,16 +73,8 @@ export const MobileList = ({
                     >{`${item.label}: ${result}`}</Grid>
                   );
                 })}
-                <Link to={`/${resource}/${it.id}/edit`}>
-                  <IconButton>
-                    <EditIcon fontSize="small" color="primary" />
-                  </IconButton>
-                </Link>
-                <Link to={`/${resource}/${it.id}/detail`}>
-                  <IconButton>
-                    <VisibilityIcon fontSize="small" color="primary" />
-                  </IconButton>
-                </Link>
+                <IconButtonEdit resource={resource} row={it} />
+                <IconButtonDetail resource={resource} row={it} />
                 {isBlock && it.status === "STATUS_BLOCKED" ? (
                   <IconButton onClick={() => handleUnblock(it)}>
                     <LockOpenIcon fontSize="small" color="primary" />

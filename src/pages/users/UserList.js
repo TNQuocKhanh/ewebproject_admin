@@ -7,7 +7,6 @@ import { ButtonCustom } from "../../components/Button";
 import { storage } from "../../utils";
 import { getListUsers } from "../../apis";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import { ExportToCsv } from "export-to-csv";
 
 const columns = [
   { id: "fullName", label: "Tên người dùng", minWidth: 170 },
@@ -119,33 +118,16 @@ export const UserList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const csvOptions = {
-    fieldSeparator: ",",
-    quoteStrings: '"',
-    decimalSeparator: ".",
-    showLabels: true,
-    useBom: true,
-    useKeysAsHeaders: false,
-    headers: columns.map((c) => c.id),
-  };
-
-  const csvExporter = new ExportToCsv(csvOptions);
-
-  let trans = [];
+  const trans = [];
   data.map((it) =>
     trans.push({ fullName: it.fullName, email: it.email, status: it.status })
   );
-
-  const handleExportData = () => {
-    csvExporter.generateCsv(trans);
-  };
-
+  
   if (loading) return <LinearProgress />;
 
   return (
     <>
       <Grid container spacing={4}>
-        <button onClick={handleExportData}>Export</button>
         <Grid item xs={12}>
           <List
             //filter={<FilterForm setFilterValues={setFilterValues} />}
@@ -154,6 +136,7 @@ export const UserList = () => {
             columns={columns}
             data={data}
             title="Danh sách người dùng"
+            dataCsv={trans}
           />
         </Grid>
       </Grid>

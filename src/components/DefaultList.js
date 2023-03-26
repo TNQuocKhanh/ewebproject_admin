@@ -13,17 +13,17 @@ import {
 } from "@material-ui/core";
 import Widget from "./Widget";
 import { makeStyles } from "@material-ui/styles";
-import { ButtonCustom } from "./Button";
-import { Link } from "react-router-dom";
+import {
+  ButtonExport,
+  IconButtonDetail,
+  IconButtonEdit,
+} from "./Button";
 import { HeaderAction } from "./HeaderAction";
-import EditIcon from "@material-ui/icons/Edit";
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import AddIcon from "@material-ui/icons/Add";
-import GetAppIcon from "@material-ui/icons/GetApp";
 import LockIcon from "@material-ui/icons/Lock";
 import { blockUser, unblockUser } from "../apis";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import { getStatus } from "../utils";
+import { ButtonCreate } from "./Button";
 
 const useStyles = makeStyles((theme) => ({
   tableOverflow: {
@@ -45,6 +45,7 @@ export const DefaultList = ({
   resource,
   isCreate,
   isBlock,
+  dataCsv,
 }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
@@ -67,35 +68,15 @@ export const DefaultList = ({
   const handleUnblock = (row) => {
     unblockUser(row.id);
   };
+
   return (
     <>
       <HeaderAction
         title={title}
         actions={
           <div className={classes.actions}>
-            {isCreate && (
-              <Link
-                to={`/${resource}/create`}
-                style={{ textDecoration: "none" }}
-              >
-                <ButtonCustom
-                  style={{ backgroundColor: "#556afe", color: "#fff" }}
-                  icon={<AddIcon />}
-                  title="Tạo mới"
-                  variant="contained"
-                />
-              </Link>
-            )}
-            <ButtonCustom
-              style={{
-                backgroundColor: "#556afe",
-                color: "#fff",
-                marginLeft: 5,
-              }}
-              icon={<GetAppIcon />}
-              title="Export"
-              variant="contained"
-            />
+            {isCreate && <ButtonCreate resource={resource} />}
+            <ButtonExport columns={columns} transformCsv={dataCsv} />
           </div>
         }
       />
@@ -162,19 +143,8 @@ export const DefaultList = ({
                           );
                         })}
                         <TableCell>
-                          <Link to={`/${resource}/${row.id}/edit`}>
-                            <IconButton>
-                              <EditIcon fontSize="small" color="primary" />
-                            </IconButton>
-                          </Link>
-                          <Link to={`/${resource}/${row.id}/detail`}>
-                            <IconButton>
-                              <VisibilityIcon
-                                fontSize="small"
-                                color="primary"
-                              />
-                            </IconButton>
-                          </Link>
+                          <IconButtonEdit resource={resource} row={row} />
+                          <IconButtonDetail resource={resource} row={row} />
                           {isBlock ? (
                             <>
                               {row.status === "STATUS_BLOCKED" ? (

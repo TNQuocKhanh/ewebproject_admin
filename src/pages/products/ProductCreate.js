@@ -7,9 +7,9 @@ import {
   Grid,
   Typography,
 } from "@material-ui/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { createProduct } from "../../apis/product.api";
+import { createProduct, getListCategories, getListSupplier } from "../../apis";
 import { ButtonCustom } from "../../components/Button";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import SaveIcon from "@material-ui/icons/Save";
@@ -20,16 +20,43 @@ export const ProductCreate = () => {
   const [price, setPrice] = useState();
   const [discount, setDiscount] = useState();
   const [categoryId, setCategoryId] = useState();
+  const [supplierId, setSupplierId] = useState();
+
+  const [categoryArr, setCategoryArr] = useState([]);
+  const [supplierArr, setSupplierArr] = useState([]);
 
   const history = useHistory();
+
+  const getAllCategories = async () => {
+    const res = await getListCategories();
+    if (res) {
+      setCategoryArr(res);
+    }
+  };
+
+  const getAllSupllier = async () => {
+    const res = await getListSupplier();
+    if (res) {
+      setSupplierArr(res);
+    }
+  };
+
+  useEffect(() => {
+    getAllCategories();
+    getAllSupllier();
+  }, []);
+
+  console.log("===", categoryArr, supplierArr);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = { name, cost, price, discount, categoryId };
-    const res = await createProduct({...data, supplierId: '1'});
+    const data = { name, cost, price, discount, categoryId, supplierId };
+    const res = await createProduct(data);
     if (res) {
       history.push("/products");
     }
   };
+
   return (
     <div>
       <div
@@ -91,6 +118,25 @@ export const ProductCreate = () => {
                 value={cost}
                 onChange={(e) => setCost(e.target.value)}
               />
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <FormControl fullWidth variant="outlined">
+                <InputLabel htmlFor="outlined-age-native-simple">
+                  Nha cung cap
+                </InputLabel>
+                <Select
+                  native
+                  value={supplierId}
+                  onChange={(e) => setSupplierId(e.target.value)}
+                  label="Danh mục"
+                >
+                  <option aria-label="None" value="" />
+                  <option value="1">Laptop</option>
+                  <option value="2">Phone</option>
+                  <option value="3">Phone2</option>
+                  <option value="4">Phone4</option>
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item md={6} xs={12}>
               <TextField

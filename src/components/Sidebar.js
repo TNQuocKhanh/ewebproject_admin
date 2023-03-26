@@ -15,6 +15,7 @@ import CategoryIcon from '@material-ui/icons/Category';
 import BookIcon from '@material-ui/icons/Book';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
+import BusinessIcon from '@material-ui/icons/Business';
 
 import {makeStyles} from "@material-ui/styles";
 import {
@@ -31,13 +32,14 @@ const structure = [
   { id: 0, label: "Dashboard", link: "/dashboard", icon: <HomeIcon /> },
   { id: 1, label: "User", link: "/users", icon: <GroupIcon /> },
   { id: 2, label: "Category", link: "/categories", icon: <CategoryIcon /> },
-  { id: 3, label: "Product", link: "/products", icon: <BookIcon /> },
-  { id: 4, label: "Customer", link: "/customers", icon: <PersonIcon /> },
-  { id: 5, label: "Order", link: "/orders", icon: <AddShoppingCartIcon /> },
-  { id: 6, label: "Statistic", link: "/statistics", icon: <EqualizerIcon /> },
-  { id: 7, type: "divider" },
-  { id: 8, type: "title", label: "Config" },
-  { id: 9, label: "Config", link: "/settings", icon: <SettingsIcon /> },
+  { id: 3, label: "Supplier", link: "/suppliers", icon: <BusinessIcon /> },
+  { id: 4, label: "Product", link: "/products", icon: <BookIcon /> },
+  { id: 5, label: "Customer", link: "/customers", icon: <PersonIcon /> },
+  { id: 6, label: "Order", link: "/orders", icon: <AddShoppingCartIcon /> },
+  { id: 7, label: "Statistic", link: "/statistics", icon: <EqualizerIcon /> },
+  { id: 8, type: "divider" },
+  { id: 9, type: "title", label: "Config" },
+  { id: 10, label: "Config", link: "/settings", icon: <SettingsIcon /> },
 ];
 
 const drawerWidth = 240;
