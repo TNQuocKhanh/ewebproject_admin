@@ -18,14 +18,18 @@ export const ProductList = () => {
   const [data, setData] = useState([]);
 
   const getAllProducts = async () => {
-    const res = await getListProducts();
+    try {
+      const res = await getListProducts();
 
-    const transform = res.map((item) => ({
-      ...item,
-      category: item.category?.name,
-    }));
+      const transform = await res.map((item) => ({
+        ...item,
+        category: item.category?.name,
+      }));
 
-    setData(transform);
+      setData(transform);
+    } catch (e) {
+      setData([]);
+    }
   };
 
   const isLogin = storage.load("auth");

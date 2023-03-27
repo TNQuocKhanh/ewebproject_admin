@@ -100,10 +100,12 @@ export const UserList = () => {
 
   const getAllUsers = async () => {
     setLoading(true);
-    const res = await getListUsers();
-    if (res) {
+    try {
+      const res = await getListUsers();
       setLoading(false);
       setData(res);
+    } catch (e) {
+      setData([]);
     }
   };
 
@@ -122,7 +124,7 @@ export const UserList = () => {
   data.map((it) =>
     trans.push({ fullName: it.fullName, email: it.email, status: it.status })
   );
-  
+
   if (loading) return <LinearProgress />;
 
   return (

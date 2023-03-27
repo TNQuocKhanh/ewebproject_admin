@@ -23,22 +23,26 @@ export const OrderList = () => {
   const history = useHistory();
   const [data, setData] = useState([]);
 
-  const getAllCategories = async () => {
-    const res = await getListOrders();
+  const getAllOrders = async () => {
+    try {
+      const res = await getListOrders();
 
-    const transform = res.map((item) => ({
-      ...item,
-      email: item.customer.email,
-    }));
+      const transform = res.map((item) => ({
+        ...item,
+        email: item.customer.email,
+      }));
 
-    setData(transform);
+      setData(transform);
+    } catch (e) {
+      setData([]);
+    }
   };
 
   const isLogin = storage.load("auth");
 
   useEffect(() => {
     if (isLogin) {
-      getAllCategories();
+      getAllOrders();
     } else {
       history.push("/login");
     }

@@ -16,14 +16,18 @@ export const SupplierList = () => {
   const [data, setData] = useState([]);
 
   const getAllSuppliers = async () => {
-    const res = await getListSupplier();
+    try {
+      const res = await getListSupplier();
 
-    const transform = res.map((item) => ({
-      ...item,
-      enabled: item.enabled ? "true" : "false",
-    }));
+      const transform = res.map((item) => ({
+        ...item,
+        enabled: item.enabled ? "true" : "false",
+      }));
 
-    setData(transform);
+      setData(transform);
+    } catch (e) {
+      setData([]);
+    }
   };
 
   const isLogin = storage.load("auth");
@@ -51,4 +55,4 @@ export const SupplierList = () => {
       </Grid>
     </>
   );
-}
+};

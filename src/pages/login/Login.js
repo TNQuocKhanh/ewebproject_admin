@@ -125,13 +125,6 @@ function Login(props) {
                   Đăng nhập
                 </Button>
               )}
-              <Button
-                color="primary"
-                size="large"
-                className={classes.forgetButton}
-              >
-                Quên mật khẩu
-              </Button>
             </div>
           </React.Fragment>
         </div>

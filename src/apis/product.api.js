@@ -7,6 +7,7 @@ export const getListProducts = async () => {
   const token = auth.accessToken
 
   const headers = new Headers();
+  headers.append("Content-Type", "application/json");
   headers.append("Authorization", `Bearer ${token}`);
 
   const res = await fetch(`${API_URL}/products`, {

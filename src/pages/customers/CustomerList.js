@@ -22,9 +22,14 @@ export const CustomerList = () => {
   const [data, setData] = useState([]);
 
   const getAllCustomers = async () => {
-    const res = await getListCustomers();
-
-    setData(res);
+    try {
+      const res = await getListCustomers();
+      console.log("===res", res);
+      setData(res || []);
+    } catch (e) {
+      console.log('===Error', e)
+      setData([]);
+    }
   };
 
   const isLogin = storage.load("auth");

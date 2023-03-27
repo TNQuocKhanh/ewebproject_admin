@@ -28,16 +28,20 @@ export const ProductCreate = () => {
   const history = useHistory();
 
   const getAllCategories = async () => {
-    const res = await getListCategories();
-    if (res) {
+    try {
+      const res = await getListCategories();
       setCategoryArr(res);
+    } catch (e) {
+      setCategoryArr([]);
     }
   };
 
   const getAllSupllier = async () => {
-    const res = await getListSupplier();
-    if (res) {
+    try {
+      const res = await getListSupplier();
       setSupplierArr(res);
+    } catch (e) {
+      setSupplierArr([]);
     }
   };
 
@@ -46,11 +50,16 @@ export const ProductCreate = () => {
     getAllSupllier();
   }, []);
 
-  console.log("===", categoryArr, supplierArr);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = { name, cost, price, discount, categoryId, supplierId };
+    const data = {
+      name,
+      cost,
+      price,
+      discount,
+      categoryId,
+      supplierId,
+    };
     const res = await createProduct(data);
     if (res) {
       history.push("/products");
@@ -102,10 +111,11 @@ export const ProductCreate = () => {
                   label="Danh mục"
                 >
                   <option aria-label="None" value="" />
-                  <option value="1">Laptop</option>
-                  <option value="2">Phone</option>
-                  <option value="3">Phone2</option>
-                  <option value="4">Phone4</option>
+                  {categoryArr.map((it) => (
+                    <option key={it.id} value={it.id}>
+                      {it.name}
+                    </option>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>
@@ -131,10 +141,11 @@ export const ProductCreate = () => {
                   label="Danh mục"
                 >
                   <option aria-label="None" value="" />
-                  <option value="1">Laptop</option>
-                  <option value="2">Phone</option>
-                  <option value="3">Phone2</option>
-                  <option value="4">Phone4</option>
+                  {supplierArr.map((it) => (
+                    <option key={it.id} value={it.id}>
+                      {it.name}
+                    </option>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>

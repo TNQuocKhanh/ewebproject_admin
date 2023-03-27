@@ -21,14 +21,18 @@ export const CategoryList = () => {
   const [data, setData] = useState([]);
 
   const getAllCategories = async () => {
-    const res = await getListCategories();
+    try {
+      const res = await getListCategories();
 
-    const transform = res.map((item) => ({
-      ...item,
-      enabled: item.enabled ? "true" : "false",
-    }));
+      const transform = res.map((item) => ({
+        ...item,
+        enabled: item.enabled ? "true" : "false",
+      }));
 
-    setData(transform);
+      setData(transform);
+    } catch (e) {
+      setData([]);
+    }
   };
 
   const isLogin = storage.load("auth");
