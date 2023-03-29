@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { getCustomerById } from "../../apis";
-import { ButtonCustom } from "../../components/Button";
+import { ButtonCustom, ButtonReturn, ButtonSave } from "../../components/Button";
 
 export const CustomerEdit = () => {
   const [fullName, setFullName] = useState();
@@ -50,9 +50,7 @@ export const CustomerEdit = () => {
         }}
       >
         <Typography>Cập nhật</Typography>
-        <Link to={"/customers"} style={{ textDecoration: "none" }}>
-          <ButtonCustom variant="contained" title="Quay lại" />
-        </Link>
+        <ButtonReturn resource="customers" />
       </div>
       <Card style={{ padding: 10 }}>
         <form onSubmit={handleSubmit}>
@@ -99,7 +97,7 @@ export const CustomerEdit = () => {
             </Grid>
           </Grid>
           <div style={{ margin: "20px 0" }}>
-            <ButtonCustom variant="contained" type="submit" title="Lưu" />
+            <ButtonSave />
           </div>
         </form>
       </Card>

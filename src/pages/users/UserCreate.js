@@ -8,9 +8,9 @@ import {
   Typography,
 } from "@material-ui/core";
 import { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import {  useHistory } from "react-router-dom";
 import { createUser } from "../../apis/user.api";
-import { ButtonCustom } from "../../components/Button";
+import { ButtonReturn, ButtonSave } from "../../components/Button";
 
 export const UserCreate = () => {
   const [fullName, setFullName] = useState();
@@ -24,19 +24,28 @@ export const UserCreate = () => {
     e.preventDefault();
     const data = { email, fullName, password, roles: [roles] };
 
-    const res = await createUser(data);
-    if (res) {
-      history.push("/users");
+    try {
+      const res = await createUser(data);
+      if (res) {
+        history.push("/users");
+      }
+    } catch (err) {
+      console.log("====err", err);
     }
   };
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center', margin: 10 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          margin: 10,
+        }}
+      >
         <Typography>Thêm mới</Typography>
-        <Link to={"/users"} style={{ textDecoration: "none" }}>
-          <ButtonCustom variant="contained" title="Quay lại" />
-        </Link>
+        <ButtonReturn resource="users" />
       </div>
       <Card style={{ padding: 10 }}>
         <form onSubmit={handleSubmit}>
@@ -46,8 +55,8 @@ export const UserCreate = () => {
                 type="text"
                 label="Tên người dùng"
                 variant="outlined"
-              value={fullName}
-              required
+                value={fullName}
+                required
                 fullWidth
                 onChange={(e) => setFullName(e.target.value)}
               />
@@ -55,8 +64,8 @@ export const UserCreate = () => {
             <Grid item md={6} xs={12}>
               <TextField
                 type="text"
-              label="Email"
-              required
+                label="Email"
+                required
                 variant="outlined"
                 value={email}
                 fullWidth
@@ -66,8 +75,8 @@ export const UserCreate = () => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-              type="password"
-              required
+                type="password"
+                required
                 label="Mật khẩu"
                 variant="outlined"
                 value={password}
@@ -95,11 +104,7 @@ export const UserCreate = () => {
             </Grid>
           </Grid>
           <div style={{ margin: "20px 0" }}>
-            <ButtonCustom
-            variant='contained'
-              type="submit"
-              title="Lưu"
-            />
+            <ButtonSave />
           </div>
         </form>
       </Card>

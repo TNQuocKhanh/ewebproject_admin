@@ -1,13 +1,8 @@
-import {
-  TextField,
-  Typography,
-  Card,
-  Grid,
-} from "@material-ui/core";
+import { TextField, Typography, Card, Grid } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { getSupplierById, updateSupplier } from "../../apis";
-import { ButtonCustom } from "../../components/Button";
+import { ButtonReturn, ButtonSave } from "../../components/Button";
 
 export const SupplierEdit = () => {
   const [name, setName] = useState("");
@@ -20,10 +15,14 @@ export const SupplierEdit = () => {
   const history = useHistory();
 
   const getCategoryDetail = async () => {
-    const res = await getSupplierById(Number(id));
-    setName(res.name);
-    setPhoneNumber(res.phoneNumber);
-    setAddress(res.address);
+    try {
+      const res = await getSupplierById(Number(id));
+      setName(res.name);
+      setPhoneNumber(res.phoneNumber);
+      setAddress(res.address);
+    } catch (e) {
+      console.log("===Err", e);
+    }
   };
 
   useEffect(() => {
@@ -33,13 +32,17 @@ export const SupplierEdit = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateSupplier(Number(id), {
-      name,
-      phone: phoneNumber,
-      address,
-    });
+    try {
+      updateSupplier(Number(id), {
+        name,
+        phone: phoneNumber,
+        address,
+      });
 
-    history.push("/suppliers");
+      history.push("/suppliers");
+    } catch (e) {
+      console.log("==Err", e);
+    }
   };
 
   return (
@@ -53,9 +56,7 @@ export const SupplierEdit = () => {
         }}
       >
         <Typography>Cập nhật</Typography>
-        <Link to={"/suppliers"} style={{ textDecoration: "none" }}>
-          <ButtonCustom variant="contained" title="Quay lại" />
-        </Link>
+        <ButtonReturn resource="suppliers" />
       </div>
       <Card style={{ padding: 10 }}>
         <form onSubmit={handleSubmit}>
@@ -97,7 +98,7 @@ export const SupplierEdit = () => {
             </Grid>
           </Grid>
           <div style={{ margin: "20px 0" }}>
-            <ButtonCustom variant="contained" type="submit" title="Lưu" />
+            <ButtonSave />
           </div>
         </form>
       </Card>

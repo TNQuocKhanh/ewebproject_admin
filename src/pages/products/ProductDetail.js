@@ -2,8 +2,7 @@ import { getProductById } from "../../apis";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { Typography, Card, Grid } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import { ButtonCustom } from "../../components/Button";
+import { ButtonReturn } from "../../components/Button";
 import _ from "lodash";
 
 const headers = [
@@ -21,14 +20,18 @@ export const ProductDetail = () => {
   const [data, setData] = useState();
 
   const getProductDetail = async () => {
-    const res = await getProductById(Number(id));
+    try {
+      const res = await getProductById(Number(id));
 
-    if (res) {
-      const transform = {
-        ...res,
-        category: res.category.name,
-      };
-      setData(transform);
+      if (res) {
+        const transform = {
+          ...res,
+          category: res.category.name,
+        };
+        setData(transform);
+      }
+    } catch (e) {
+      console.log("==Err", e);
     }
   };
 
@@ -48,9 +51,7 @@ export const ProductDetail = () => {
         }}
       >
         <Typography>Chi tiết</Typography>
-        <Link to={"/products"} style={{ textDecoration: "none" }}>
-          <ButtonCustom variant="contained" title="Quay lại" />
-        </Link>
+        <ButtonReturn resource="products" />
       </div>
       <Card style={{ padding: 10 }}>
         <Grid container spacing={2}>

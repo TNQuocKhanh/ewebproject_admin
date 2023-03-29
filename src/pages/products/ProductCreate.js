@@ -8,11 +8,9 @@ import {
   Typography,
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { createProduct, getListCategories, getListSupplier } from "../../apis";
-import { ButtonCustom } from "../../components/Button";
-import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
-import SaveIcon from "@material-ui/icons/Save";
+import { ButtonReturn, ButtonSave } from "../../components/Button";
 
 export const ProductCreate = () => {
   const [name, setName] = useState();
@@ -21,6 +19,10 @@ export const ProductCreate = () => {
   const [discount, setDiscount] = useState();
   const [categoryId, setCategoryId] = useState();
   const [supplierId, setSupplierId] = useState();
+
+  const [quantity, setQuantity] = useState();
+  const [specifications, setSpecifications] = useState();
+  const [description, setDescription] = useState();
 
   const [categoryArr, setCategoryArr] = useState([]);
   const [supplierArr, setSupplierArr] = useState([]);
@@ -59,10 +61,17 @@ export const ProductCreate = () => {
       discount,
       categoryId,
       supplierId,
+      quantity,
+      specifications,
+      description,
     };
-    const res = await createProduct(data);
-    if (res) {
-      history.push("/products");
+    try {
+      const res = await createProduct(data);
+      if (res) {
+        history.push("/products");
+      }
+    } catch (e) {
+      console.log("==Err", e);
     }
   };
 
@@ -77,14 +86,7 @@ export const ProductCreate = () => {
         }}
       >
         <Typography>Thêm mới</Typography>
-        <Link to={"/products"} style={{ textDecoration: "none" }}>
-          <ButtonCustom
-            variant="contained"
-            style={{ backgroundColor: "#556afe", color: "#fff" }}
-            title="Quay lại"
-            icon={<KeyboardBackspaceIcon fontSize="small" />}
-          />
-        </Link>
+        <ButtonReturn resource="products" />
       </div>
       <Card style={{ padding: 10 }}>
         <form onSubmit={handleSubmit}>
@@ -170,15 +172,44 @@ export const ProductCreate = () => {
                 onChange={(e) => setDiscount(e.target.value)}
               />
             </Grid>
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                type="number"
+                InputProps={{ inputProps: { min: 1 } }}
+                label="So luong nhap"
+                variant="outlined"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+              />
+            </Grid>
+            <Grid item md={6}></Grid>
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                label="specifications"
+                rows={3}
+                variant="outlined"
+                multiline
+                value={specifications}
+                onChange={(e) => setSpecifications(e.target.value)}
+              />
+            </Grid>
+            <Grid item md={6}></Grid>
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                multiline
+                rows={3}
+                label="description"
+                variant="outlined"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </Grid>
           </Grid>
           <div style={{ margin: "20px 0" }}>
-            <ButtonCustom
-              icon={<SaveIcon />}
-              style={{ backgroundColor: "#556afe", color: "#fff" }}
-              variant="contained"
-              type="submit"
-              title="Lưu"
-            />
+            <ButtonSave />
           </div>
         </form>
       </Card>

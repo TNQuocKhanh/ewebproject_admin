@@ -8,9 +8,9 @@ import {
   Grid,
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { getOrderById, updateStatus } from "../../apis";
-import { ButtonCustom } from "../../components/Button";
+import { ButtonReturn, ButtonSave } from "../../components/Button";
 import { formatDateTime } from "../../utils";
 
 export const OrderEdit = () => {
@@ -26,13 +26,17 @@ export const OrderEdit = () => {
   const history = useHistory();
 
   const getOrderDetail = async () => {
-    const res = await getOrderById(Number(id));
-    if (res) {
-      setName(res.customer.fullName);
-      setEmail(res.customer.email);
-      setStatus(res.status);
-      setPaymentMethod(res.paymentMethod);
-      setOrderTime(formatDateTime(res.orderTime));
+    try {
+      const res = await getOrderById(Number(id));
+      if (res) {
+        setName(res.customer.fullName);
+        setEmail(res.customer.email);
+        setStatus(res.status);
+        setPaymentMethod(res.paymentMethod);
+        setOrderTime(formatDateTime(res.orderTime));
+      }
+    } catch (e) {
+      console.log("===Err", e);
     }
   };
 
@@ -43,8 +47,12 @@ export const OrderEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await updateStatus(Number(id), { status });
-    history.push("/orders");
+    try {
+      await updateStatus(Number(id), { status });
+      history.push("/orders");
+    } catch (e) {
+      console.log("====Err", e);
+    }
   };
 
   return (
@@ -58,9 +66,7 @@ export const OrderEdit = () => {
         }}
       >
         <Typography>Cập nhật</Typography>
-        <Link to={"/orders"} style={{ textDecoration: "none" }}>
-          <ButtonCustom variant="contained" title="Quay lại" />
-        </Link>
+        <ButtonReturn resource="orders" />
       </div>
       <Card style={{ padding: 10 }}>
         <form onSubmit={handleSubmit}>
@@ -137,7 +143,7 @@ export const OrderEdit = () => {
             </Grid>
           </Grid>
           <div style={{ margin: "20px 0" }}>
-            <ButtonCustom variant="contained" type="submit" title="Lưu" />
+            <ButtonSave />
           </div>
         </form>
       </Card>

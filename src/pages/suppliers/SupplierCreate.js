@@ -1,13 +1,8 @@
-import {
-  TextField,
-  Card,
-  Grid,
-  Typography,
-} from "@material-ui/core";
+import { TextField, Card, Grid, Typography } from "@material-ui/core";
 import { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { createSupplier } from '../../apis'
-import { ButtonCustom } from "../../components/Button";
+import { useHistory } from "react-router-dom";
+import { createSupplier } from "../../apis";
+import { ButtonReturn, ButtonSave } from "../../components/Button";
 
 export const SupplierCreate = () => {
   const [name, setName] = useState();
@@ -19,9 +14,13 @@ export const SupplierCreate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = { name, phone, address };
-    const res = await createSupplier(data);
-    if (res) {
-      history.push("/suppliers");
+    try {
+      const res = await createSupplier(data);
+      if (res) {
+        history.push("/suppliers");
+      }
+    } catch (e) {
+      console.log("===Err", e);
     }
   };
 
@@ -36,9 +35,7 @@ export const SupplierCreate = () => {
         }}
       >
         <Typography>Thêm mới</Typography>
-        <Link to={"/suppliers"} style={{ textDecoration: "none" }}>
-          <ButtonCustom variant="contained" title="Quay lại" />
-        </Link>
+        <ButtonReturn resource="suppliers" />
       </div>
       <Card style={{ padding: 10 }}>
         <form onSubmit={handleSubmit}>
@@ -75,10 +72,10 @@ export const SupplierCreate = () => {
             </Grid>
           </Grid>
           <div style={{ margin: "20px 0" }}>
-            <ButtonCustom variant="contained" type="submit" title="Lưu" />
+            <ButtonSave />
           </div>
         </form>
       </Card>
     </div>
   );
-}
+};

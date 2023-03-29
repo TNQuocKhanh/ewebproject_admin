@@ -2,8 +2,7 @@ import { getUserById } from "../../apis";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { Typography, Card, Grid } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import { ButtonCustom } from "../../components/Button";
+import { ButtonReturn } from "../../components/Button";
 import _ from "lodash";
 
 const headers = [
@@ -16,17 +15,21 @@ export const UserDetail = () => {
   const params = useParams();
   const id = params.id;
 
-  const [data, setData] = useState();
+  const [data, setData] = useState({});
 
   const getUserDetail = async () => {
-    const res = await getUserById(Number(id));
-    console.log("==res", res);
-    if (res) {
-      const transform = {
-        ...res,
-        roles: res.roles[0]?.name,
-      };
-      setData(transform);
+    try {
+      const res = await getUserById(Number(id));
+      console.log("==res", res);
+      if (res) {
+        const transform = {
+          ...res,
+          roles: res.roles[0]?.name,
+        };
+        setData(transform);
+      }
+    } catch (e) {
+      console.log("===Err", e);
     }
   };
 
@@ -46,9 +49,7 @@ export const UserDetail = () => {
         }}
       >
         <Typography>Chi tiết</Typography>
-        <Link to={"/users"} style={{ textDecoration: "none" }}>
-          <ButtonCustom variant="contained" title="Quay lại" />
-        </Link>
+        <ButtonReturn resource="users" />
       </div>
       <Card style={{ padding: 10 }}>
         <Grid container spacing={2}>

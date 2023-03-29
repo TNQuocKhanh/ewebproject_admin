@@ -8,14 +8,14 @@ import {
   Grid,
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { getUserById, updateRole, updateUser } from "../../apis";
-import { ButtonCustom } from "../../components/Button";
+import { ButtonReturn, ButtonSave } from "../../components/Button";
 
 export const UserEdit = () => {
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [roles, setRoles] = useState('');
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [roles, setRoles] = useState("");
 
   const params = useParams();
   const id = params.id;
@@ -23,10 +23,14 @@ export const UserEdit = () => {
   const history = useHistory();
 
   const getUserDetail = async () => {
-    const res = await getUserById(Number(id));
-    setFullName(res.fullName);
-    setEmail(res.email);
-    setRoles(res.roles[0]?.name || "");
+    try {
+      const res = await getUserById(Number(id));
+      setFullName(res.fullName);
+      setEmail(res.email);
+      setRoles(res.roles[0]?.name || "");
+    } catch (err) {
+      console.log("===", err);
+    }
   };
 
   useEffect(() => {
@@ -36,10 +40,14 @@ export const UserEdit = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateUser(Number(id), { fullName, email });
+    try {
+      updateUser(Number(id), { fullName, email });
 
-    updateRole(id, {roles: [roles]})
-    history.push("/users");
+      updateRole(id, { roles: [roles] });
+      history.push("/users");
+    } catch (e) {
+      console.log("===err", e);
+    }
   };
 
   return (
@@ -53,9 +61,7 @@ export const UserEdit = () => {
         }}
       >
         <Typography>Cập nhật</Typography>
-        <Link to={"/users"} style={{ textDecoration: "none" }}>
-          <ButtonCustom variant="contained" title="Quay lại" />
-        </Link>
+        <ButtonReturn resource="users" />
       </div>
       <Card style={{ padding: 10 }}>
         <form onSubmit={handleSubmit}>
@@ -107,7 +113,7 @@ export const UserEdit = () => {
             </Grid>
           </Grid>
           <div style={{ margin: "20px 0" }}>
-            <ButtonCustom variant="contained" type="submit" title="Lưu" />
+            <ButtonSave />
           </div>
         </form>
       </Card>

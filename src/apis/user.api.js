@@ -216,7 +216,7 @@ export const updateRole = async (id, data) => {
   return res.json();
 }
 
-export const blockUser = async (id) => {
+export const blockUser = async (id, data) => {
   const auth = storage.load('auth')
   const token = auth.accessToken
 
@@ -227,22 +227,7 @@ export const blockUser = async (id) => {
   const res = await fetch(`${API_URL}/user/block/${id}`, {
     method: "PUT",
     headers,
-  });
-
-  return res.json();
-}
-
-export const unblockUser = async (id) => {
-  const auth = storage.load('auth')
-  const token = auth.accessToken
-
-  const headers = new Headers();
-  headers.append("Content-Type", "application/json");
-  headers.append("Authorization", `Bearer ${token}`);
-
-  const res = await fetch(`${API_URL}/user/unblock/${id}`, {
-    method: "PUT",
-    headers,
+    body: JSON.stringify(data)
   });
 
   return res.json();

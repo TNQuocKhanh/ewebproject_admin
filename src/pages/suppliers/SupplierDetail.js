@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { Typography, Card, Grid } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { ButtonCustom } from "../../components/Button";
+import { ButtonCustom, ButtonReturn } from "../../components/Button";
 import _ from "lodash";
 
 const headers = [
@@ -19,10 +19,14 @@ export const SupplierDetail = () => {
   const [data, setData] = useState();
 
   const getSupplierDetail = async () => {
-    const res = await getSupplierById(Number(id));
+    try {
+      const res = await getSupplierById(Number(id));
 
-    if (res) {
-      setData(res);
+      if (res) {
+        setData(res);
+      }
+    } catch (e) {
+      console.log("====", e);
     }
   };
 
@@ -42,9 +46,7 @@ export const SupplierDetail = () => {
         }}
       >
         <Typography>Chi tiết</Typography>
-        <Link to={"/suppliers"} style={{ textDecoration: "none" }}>
-          <ButtonCustom variant="contained" title="Quay lại" />
-        </Link>
+        <ButtonReturn resource="suppliers" />
       </div>
       <Card style={{ padding: 10 }}>
         <Grid container spacing={2}>
@@ -62,4 +64,4 @@ export const SupplierDetail = () => {
       </Card>
     </div>
   );
-}
+};

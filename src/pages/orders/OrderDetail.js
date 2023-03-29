@@ -2,10 +2,9 @@ import { getOrderById } from "../../apis";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { Typography, Card, Grid } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import { ButtonCustom } from "../../components/Button";
+import { ButtonReturn } from "../../components/Button";
 import _ from "lodash";
-import {getStatus} from "../../utils";
+import { getStatus } from "../../utils";
 
 const headers = [
   { id: "name", label: "Tên danh mục" },
@@ -22,16 +21,20 @@ export const OrderDetail = () => {
   const [data, setData] = useState();
 
   const getOrderDetail = async () => {
-    const res = await getOrderById(Number(id));
+    try {
+      const res = await getOrderById(Number(id));
 
-    if (res) {
-      const transform = {
-        ...res,
-        name: res.customer.fullName,
-        email: res.customer.email,
-        status: getStatus(res.status).text
-      };
-      setData(transform);
+      if (res) {
+        const transform = {
+          ...res,
+          name: res.customer.fullName,
+          email: res.customer.email,
+          status: getStatus(res.status).text,
+        };
+        setData(transform);
+      }
+    } catch (e) {
+      console.log("====Err", e);
     }
   };
 
@@ -51,9 +54,7 @@ export const OrderDetail = () => {
         }}
       >
         <Typography>Chi tiết</Typography>
-        <Link to={"/orders"} style={{ textDecoration: "none" }}>
-          <ButtonCustom variant="contained" title="Quay lại" />
-        </Link>
+        <ButtonReturn resource="orders" />
       </div>
       <Card style={{ padding: 10 }}>
         <Grid container spacing={2}>

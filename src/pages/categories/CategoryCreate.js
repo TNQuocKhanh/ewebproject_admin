@@ -1,13 +1,8 @@
-import {
-  TextField,
-  Card,
-  Grid,
-  Typography,
-} from "@material-ui/core";
+import { TextField, Card, Grid, Typography } from "@material-ui/core";
 import { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { createCategory } from "../../apis/category.api";
-import { ButtonCustom } from "../../components/Button";
+import { ButtonReturn, ButtonSave } from "../../components/Button";
 
 export const CategoryCreate = () => {
   const [name, setName] = useState();
@@ -17,9 +12,13 @@ export const CategoryCreate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = { name };
-    const res = await createCategory(data);
-    if (res) {
-      history.push("/categories");
+    try {
+      const res = await createCategory(data);
+      if (res) {
+        history.push("/categories");
+      }
+    } catch (e) {
+      console.log("==Err", e);
     }
   };
 
@@ -34,9 +33,7 @@ export const CategoryCreate = () => {
         }}
       >
         <Typography>Thêm mới</Typography>
-        <Link to={"/categories"} style={{ textDecoration: "none" }}>
-          <ButtonCustom variant="contained" title="Quay lại" />
-        </Link>
+        <ButtonReturn resource="categories" />
       </div>
       <Card style={{ padding: 10 }}>
         <form onSubmit={handleSubmit}>
@@ -54,7 +51,7 @@ export const CategoryCreate = () => {
             </Grid>
           </Grid>
           <div style={{ margin: "20px 0" }}>
-            <ButtonCustom variant="contained" type="submit" title="Lưu" />
+            <ButtonSave />
           </div>
         </form>
       </Card>

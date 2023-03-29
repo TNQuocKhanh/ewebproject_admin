@@ -8,9 +8,12 @@ import {
   Grid,
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { getCategoryById, updateCategory } from "../../apis";
-import { ButtonCustom } from "../../components/Button";
+import {
+  ButtonReturn,
+  ButtonSave,
+} from "../../components/Button";
 
 export const CategoryEdit = () => {
   const [name, setName] = useState("");
@@ -22,9 +25,13 @@ export const CategoryEdit = () => {
   const history = useHistory();
 
   const getCategoryDetail = async () => {
-    const res = await getCategoryById(Number(id));
-    setName(res.name);
-    setEnabled(res.enabled);
+    try {
+      const res = await getCategoryById(Number(id));
+      setName(res.name);
+      setEnabled(res.enabled);
+    } catch (e) {
+      console.log("===Err", e);
+    }
   };
 
   useEffect(() => {
@@ -34,12 +41,16 @@ export const CategoryEdit = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateCategory(Number(id), {
-      name,
-      enabled: enabled === "true" ? true : false,
-    });
+    try {
+      updateCategory(Number(id), {
+        name,
+        enabled: enabled === "true" ? true : false,
+      });
 
-    history.push("/categories");
+      history.push("/categories");
+    } catch (e) {
+      console.log("===Err", e);
+    }
   };
 
   return (
@@ -53,9 +64,7 @@ export const CategoryEdit = () => {
         }}
       >
         <Typography>Cập nhật</Typography>
-        <Link to={"/categories"} style={{ textDecoration: "none" }}>
-          <ButtonCustom variant="contained" title="Quay lại" />
-        </Link>
+        <ButtonReturn resource="categories" />
       </div>
       <Card style={{ padding: 10 }}>
         <form onSubmit={handleSubmit}>
@@ -91,7 +100,7 @@ export const CategoryEdit = () => {
             </Grid>
           </Grid>
           <div style={{ margin: "20px 0" }}>
-            <ButtonCustom variant="contained" type="submit" title="Lưu" />
+            <ButtonSave />
           </div>
         </form>
       </Card>

@@ -2,8 +2,7 @@ import { getCategoryById } from "../../apis";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { Typography, Card, Grid } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import { ButtonCustom } from "../../components/Button";
+import { ButtonReturn } from "../../components/Button";
 import _ from "lodash";
 
 const headers = [
@@ -18,14 +17,18 @@ export const CategoryDetail = () => {
   const [data, setData] = useState();
 
   const getCategoryDetail = async () => {
-    const res = await getCategoryById(Number(id));
+    try {
+      const res = await getCategoryById(Number(id));
 
-    if (res) {
-      const transform = {
-        ...res,
-        enabled: res.enabled ? "Hoạt động" : "Không hoạt động",
-      };
-      setData(transform);
+      if (res) {
+        const transform = {
+          ...res,
+          enabled: res.enabled ? "Hoạt động" : "Không hoạt động",
+        };
+        setData(transform);
+      }
+    } catch (e) {
+      console.log("===Err", e);
     }
   };
 
@@ -45,9 +48,7 @@ export const CategoryDetail = () => {
         }}
       >
         <Typography>Chi tiết</Typography>
-        <Link to={"/categories"} style={{ textDecoration: "none" }}>
-          <ButtonCustom variant="contained" title="Quay lại" />
-        </Link>
+        <ButtonReturn resource="categories" />
       </div>
       <Card style={{ padding: 10 }}>
         <Grid container spacing={2}>

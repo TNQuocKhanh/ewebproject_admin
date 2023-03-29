@@ -6,34 +6,20 @@ import {
   Typography,
   Card,
   Grid,
-  Box,
   Tabs,
   Tab,
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
-import { getProductById, updateProduct, updateImageProduct } from "../../apis";
-import { ButtonCustom } from "../../components/Button";
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
+import { useHistory, useParams } from "react-router-dom";
+import {
+  getProductById,
+  updateProduct,
+  updateImageProduct,
+  getListCategories,
+  getListSupplier,
+} from "../../apis";
+import { ButtonReturn, ButtonSave } from "../../components/Button";
+import { TabPanel } from "../../components";
 
 const ProductForm = () => {
   const [name, setName] = useState("");
@@ -41,19 +27,34 @@ const ProductForm = () => {
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
   const [categoryId, setCategoryId] = useState("");
+  const [supplierId, setSupplierId] = useState("");
 
+  const [quantity, setQuantity] = useState();
+  const [specifications, setSpecifications] = useState();
+  const [description, setDescription] = useState();
   const params = useParams();
   const id = params.id;
+
+  const [categoryArr, setCategoryArr] = useState([]);
+  const [supplierArr, setSupplierArr] = useState([]);
 
   const history = useHistory();
 
   const getUserDetail = async () => {
-    const res = await getProductById(Number(id));
-    setName(res.name);
-    setCost(res.cost);
-    setPrice(res.price);
-    setDiscount(res.discountPercent);
-    setCategoryId(res.category?.id);
+    try {
+      const res = await getProductById(Number(id));
+      setName(res.name);
+      setCost(res.cost);
+      setPrice(res.price);
+      setDiscount(res.discountPercent);
+      setCategoryId(res.category?.id);
+      setSupplierId(res.supplier?.id);
+      setQuantity(res.quantity);
+      setSpecifications(res.specifications);
+      setDescription(res.description);
+    } catch (e) {
+      console.log("===Err", e);
+    }
   };
 
   useEffect(() => {
@@ -61,17 +62,48 @@ const ProductForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const getAllCategories = async () => {
+    try {
+      const res = await getListCategories();
+      setCategoryArr(res);
+    } catch (e) {
+      setCategoryArr([]);
+    }
+  };
+
+  const getAllSupllier = async () => {
+    try {
+      const res = await getListSupplier();
+      setSupplierArr(res);
+    } catch (e) {
+      setSupplierArr([]);
+    }
+  };
+
+  useEffect(() => {
+    getAllCategories();
+    getAllSupllier();
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateProduct(Number(id), {
-      name,
-      cost,
-      price,
-      discount,
-      categoryId,
-    });
+    try {
+      updateProduct(Number(id), {
+        name,
+        cost,
+        price,
+        discount,
+        categoryId,
+        supplierId,
+        quantity,
+        specifications,
+        description,
+      });
 
-    history.push("/products");
+      history.push("/products");
+    } catch (e) {
+      console.log("===Err", e);
+    }
   };
 
   return (
@@ -103,10 +135,31 @@ const ProductForm = () => {
                 InputLabelProps={{ shrink: true }}
               >
                 <option aria-label="None" value="" />
-                <option value="1">Laptop</option>
-                <option value="2">Phone2</option>
-                <option value="3">Phone3</option>
-                <option value="4">Phone4</option>
+                {categoryArr.map((it) => (
+                  <option key={it.id} value={it.id}>
+                    {it.name}
+                  </option>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel htmlFor="outlined-age-native-simple">
+                Nha cung cap
+              </InputLabel>
+              <Select
+                native
+                value={supplierId}
+                onChange={(e) => setSupplierId(e.target.value)}
+                label="Danh mục"
+              >
+                <option aria-label="None" value="" />
+                {supplierArr.map((it) => (
+                  <option key={it.id} value={it.id}>
+                    {it.name}
+                  </option>
+                ))}
               </Select>
             </FormControl>
           </Grid>
@@ -144,9 +197,47 @@ const ProductForm = () => {
               InputLabelProps={{ shrink: true }}
             />
           </Grid>
+          <Grid item md={6} xs={12}>
+            <TextField
+              fullWidth
+              type="number"
+              InputProps={{ inputProps: { min: 1 } }}
+              label="So luong nhap"
+              InputLabelProps={{ shrink: true }}
+              variant="outlined"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+            />
+          </Grid>
+          <Grid item md={6}></Grid>
+          <Grid item md={6} xs={12}>
+            <TextField
+              fullWidth
+              label="specifications"
+              rows={3}
+              variant="outlined"
+              multiline
+              value={specifications}
+              InputLabelProps={{ shrink: true }}
+              onChange={(e) => setSpecifications(e.target.value)}
+            />
+          </Grid>
+          <Grid item md={6}></Grid>
+          <Grid item md={6} xs={12}>
+            <TextField
+              fullWidth
+              multiline
+              rows={3}
+              InputLabelProps={{ shrink: true }}
+              label="description"
+              variant="outlined"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </Grid>
         </Grid>
         <div style={{ margin: "20px 0" }}>
-          <ButtonCustom variant="contained" type="submit" title="Lưu" />
+          <ButtonSave />
         </div>
       </form>
     </div>
@@ -209,9 +300,7 @@ export const ProductEdit = () => {
         }}
       >
         <Typography>Cập nhật</Typography>
-        <Link to={"/products"} style={{ textDecoration: "none" }}>
-          <ButtonCustom variant="contained" title="Quay lại" />
-        </Link>
+        <ButtonReturn resource="products" />
       </div>
       <Card>
         <Tabs

@@ -7,6 +7,8 @@ import EditIcon from "@material-ui/icons/Edit";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import { ExportToCsv } from "export-to-csv";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import SaveIcon from '@material-ui/icons/Save'
 
 export const ButtonCustom = (props) => {
   const {
@@ -49,6 +51,33 @@ export const ButtonCreate = (props) => {
         variant="contained"
       />
     </Link>
+  );
+};
+
+export const ButtonReturn = (props) => {
+  const { resource } = props;
+
+  return (
+    <Link to={`/${resource}`} style={{ textDecoration: "none" }}>
+      <ButtonCustom
+        style={{ backgroundColor: "#556afe", color: "#fff" }}
+        icon={<ArrowBackIcon />}
+        title="Quay lại"
+        variant="contained"
+      />
+    </Link>
+  );
+};
+
+export const ButtonSave = (props) => {
+  return (
+      <ButtonCustom
+        style={{ backgroundColor: "#556afe", color: "#fff" }}
+        icon={<SaveIcon />}
+        title="Lưu"
+        type='submit'
+        variant="contained"
+      />
   );
 };
 

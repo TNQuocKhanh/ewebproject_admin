@@ -6,7 +6,7 @@ import { ButtonCreate, IconButtonDetail, IconButtonEdit } from "./Button";
 import { HeaderAction } from "./HeaderAction";
 import _ from "lodash";
 import LockIcon from "@material-ui/icons/Lock";
-import { blockUser, unblockUser } from "../apis";
+import { blockUser } from "../apis";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import { getStatus } from "../utils";
 
@@ -33,11 +33,11 @@ export const MobileList = ({
 }) => {
   const classes = useStyles();
   const handleBlock = (row) => {
-    blockUser(row.id);
+    blockUser(row.id, {status: "STATUS_BLOCKED"});
   };
 
   const handleUnblock = (row) => {
-    unblockUser(row.id);
+    blockUser(row.id, {status: "STATUS_ACTIVE"});
   };
   return (
     <>
