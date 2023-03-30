@@ -17,6 +17,7 @@ import {
   updateImageProduct,
   getListCategories,
   getListSupplier,
+  updateExtraImageProduct,
 } from "../../apis";
 import { ButtonReturn, ButtonSave } from "../../components/Button";
 import { TabPanel } from "../../components";
@@ -244,18 +245,20 @@ const ProductForm = () => {
   );
 };
 
-export const ImageUpload = () => {
+export const ImageUpload = ({ image }) => {
   const [selectedFile, setSelectedFile] = useState();
-  const [preview, setPreview] = useState();
+  const [preview, setPreview] = useState(image);
+
+  const params = useParams();
+  const { id } = params;
 
   useEffect(() => {
     if (!selectedFile) {
-      setPreview(undefined);
       return;
     }
 
     const objectUrl = URL.createObjectURL(selectedFile);
-    updateImageProduct(1, selectedFile);
+    updateImageProduct(id, selectedFile);
     setPreview(objectUrl);
 
     return () => URL.revokeObjectURL(objectUrl);
@@ -272,16 +275,60 @@ export const ImageUpload = () => {
   return (
     <div>
       <div
-        style={{ border: "1px solid #000", width: "300px", height: "300px" }}
+        style={{ border: "1px solid #000", width: "250px", height: "250px" }}
       >
-        {selectedFile && (
-          <img alt="img" src={preview} width="300px" height="300px" />
-        )}
+        <img alt="img" src={preview} width="250px" height="250px" />
       </div>
       <input type="file" onChange={onSelectFile} />
     </div>
   );
 };
+
+function PreviewMultipleImages({ extra, image }) {
+  const [images, setImages] = useState(extra);
+
+  const params = useParams();
+  const { id } = params;
+
+  const handleMultipleImages = (evnt) => {
+    const selectedFIles = [];
+    const targetFiles = evnt.target.files;
+    const targetFilesObject = [...targetFiles];
+    targetFilesObject.map((file) => {
+      return selectedFIles.push(URL.createObjectURL(file));
+    });
+    console.log("====selectedFIles", selectedFIles);
+    try {
+      updateExtraImageProduct(id, image, selectedFIles);
+    } catch (e) {
+      console.log("===Error", e);
+    }
+    setImages(selectedFIles);
+  };
+  return (
+    <>
+      <div style={{ display: "flex" }}>
+        {images.map((url) => {
+          return (
+            <div
+              style={{
+                border: "1px solid #000",
+                width: "200px",
+                height: "200px",
+                marginRight: 5,
+              }}
+            >
+              <img alt="img" src={url} width="200px" height="200px" />
+            </div>
+          );
+        })}
+      </div>
+      <div>
+        <input type="file" onChange={handleMultipleImages} multiple />
+      </div>
+    </>
+  );
+}
 
 export const ProductEdit = () => {
   const [value, setValue] = useState(0);
@@ -289,6 +336,28 @@ export const ProductEdit = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const params = useParams();
+  const { id } = params;
+
+  const [mainImage, setMainImage] = useState();
+  const [extraImage, setExtraImage] = useState();
+
+  const getUserDetail = async () => {
+    try {
+      const res = await getProductById(Number(id));
+      setMainImage(res.mainImage);
+      setExtraImage(res.productImages.map((it) => it.extraImage));
+    } catch (e) {
+      console.log("===Err", e);
+    }
+  };
+
+  useEffect(() => {
+    getUserDetail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div>
       <div
@@ -315,7 +384,14 @@ export const ProductEdit = () => {
           <ProductForm />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <ImageUpload />
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={12}>
+              <ImageUpload image={mainImage} />
+            </Grid>
+            <Grid item xs={12} md={12}>
+              <PreviewMultipleImages extra={extraImage} image={mainImage} />
+            </Grid>
+          </Grid>
         </TabPanel>
       </Card>
     </div>
