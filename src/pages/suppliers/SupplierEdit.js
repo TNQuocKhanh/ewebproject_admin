@@ -77,7 +77,6 @@ export const SupplierEdit = () => {
                 fullWidth
                 type="text"
                 label="SDT"
-                disabled
                 variant="outlined"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
@@ -89,7 +88,6 @@ export const SupplierEdit = () => {
                 fullWidth
                 type="text"
                 label="Dia chi"
-                disabled
                 variant="outlined"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}

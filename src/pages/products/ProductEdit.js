@@ -14,7 +14,6 @@ import { useHistory, useParams } from "react-router-dom";
 import {
   getProductById,
   updateProduct,
-  updateImageProduct,
   getListCategories,
   getListSupplier,
   updateExtraImageProduct,
@@ -245,45 +244,6 @@ const ProductForm = () => {
   );
 };
 
-export const ImageUpload = ({ image }) => {
-  const [selectedFile, setSelectedFile] = useState();
-  const [preview, setPreview] = useState(image);
-
-  const params = useParams();
-  const { id } = params;
-
-  useEffect(() => {
-    if (!selectedFile) {
-      return;
-    }
-
-    const objectUrl = URL.createObjectURL(selectedFile);
-    updateImageProduct(id, selectedFile);
-    setPreview(objectUrl);
-
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [selectedFile]);
-
-  const onSelectFile = (e) => {
-    if (!e.target.files || e.target.files.length === 0) {
-      setSelectedFile(undefined);
-      return;
-    }
-    setSelectedFile(e.target.files[0]);
-  };
-
-  return (
-    <div>
-      <div
-        style={{ border: "1px solid #000", width: "250px", height: "250px" }}
-      >
-        <img alt="img" src={preview} width="250px" height="250px" />
-      </div>
-      <input type="file" onChange={onSelectFile} />
-    </div>
-  );
-};
-
 function PreviewMultipleImages({ extra, image }) {
   const [images, setImages] = useState(extra);
 
@@ -299,7 +259,8 @@ function PreviewMultipleImages({ extra, image }) {
     });
     console.log("====selectedFIles", selectedFIles);
     try {
-      updateExtraImageProduct(id, image, selectedFIles);
+      console.log("===", image, selectedFIles);
+      updateExtraImageProduct(id, targetFiles);
     } catch (e) {
       console.log("===Error", e);
     }
@@ -385,9 +346,6 @@ export const ProductEdit = () => {
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Grid container spacing={2}>
-            <Grid item xs={12} md={12}>
-              <ImageUpload image={mainImage} />
-            </Grid>
             <Grid item xs={12} md={12}>
               <PreviewMultipleImages extra={extraImage} image={mainImage} />
             </Grid>
