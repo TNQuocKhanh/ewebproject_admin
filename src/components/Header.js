@@ -20,7 +20,7 @@ import {
   toggleSidebar,
 } from "../context/LayoutContext";
 import { getProfile, logout } from "../apis";
-import { NavLink, useHistory, Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   logotype: {
@@ -155,7 +155,7 @@ export default function Header() {
 
   const getUserProfile = async () => {
     const res = await getProfile();
-    console.log('===res', res)
+    //console.log('===profile', res)
     if (res) {
       setUserName(res.fullName);
     }

@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const DefaultList = ({
-  data,
+  data = [],
   title,
   columns,
   filter,
@@ -86,7 +86,7 @@ export const DefaultList = ({
         <hr />
         {data && data.length > 0 && (
           <Typography style={{ margin: "10px" }}>
-            Tổng số bản ghi: {data?.length || 0}
+            Tổng số bản ghi: {data.length || 0}
           </Typography>
         )}
         {data.length > 0 ? (

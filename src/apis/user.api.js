@@ -1,6 +1,6 @@
-import {storage} from '../utils'
+import { storage } from "../utils";
 
-const API_URL = process.env.REACT_APP_API_URL
+const API_URL = process.env.REACT_APP_API_URL;
 
 //const auth = storage.load('auth')
 //console.log('==auth', auth)
@@ -20,37 +20,39 @@ export const login = async (email, password) => {
 };
 
 export const logout = async () => {
-  const auth = storage.load('auth')
-  const token = auth.accessToken
+  const auth = storage.load("auth");
+  const token = auth.accessToken;
 
   const headers = new Headers();
   headers.append("Authorization", `Bearer ${token}`);
 
   const res = await fetch(`${API_URL}/logout`, {
     method: "POST",
-    headers
+    headers,
   });
   return res.json();
 };
 
-export const getListUsers = async () => {
-  const auth = storage.load('auth')
-  const token = auth.accessToken
+export const getListUsers = async (filter) => {
+  const auth = storage.load("auth");
+  const token = auth.accessToken;
 
   const headers = new Headers();
   headers.append("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${API_URL}/users`, {
-    method: "GET",
-    headers,
-  });
-
+  const res = await fetch(
+    `${API_URL}/users/filter?` + new URLSearchParams(filter),
+    {
+      method: "GET",
+      headers,
+    }
+  );
   return res.json();
 };
 
 export const createUser = async (data) => {
-  const auth = storage.load('auth')
-  const token = auth.accessToken
+  const auth = storage.load("auth");
+  const token = auth.accessToken;
 
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
@@ -59,15 +61,15 @@ export const createUser = async (data) => {
   const res = await fetch(`${API_URL}/user/create`, {
     method: "POST",
     headers,
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   });
 
   return res.json();
 };
 
 export const getUserById = async (id) => {
-  const auth = storage.load('auth')
-  const token = auth.accessToken
+  const auth = storage.load("auth");
+  const token = auth.accessToken;
 
   const headers = new Headers();
   headers.append("Authorization", `Bearer ${token}`);
@@ -81,8 +83,8 @@ export const getUserById = async (id) => {
 };
 
 export const updateUser = async (id, data) => {
-  const auth = storage.load('auth')
-  const token = auth.accessToken
+  const auth = storage.load("auth");
+  const token = auth.accessToken;
 
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
@@ -91,15 +93,15 @@ export const updateUser = async (id, data) => {
   const res = await fetch(`${API_URL}/user/${id}`, {
     method: "PUT",
     headers,
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   });
 
   return res.json();
-}
+};
 
 export const getProfile = async () => {
-  const auth = storage.load('auth')
-  const token = auth.accessToken
+  const auth = storage.load("auth");
+  const token = auth.accessToken;
 
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
@@ -111,11 +113,11 @@ export const getProfile = async () => {
   });
 
   return res.json();
-}
+};
 
-export const updateProfile  = async (data) => {
-  const auth = storage.load('auth')
-  const token = auth.accessToken
+export const updateProfile = async (data) => {
+  const auth = storage.load("auth");
+  const token = auth.accessToken;
 
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
@@ -124,51 +126,51 @@ export const updateProfile  = async (data) => {
   const res = await fetch(`${API_URL}/user/change-profile`, {
     method: "PUT",
     headers,
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   });
 
   return res.json();
-}
+};
 
 export const updateUserPhoto = async (id, data) => {
-  const auth = storage.load('auth')
-  const token = auth.accessToken
+  const auth = storage.load("auth");
+  const token = auth.accessToken;
 
   const headers = new Headers();
-  const formdata = new FormData()
-  formdata.append("image", data)
+  const formdata = new FormData();
+  formdata.append("image", data);
   headers.append("Authorization", `Bearer ${token}`);
 
   const res = await fetch(`${API_URL}/user/update-photo/${id}`, {
     method: "PUT",
     headers,
-    body: formdata 
+    body: formdata,
   });
 
   return res.json();
-}
+};
 
-export const updatePhotoProfile  =async (data) => {
-  const auth = storage.load('auth')
-  const token = auth.accessToken
+export const updatePhotoProfile = async (data) => {
+  const auth = storage.load("auth");
+  const token = auth.accessToken;
 
   const headers = new Headers();
-  const formdata = new FormData()
-  formdata.append("image", data)
+  const formdata = new FormData();
+  formdata.append("image", data);
   headers.append("Authorization", `Bearer ${token}`);
 
   const res = await fetch(`${API_URL}/user/update-photo`, {
     method: "PUT",
     headers,
-    body: formdata 
+    body: formdata,
   });
 
   return res.json();
-}
+};
 
 export const changeUserPassword = async (data) => {
-  const auth = storage.load('auth')
-  const token = auth.accessToken
+  const auth = storage.load("auth");
+  const token = auth.accessToken;
 
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
@@ -177,15 +179,15 @@ export const changeUserPassword = async (data) => {
   const res = await fetch(`${API_URL}/user/change-password`, {
     method: "PUT",
     headers,
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   });
 
   return res.json();
-}
+};
 
 export const updateRole = async (id, data) => {
-  const auth = storage.load('auth')
-  const token = auth.accessToken
+  const auth = storage.load("auth");
+  const token = auth.accessToken;
 
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
@@ -194,15 +196,15 @@ export const updateRole = async (id, data) => {
   const res = await fetch(`${API_URL}/user/update-role/${id}`, {
     method: "PUT",
     headers,
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   });
 
   return res.json();
-}
+};
 
 export const blockUser = async (id, data) => {
-  const auth = storage.load('auth')
-  const token = auth.accessToken
+  const auth = storage.load("auth");
+  const token = auth.accessToken;
 
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
@@ -211,8 +213,8 @@ export const blockUser = async (id, data) => {
   const res = await fetch(`${API_URL}/user/block/${id}`, {
     method: "PUT",
     headers,
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   });
 
   return res.json();
-}
+};

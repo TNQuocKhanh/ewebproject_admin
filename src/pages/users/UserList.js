@@ -7,6 +7,7 @@ import { ButtonCustom } from "../../components/Button";
 import { storage } from "../../utils";
 import { getListUsers } from "../../apis";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import SearchIcon from "@material-ui/icons/Search";
 
 const columns = [
   { id: "fullName", label: "Tên người dùng", minWidth: 170 },
@@ -21,52 +22,34 @@ const columns = [
 ];
 
 const FilterForm = (props) => {
-  const { setFilterValue } = props;
+  const { setFilterValues } = props;
+  const history = useHistory();
 
   const handleSubmit = (value) => {
-    setFilterValue(value);
+    setFilterValues(value);
+    const url = `${window.location.pathname}?` + new URLSearchParams(value);
+    history.push(url);
   };
+
   return (
     <Form
       onSubmit={handleSubmit}
-      initialValues={{}}
-      //initialValues={{ stooge: "larry", employed: false }}
-      setFilterValue={setFilterValue}
+      initialValues={{
+        fullName: new URLSearchParams(window.location.search).get("fullName"),
+      }}
+      setFilterValue={setFilterValues}
       render={({ handleSubmit, form, submitting, pristine, values }) => (
         <form onSubmit={handleSubmit}>
           <Grid container spacing={4}>
-            <Grid item xs={4}>
-              <label>Tên người dùng</label>
+            <Grid item xs={12} md={4}>
+              <label>Tên người dùng: </label>
               <Field
-                style={{ width: "200px", margin: "5px" }}
+                style={{ width: "200px", margin: "5px", height: "30px" }}
                 name="fullName"
                 component="input"
                 type="text"
                 placeholder="Tên người dùng"
               />
-            </Grid>
-            <Grid item xs={4}>
-              <label>Email</label>
-              <Field
-                style={{ width: "200px", margin: "5px" }}
-                name="email"
-                component="input"
-                type="text"
-                placeholder="Email"
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <label>Trạng thái</label>
-              <Field
-                name="status"
-                component="select"
-                style={{ width: "200px", margin: "5px" }}
-              >
-                <option />
-                <option value="sent">Sent</option>
-                <option value="pending">Pending</option>
-                <option value="declined">Declined</option>
-              </Field>
             </Grid>
           </Grid>
           <div
@@ -75,15 +58,13 @@ const FilterForm = (props) => {
           >
             <ButtonCustom
               disabled={submitting || pristine}
-              title="Tìm"
+              title="Tìm kiếm"
               variant="contained"
               handleClick={handleSubmit}
-            />
-            <ButtonCustom
-              disabled={submitting || pristine}
-              title="Bỏ lọc"
-              variant="contained"
-              handleClick={form.reset}
+              icon={<SearchIcon />}
+              style={
+                pristine ? {} : { backgroundColor: "#556afe", color: "#fff" }
+              }
             />
           </div>
         </form>
@@ -96,14 +77,16 @@ export const UserList = () => {
   const history = useHistory();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  //const [filterValues, setFilterValues] = useState();
+  const [filterValues, setFilterValues] = useState({
+    fullName: new URLSearchParams(window.location.search).get("fullName") || "",
+  });
 
   const getAllUsers = async () => {
     setLoading(true);
     try {
-      const res = await getListUsers();
+      const res = await getListUsers(filterValues);
       setLoading(false);
-      setData(res);
+      setData(res.content);
     } catch (e) {
       setData([]);
     }
@@ -118,10 +101,10 @@ export const UserList = () => {
       history.push("/login");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [filterValues]);
 
   const trans = [];
-  data.map((it) =>
+  data?.map((it) =>
     trans.push({ fullName: it.fullName, email: it.email, status: it.status })
   );
 
@@ -132,7 +115,7 @@ export const UserList = () => {
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <List
-            //filter={<FilterForm setFilterValues={setFilterValues} />}
+            filter={<FilterForm setFilterValues={setFilterValues} />}
             resource="users"
             isBlock={true}
             columns={columns}
