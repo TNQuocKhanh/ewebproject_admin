@@ -13,11 +13,7 @@ import {
 } from "@material-ui/core";
 import Widget from "./Widget";
 import { makeStyles } from "@material-ui/styles";
-import {
-  ButtonExport,
-  IconButtonDetail,
-  IconButtonEdit,
-} from "./Button";
+import { ButtonExport, IconButtonDetail, IconButtonEdit } from "./Button";
 import { HeaderAction } from "./HeaderAction";
 import LockIcon from "@material-ui/icons/Lock";
 import { blockUser } from "../apis";
@@ -46,6 +42,7 @@ export const DefaultList = ({
   isCreate,
   isBlock,
   dataCsv,
+  columnAction,
 }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
@@ -61,11 +58,11 @@ export const DefaultList = ({
   };
 
   const handleBlock = (row) => {
-    blockUser(row.id, {status: "STATUS_BLOCKED"});
+    blockUser(row.id, { status: "STATUS_BLOCKED" });
   };
 
   const handleUnblock = (row) => {
-    blockUser(row.id, {status: "STATUS_ACTIVE"});
+    blockUser(row.id, { status: "STATUS_ACTIVE" });
   };
 
   return (
@@ -142,8 +139,12 @@ export const DefaultList = ({
                           );
                         })}
                         <TableCell>
-                          <IconButtonEdit resource={resource} row={row} />
-                          <IconButtonDetail resource={resource} row={row} />
+                          {columnAction && (
+                            <>
+                              <IconButtonEdit resource={resource} row={row} />
+                              <IconButtonDetail resource={resource} row={row} />
+                            </>
+                          )}
                           {isBlock ? (
                             <>
                               {row.status === "STATUS_BLOCKED" ? (

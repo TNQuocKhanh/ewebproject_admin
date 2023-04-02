@@ -6,7 +6,7 @@ import { ButtonReturn } from "../../components/Button";
 import _ from "lodash";
 
 const headers = [
-  { id: "fullName", label: "Fullname" },
+  { id: "fullName", label: "Tên người dùng" },
   { id: "email", label: "Email" },
   { id: "roles", label: "Roles" },
 ];

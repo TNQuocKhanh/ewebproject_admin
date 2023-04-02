@@ -2,14 +2,13 @@ import { getSupplierById } from "../../apis";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { Typography, Card, Grid } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import { ButtonCustom, ButtonReturn } from "../../components/Button";
+import {  ButtonReturn } from "../../components/Button";
 import _ from "lodash";
 
 const headers = [
-  { id: "name", label: "Tên danh mục" },
-  { id: "phoneNumber", label: "SDT" },
-  { id: "address", label: "Dia chi" },
+  { id: "name", label: "Tên nhà cung cấp" },
+  { id: "phoneNumber", label: "Số điện thoại" },
+  { id: "address", label: "Địa chỉ" },
 ];
 
 export const SupplierDetail = () => {

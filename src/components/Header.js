@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Menu,
-  MenuItem,
-} from "@material-ui/core";
+import { AppBar, Toolbar, IconButton, Menu, MenuItem } from "@material-ui/core";
 import {
   Menu as MenuIcon,
   NotificationsNone as NotificationsIcon,
   Person as AccountIcon,
 } from "@material-ui/icons";
-import MenuOpenIcon from '@material-ui/icons/MenuOpen';
+import MenuOpenIcon from "@material-ui/icons/MenuOpen";
 import classNames from "classnames";
 
 import { makeStyles } from "@material-ui/styles";
@@ -19,14 +13,14 @@ import { makeStyles } from "@material-ui/styles";
 import { Badge, Typography } from "./Wrapper";
 import Notification from "./Notification";
 import UserAvatar from "./UserAvatar";
-
+import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import {
   useLayoutState,
   useLayoutDispatch,
   toggleSidebar,
 } from "../context/LayoutContext";
 import { getProfile, logout } from "../apis";
-import { NavLink, useHistory } from "react-router-dom";
+import { NavLink, useHistory, Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   logotype: {
@@ -147,7 +141,7 @@ export default function Header() {
   var [isNotificationsUnread, setIsNotificationsUnread] = useState(true);
   var [profileMenu, setProfileMenu] = useState(null);
 
-  const [username, setUserName] =useState()
+  const [username, setUserName] = useState();
 
   const history = useHistory();
 
@@ -160,16 +154,17 @@ export default function Header() {
   };
 
   const getUserProfile = async () => {
-    const res= await getProfile()
-    if(res){
-   setUserName(res.fullName)
+    const res = await getProfile();
+    console.log('===res', res)
+    if (res) {
+      setUserName(res.fullName);
     }
-  }
+  };
 
   useEffect(() => {
-    getUserProfile()
-  })
-  
+    getUserProfile();
+  }, []);
+
   return (
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
@@ -178,7 +173,7 @@ export default function Header() {
           onClick={() => toggleSidebar(layoutDispatch)}
           className={classNames(
             classes.headerMenuButtonSandwich,
-            classes.headerMenuButtonCollapse,
+            classes.headerMenuButtonCollapse
           )}
         >
           {layoutState.isSidebarOpened ? (
@@ -186,7 +181,7 @@ export default function Header() {
               classes={{
                 root: classNames(
                   classes.headerIcon,
-                  classes.headerIconCollapse,
+                  classes.headerIconCollapse
                 ),
               }}
             />
@@ -195,7 +190,7 @@ export default function Header() {
               classes={{
                 root: classNames(
                   classes.headerIcon,
-                  classes.headerIconCollapse,
+                  classes.headerIconCollapse
                 ),
               }}
             />
@@ -260,28 +255,29 @@ export default function Header() {
         >
           <div className={classes.profileMenuUser}>
             <Typography variant="h4" weight="medium">
-              {username || ' '} 
+              {username || " "}
             </Typography>
           </div>
           <MenuItem
             className={classNames(
               classes.profileMenuItem,
-              classes.headerMenuItem,
+              classes.headerMenuItem
             )}
-        >
-            <NavLink to={'/profile'} style={{textDecoration: 'none'}}>
-            <AccountIcon className={classes.profileMenuIcon} /> Profile
-            </NavLink>
+          >
+            <Link to={"/profile"} style={{ textDecoration: "none" }}>
+              <AccountIcon className={classes.profileMenuIcon} /> Thông tin
+            </Link>
           </MenuItem>
           <MenuItem
             className={classNames(
               classes.profileMenuItem,
-              classes.headerMenuItem,
+              classes.headerMenuItem
             )}
-        >
-            <NavLink to={'change-password'} style={{ textDecoration: 'none'}}>
-            <AccountIcon className={classes.profileMenuIcon} /> Change password
-            </NavLink>
+          >
+            <Link to={"change-password"} style={{ textDecoration: "none" }}>
+              <VpnKeyIcon className={classes.profileMenuIcon} />
+              Đổi mật khẩu
+            </Link>
           </MenuItem>
           <div className={classes.profileMenuUser}>
             <Typography
@@ -289,7 +285,7 @@ export default function Header() {
               color="primary"
               onClick={handleLogout}
             >
-              Sign Out
+              Đăng xuất
             </Typography>
           </div>
         </Menu>

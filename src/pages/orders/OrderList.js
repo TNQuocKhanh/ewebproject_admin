@@ -7,9 +7,9 @@ import { getListOrders } from "../../apis";
 
 const columns = [
   { id: "email", label: "Email", minWidth: 170 },
-  { id: "paymentMethod", label: "Phuong thuc", minWidth: 170 },
-  { id: "orderTime", label: "Ngay tao", minWidth: 170 },
-  { id: "total", label: "Total", minWidth: 170 },
+  { id: "paymentMethod", label: "Phương thức thanh toán", minWidth: 170 },
+  { id: "orderTime", label: "Ngày đặt hàng", minWidth: 170 },
+  { id: "total", label: "Tổng tiền", minWidth: 170 },
   {
     id: "status",
     label: "Trạng thái",
@@ -58,7 +58,7 @@ export const OrderList = () => {
             resource="orders"
             columns={columns}
             data={data}
-            title="Danh sách don hang"
+            title="Danh sách đơn hàng"
           />
         </Grid>
       </Grid>

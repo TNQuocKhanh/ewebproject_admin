@@ -65,7 +65,7 @@ export const SupplierEdit = () => {
               <TextField
                 fullWidth
                 type="text"
-                label="Tên danh mục"
+                label="Tên nhà cung cấp"
                 variant="outlined"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -76,7 +76,7 @@ export const SupplierEdit = () => {
               <TextField
                 fullWidth
                 type="text"
-                label="SDT"
+                label="Số điện thoại"
                 variant="outlined"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
@@ -87,7 +87,7 @@ export const SupplierEdit = () => {
               <TextField
                 fullWidth
                 type="text"
-                label="Dia chi"
+                label="Địa chỉ"
                 variant="outlined"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}

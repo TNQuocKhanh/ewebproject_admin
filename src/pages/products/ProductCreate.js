@@ -134,13 +134,13 @@ export const ProductCreate = () => {
             <Grid item md={6} xs={12}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel htmlFor="outlined-age-native-simple">
-                  Nha cung cap
+                  Nhà cung cấp
                 </InputLabel>
                 <Select
                   native
                   value={supplierId}
                   onChange={(e) => setSupplierId(e.target.value)}
-                  label="Danh mục"
+                  label="Nhà cung cấp"
                 >
                   <option aria-label="None" value="" />
                   {supplierArr.map((it) => (
@@ -177,7 +177,7 @@ export const ProductCreate = () => {
                 fullWidth
                 type="number"
                 InputProps={{ inputProps: { min: 1 } }}
-                label="So luong nhap"
+                label="Số lượng nhập"
                 variant="outlined"
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
@@ -187,7 +187,7 @@ export const ProductCreate = () => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                label="specifications"
+                label="Thông số sản phẩm"
                 rows={3}
                 variant="outlined"
                 multiline
@@ -201,7 +201,7 @@ export const ProductCreate = () => {
                 fullWidth
                 multiline
                 rows={3}
-                label="description"
+                label="Mô tả"
                 variant="outlined"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}

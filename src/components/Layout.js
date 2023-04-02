@@ -13,7 +13,7 @@ import { UserList, UserEdit, UserCreate, UserDetail, Profile, ChangePassword } f
 import { useLayoutState } from "../context/LayoutContext";
 import { ProductList, ProductCreate, ProductEdit, ProductDetail } from "../pages/products";
 import {CategoryList, CategoryCreate, CategoryEdit, CategoryDetail } from '../pages/categories'
-import { CustomerList, CustomerEdit, CustomerDetail }  from '../pages/customers'
+import { CustomerList }  from '../pages/customers'
 import { OrderDetail, OrderEdit, OrderList } from '../pages/orders'
 import {SupplierList, SupplierEdit, SupplierDetail, SupplierCreate} from '../pages/suppliers'
 
@@ -71,8 +71,6 @@ function Layout(props) {
               <Route path="/categories/:id/edit" exact component={CategoryEdit} />
               <Route path="/categories/:id/detail" exact component={CategoryDetail} />
               <Route path="/customers" exact component={CustomerList} />
-              <Route path="/customers/:id/edit" exact component={CustomerEdit} />
-              <Route path="/customers/:id/detail" exact component={CustomerDetail} />
               <Route path="/orders" exact component={OrderList} />
               <Route path="/orders/:id/edit" exact component={OrderEdit} />
               <Route path="/orders/:id/detail" exact component={OrderDetail} />

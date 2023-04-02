@@ -30,14 +30,15 @@ export const MobileList = ({
   resource,
   isCreate,
   isBlock,
+  columnAction,
 }) => {
   const classes = useStyles();
   const handleBlock = (row) => {
-    blockUser(row.id, {status: "STATUS_BLOCKED"});
+    blockUser(row.id, { status: "STATUS_BLOCKED" });
   };
 
   const handleUnblock = (row) => {
-    blockUser(row.id, {status: "STATUS_ACTIVE"});
+    blockUser(row.id, { status: "STATUS_ACTIVE" });
   };
   return (
     <>
@@ -73,16 +74,26 @@ export const MobileList = ({
                     >{`${item.label}: ${result}`}</Grid>
                   );
                 })}
-                <IconButtonEdit resource={resource} row={it} />
-                <IconButtonDetail resource={resource} row={it} />
-                {isBlock && it.status === "STATUS_BLOCKED" ? (
-                  <IconButton onClick={() => handleUnblock(it)}>
-                    <LockOpenIcon fontSize="small" color="primary" />
-                  </IconButton>
+                {columnAction && (
+                  <>
+                    <IconButtonEdit resource={resource} row={it} />
+                    <IconButtonDetail resource={resource} row={it} />
+                  </>
+                )}
+                {isBlock ? (
+                  <>
+                    {it.status === "STATUS_BLOCKED" ? (
+                      <IconButton onClick={() => handleUnblock(it)}>
+                        <LockOpenIcon fontSize="small" color="primary" />
+                      </IconButton>
+                    ) : (
+                      <IconButton onClick={() => handleBlock(it)}>
+                        <LockIcon fontSize="small" color="primary" />
+                      </IconButton>
+                    )}
+                  </>
                 ) : (
-                  <IconButton onClick={() => handleBlock(it)}>
-                    <LockIcon fontSize="small" color="primary" />
-                  </IconButton>
+                  ""
                 )}
               </Grid>
             </Card>

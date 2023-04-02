@@ -43,7 +43,7 @@ export const SupplierCreate = () => {
             <Grid item md={6} xs={12}>
               <TextField
                 type="text"
-                label="Tên NCC"
+                label="Tên nhà cung cấp"
                 variant="outlined"
                 value={name}
                 fullWidth
@@ -53,7 +53,7 @@ export const SupplierCreate = () => {
             <Grid item md={6} xs={12}>
               <TextField
                 type="text"
-                label="SDT"
+                label="Số điện thoại"
                 variant="outlined"
                 value={phone}
                 fullWidth
@@ -63,7 +63,7 @@ export const SupplierCreate = () => {
             <Grid item md={6} xs={12}>
               <TextField
                 type="text"
-                label="Dia chi"
+                label="Địa chỉ"
                 variant="outlined"
                 value={address}
                 fullWidth

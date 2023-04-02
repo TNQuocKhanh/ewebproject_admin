@@ -12,7 +12,8 @@ export default function List({
   resource,
   isCreate = true,
   isBlock = false,
-  dataCsv
+  dataCsv,
+  columnAction = true,
 }) {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
@@ -27,8 +28,9 @@ export default function List({
           columns={columns}
           resource={resource}
           isCreate={isCreate}
-        isBlock={isBlock}
-         dataCsv={dataCsv}
+          isBlock={isBlock}
+          dataCsv={dataCsv}
+          columnAction={columnAction}
         />
       ) : (
         <MobileList
@@ -39,6 +41,7 @@ export default function List({
           resource={resource}
           isCreate={isCreate}
           isBlock={isBlock}
+          columnAction={columnAction}
         />
       )}
     </>

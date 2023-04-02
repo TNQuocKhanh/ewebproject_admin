@@ -27,7 +27,7 @@ export const CustomerList = () => {
       console.log("===res", res);
       setData(res || []);
     } catch (e) {
-      console.log('===Error', e)
+      console.log("===Error", e);
       setData([]);
     }
   };
@@ -48,6 +48,7 @@ export const CustomerList = () => {
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <List
+            columnAction={false}
             isCreate={false}
             resource="customers"
             columns={columns}

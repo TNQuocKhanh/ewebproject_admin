@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import useStyles from "./styles";
-import logo from "./logo.svg";
+import img from './image.png'
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import { login } from "../../apis";
@@ -50,7 +50,7 @@ function Login(props) {
   return (
     <Grid container className={classes.container}>
       <div className={classes.logotypeContainer}>
-        <img src={logo} alt="logo" className={classes.logotypeImage} />
+        <img src={img} alt="logo" className={classes.logotypeImage} />
         <Typography className={classes.logotypeText}>HDKShop Admin</Typography>
       </div>
       <div className={classes.formContainer}>

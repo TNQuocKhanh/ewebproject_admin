@@ -17,6 +17,7 @@ const useStyles =  makeStyles(() => ({
     color: "white",
   },
 }));
+
 export default function UserAvatar({ color = "primary", ...props }) {
   var classes = useStyles();
   var theme = useTheme();

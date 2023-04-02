@@ -76,7 +76,7 @@ export const OrderEdit = () => {
                 fullWidth
                 onChange={(e) => setName(e.target.value)}
                 type="text"
-                label="Nguoi dat hang"
+                label="Người đặt hàng"
                 variant="outlined"
                 value={name}
                 InputLabelProps={{ shrink: true }}
@@ -100,7 +100,7 @@ export const OrderEdit = () => {
                 fullWidth
                 type="text"
                 onChange={(e) => setPaymentMethod(e.target.value)}
-                label="Phuong thuc thanh toan"
+                label="Phương thức thanh toán"
                 variant="outlined"
                 value={paymentMethod}
                 disabled
@@ -111,7 +111,7 @@ export const OrderEdit = () => {
               <TextField
                 fullWidth
                 type="text"
-                label="Thoi gian dat hang"
+                label="Ngày đặt hàng"
                 onChange={(e) => setOrderTime(e.target.value)}
                 variant="outlined"
                 value={orderTime}

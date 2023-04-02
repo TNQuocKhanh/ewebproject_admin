@@ -7,10 +7,10 @@ import _ from "lodash";
 import { getStatus } from "../../utils";
 
 const headers = [
-  { id: "name", label: "Tên danh mục" },
-  { id: "email", label: "Trạng thái" },
-  { id: "paymentMethod", label: "Phuong thuc" },
-  { id: "orderTime", label: "Ngay dat" },
+  { id: "name", label: "Người đặt hàng" },
+  { id: "email", label: "Email" },
+  { id: "paymentMethod", label: "Phương thức thanh toán" },
+  { id: "orderTime", label: "Ngày đặt hàng" },
   { id: "status", label: "Trạng thái" },
 ];
 

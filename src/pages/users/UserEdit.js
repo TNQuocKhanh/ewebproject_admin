@@ -71,7 +71,7 @@ export const UserEdit = () => {
                 fullWidth
                 type="text"
                 required
-                label="Full Name"
+                label="Tên người dùng"
                 variant="outlined"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}

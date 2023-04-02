@@ -97,22 +97,6 @@ export const updateUser = async (id, data) => {
   return res.json();
 }
 
-export const downloadUserList = async () => {
-  const auth = storage.load('auth')
-  const token = auth.accessToken
-
-  const headers = new Headers();
-  headers.append("Content-Type", "application/json");
-  headers.append("Authorization", `Bearer ${token}`);
-
-  const res = await fetch(`${API_URL}/users/export/excel`, {
-    method: "GET",
-    headers,
-  });
-
-  return res.json();
-}
-
 export const getProfile = async () => {
   const auth = storage.load('auth')
   const token = auth.accessToken

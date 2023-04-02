@@ -6,9 +6,9 @@ import { storage } from "../../utils";
 import { getListSupplier } from "../../apis";
 
 const columns = [
-  { id: "name", label: "Tên nha cung cap", minWidth: 170 },
-  { id: "phoneNumber", label: "So dien thoai", minWidth: 170 },
-  { id: "address", label: "Dia chi", minWidth: 170 },
+  { id: "name", label: "Tên nhà cung cấp", minWidth: 170 },
+  { id: "phoneNumber", label: "Số điện thoại", minWidth: 170 },
+  { id: "address", label: "Địa chỉ", minWidth: 170 },
 ];
 
 export const SupplierList = () => {
@@ -49,7 +49,7 @@ export const SupplierList = () => {
             resource="suppliers"
             columns={columns}
             data={data}
-            title="Danh sách nha cung cap"
+            title="Danh sách nhà cung cấp"
           />
         </Grid>
       </Grid>

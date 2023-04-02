@@ -1,8 +1,9 @@
 import { TextField, Typography, Card, Grid, Box } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { getProfile, updatePhotoProfile, updateProfile } from "../../apis";
-import { ButtonCustom } from "../../components/Button";
+import { ButtonSave, ButtonCustom } from "../../components/Button";
+import { Link } from "react-router-dom";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 export const Profile = () => {
   const [fullName, setFullName] = useState();
@@ -20,7 +21,6 @@ export const Profile = () => {
     }
     const objectUrl = URL.createObjectURL(selectedFile);
     setPhoto(objectUrl);
-    updatePhotoProfile(selectedFile)
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 
@@ -50,6 +50,14 @@ export const Profile = () => {
     setSelectedFile(e.target.files[0]);
   };
 
+  const handleUploadPhoto = async () => {
+    try {
+      await updatePhotoProfile(selectedFile);
+    } catch (error) {
+      console.log("====Error", error);
+    }
+  };
+
   return (
     <div>
       <div
@@ -60,21 +68,38 @@ export const Profile = () => {
           margin: 10,
         }}
       >
-        <Typography>Thong tin</Typography>
+        <Typography>Thông tin</Typography>
         <Link to={"/"} style={{ textDecoration: "none" }}>
-          <ButtonCustom variant="contained" title="Quay lại" />
+          <ButtonCustom
+            style={{ backgroundColor: "#556afe", color: "#fff" }}
+            icon={<ArrowBackIcon />}
+            variant="contained"
+            title="Quay lại"
+          />
         </Link>
       </div>
       <Card style={{ padding: 10 }}>
         <Grid container spacing={2}>
           <Grid item md={4} xs={12}>
             <div>
-              <Box style={{border: '1px solid #000', height: '200px', width: '200px', margin: 'auto'}}>
-            <img src={photo} alt="avatar" width='200px' height='200px' />
-          </Box>
-          <div style={{ textAlign: 'center', marginTop: '10px'}}>
-            <input type="file" onChange={onSelectFile} />
-          </div>
+              <Box
+                style={{
+                  border: "1px solid #000",
+                  height: "200px",
+                  width: "200px",
+                  margin: "auto",
+                }}
+              >
+                <img src={photo} alt="avatar" width="200px" height="200px" />
+              </Box>
+              <div style={{ textAlign: "center", marginTop: "10px" }}>
+                <input type="file" onChange={onSelectFile} />
+              </div>
+              <div style={{ textAlign: "center", marginTop: "10px" }}>
+                {selectedFile && (
+                  <button onClick={handleUploadPhoto}>Upload</button>
+                )}
+              </div>
             </div>
           </Grid>
           <Grid item md={8} i xs={12}>
@@ -85,7 +110,7 @@ export const Profile = () => {
                     fullWidth
                     type="text"
                     required
-                    label="Full Name"
+                    label="Tên"
                     variant="outlined"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
@@ -108,7 +133,7 @@ export const Profile = () => {
                   <TextField
                     fullWidth
                     type="text"
-                    label="phoneNumber"
+                    label="Số điện thoại"
                     variant="outlined"
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
@@ -119,7 +144,7 @@ export const Profile = () => {
                   <TextField
                     fullWidth
                     type="text"
-                    label="Address"
+                    label="Địa chỉ"
                     variant="outlined"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
@@ -128,11 +153,7 @@ export const Profile = () => {
                 </Grid>
               </Grid>
               <div style={{ margin: "20px 0" }}>
-                <ButtonCustom
-                  variant="contained"
-                  type="submit"
-                  title="Cập nhật"
-                />
+                <ButtonSave />
               </div>
             </form>
           </Grid>

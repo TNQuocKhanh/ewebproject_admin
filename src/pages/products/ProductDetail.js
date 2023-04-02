@@ -11,6 +11,11 @@ const headers = [
   { id: "price", label: "Giá bán" },
   { id: "discountPercent", label: "Discount" },
   { id: "category", label: "Danh mục" },
+  { id: "supplier", label: "Nhà cung cấp" },
+  { id: "sold", label: 'Đã bán'},
+  { id: "inStock", label: 'Còn hàng' },
+  {id: 'description', label: 'Mô tả' },
+  {id: 'specifications', label: 'Thông số sản phẩm'}
 ];
 
 export const ProductDetail = () => {
@@ -27,6 +32,7 @@ export const ProductDetail = () => {
         const transform = {
           ...res,
           category: res.category.name,
+          supplier: res.supplier.name,
         };
         setData(transform);
       }

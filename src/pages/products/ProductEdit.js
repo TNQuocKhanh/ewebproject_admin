@@ -146,13 +146,13 @@ const ProductForm = () => {
           <Grid item md={6} xs={12}>
             <FormControl fullWidth variant="outlined">
               <InputLabel htmlFor="outlined-age-native-simple">
-                Nha cung cap
+                Nhà cung cấp
               </InputLabel>
               <Select
                 native
                 value={supplierId}
                 onChange={(e) => setSupplierId(e.target.value)}
-                label="Danh mục"
+                label="Nhà cung cấp"
               >
                 <option aria-label="None" value="" />
                 {supplierArr.map((it) => (
@@ -202,7 +202,7 @@ const ProductForm = () => {
               fullWidth
               type="number"
               InputProps={{ inputProps: { min: 1 } }}
-              label="So luong nhap"
+              label="Số lượng nhập"
               InputLabelProps={{ shrink: true }}
               variant="outlined"
               value={quantity}
@@ -213,7 +213,7 @@ const ProductForm = () => {
           <Grid item md={6} xs={12}>
             <TextField
               fullWidth
-              label="specifications"
+              label="Thông số sản phẩm"
               rows={3}
               variant="outlined"
               multiline
@@ -229,7 +229,7 @@ const ProductForm = () => {
               multiline
               rows={3}
               InputLabelProps={{ shrink: true }}
-              label="description"
+              label="Mô tả"
               variant="outlined"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -269,9 +269,10 @@ function PreviewMultipleImages({ extra, image }) {
   return (
     <>
       <div style={{ display: "flex" }}>
-        {images.map((url) => {
+        {images.map((url, idx) => {
           return (
             <div
+              key={idx}
               style={{
                 border: "1px solid #000",
                 width: "200px",

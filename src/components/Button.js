@@ -119,7 +119,7 @@ export const IconButtonEdit = (props) => {
 
   return (
     <Link to={`/${resource}/${row.id}/edit`}>
-      <Tooltip title="Cap nhat">
+      <Tooltip title="Cập nhật">
         <IconButton>
           <EditIcon fontSize="small" color="primary" />
         </IconButton>
@@ -133,7 +133,7 @@ export const IconButtonDetail = (props) => {
 
   return (
     <Link to={`/${resource}/${row.id}/detail`}>
-      <Tooltip title="Chi tiet">
+      <Tooltip title="Chi tiết">
         <IconButton>
           <VisibilityIcon fontSize="small" color="primary" />
         </IconButton>
