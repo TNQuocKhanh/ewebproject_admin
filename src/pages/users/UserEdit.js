@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { getUserById, updateRole, updateUser } from "../../apis";
 import { ButtonReturn, ButtonSave } from "../../components/Button";
+import { Toastify } from "../../components/Toastify";
+import { toast } from "react-toastify";
 
 export const UserEdit = () => {
   const [fullName, setFullName] = useState("");
@@ -38,16 +40,20 @@ export const UserEdit = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      updateUser(Number(id), { fullName, email });
-
-      updateRole(id, { roles: [roles] });
-      history.push("/users");
+      const res = await updateUser(Number(id), { fullName, email });
+      await updateRole(id, { roles: [roles] });
+      if (res.id) {
+        toast.success("Cập nhật thành công");
+      }
     } catch (e) {
-      console.log("===err", e);
+      console.log("[Update user] Error", e);
     }
+
+    setTimeout(() => history.push("/users"), 2000);
+    //history.push("/users")
   };
 
   return (
@@ -60,7 +66,7 @@ export const UserEdit = () => {
           margin: 10,
         }}
       >
-        <Typography>Cập nhật</Typography>
+        <Typography onClick={() => toast.success("CABD")}>Cập nhật</Typography>
         <ButtonReturn resource="users" />
       </div>
       <Card style={{ padding: 10 }}>
@@ -116,6 +122,7 @@ export const UserEdit = () => {
             <ButtonSave />
           </div>
         </form>
+        <Toastify />
       </Card>
     </div>
   );

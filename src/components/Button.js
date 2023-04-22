@@ -9,6 +9,8 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import { ExportToCsv } from "export-to-csv";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import SaveIcon from '@material-ui/icons/Save'
+import LockIcon from "@material-ui/icons/Lock";
+import LockOpenIcon from "@material-ui/icons/LockOpen";
 
 export const ButtonCustom = (props) => {
   const {

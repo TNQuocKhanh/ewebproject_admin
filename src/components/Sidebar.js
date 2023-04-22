@@ -4,20 +4,20 @@ import {
   Home as HomeIcon,
   ArrowBack as ArrowBackIcon,
 } from "@material-ui/icons";
-import GroupIcon from '@material-ui/icons/Group';
-import SettingsIcon from '@material-ui/icons/Settings';
+import GroupIcon from "@material-ui/icons/Group";
+import SettingsIcon from "@material-ui/icons/Settings";
 import { useTheme } from "@material-ui/styles";
 import { withRouter } from "react-router-dom";
 import classNames from "classnames";
-import SidebarLink from './SidebarLink'
-import PersonIcon from '@material-ui/icons/Person';
-import CategoryIcon from '@material-ui/icons/Category';
-import BookIcon from '@material-ui/icons/Book';
-import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
-import EqualizerIcon from '@material-ui/icons/Equalizer';
-import BusinessIcon from '@material-ui/icons/Business';
+import SidebarLink from "./SidebarLink";
+import PersonIcon from "@material-ui/icons/Person";
+import CategoryIcon from "@material-ui/icons/Category";
+import BookIcon from "@material-ui/icons/Book";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import EqualizerIcon from "@material-ui/icons/Equalizer";
+import BusinessIcon from "@material-ui/icons/Business";
 
-import {makeStyles} from "@material-ui/styles";
+import { makeStyles } from "@material-ui/styles";
 import {
   useLayoutState,
   useLayoutDispatch,
@@ -37,14 +37,14 @@ const structure = [
   { id: 5, label: "Khách hàng", link: "/customers", icon: <PersonIcon /> },
   { id: 6, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
   { id: 7, label: "Thống kê", link: "/statistics", icon: <EqualizerIcon /> },
-  { id: 8, type: "divider" },
-  { id: 9, type: "title", label: "Config" },
-  { id: 10, label: "Config", link: "/settings", icon: <SettingsIcon /> },
+  //{ id: 8, type: "divider" },
+  //{ id: 9, type: "title", label: "Config" },
+  //{ id: 10, label: "Config", link: "/settings", icon: <SettingsIcon /> },
 ];
 
 const drawerWidth = 240;
 
-const useStyles =  makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginLeft: 12,
     marginRight: 36,
@@ -101,7 +101,7 @@ function Sidebar({ location }) {
 
   var [isPermanent, setPermanent] = useState(true);
 
-  useEffect(function() {
+  useEffect(function () {
     window.addEventListener("resize", handleWindowWidthChange);
     handleWindowWidthChange();
     return function cleanup() {
@@ -135,7 +135,7 @@ function Sidebar({ location }) {
         </IconButton>
       </div>
       <List className={classes.sidebarList}>
-        {structure.map(link => (
+        {structure.map((link) => (
           <SidebarLink
             key={link.id}
             location={location}

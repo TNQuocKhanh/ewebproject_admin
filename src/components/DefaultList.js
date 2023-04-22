@@ -10,6 +10,7 @@ import {
   TablePagination,
   TableContainer,
   IconButton,
+  Tooltip,
 } from "@material-ui/core";
 import Widget from "./Widget";
 import { makeStyles } from "@material-ui/styles";
@@ -20,6 +21,7 @@ import { blockUser } from "../apis";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import { getStatus } from "../utils";
 import { ButtonCreate } from "./Button";
+import { ConfirmDialog } from "./ConfirmDialog";
 
 const useStyles = makeStyles((theme) => ({
   tableOverflow: {
@@ -47,6 +49,8 @@ export const DefaultList = ({
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const [open, setOpen] = useState(false);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -147,17 +151,22 @@ export const DefaultList = ({
                           )}
                           {isBlock ? (
                             <>
-                              {row.status === "STATUS_BLOCKED" ? (
-                                <IconButton onClick={() => handleUnblock(row)}>
+                            {row.status === "STATUS_BLOCKED" ? (
+                              <Tooltip title="Mở khoá">
+                                <IconButton onClick={() => setOpen(true)}>
                                   <LockOpenIcon
                                     fontSize="small"
                                     color="primary"
                                   />
                                 </IconButton>
-                              ) : (
-                                <IconButton onClick={() => handleBlock(row)}>
+                              </Tooltip>
+                            ) : (
+                              <Tooltip title='Khoá'>
+                                <IconButton onClick={() => setOpen(true)}>
                                   <LockIcon fontSize="small" color="primary" />
                                 </IconButton>
+                              </Tooltip>
+
                               )}
                             </>
                           ) : (
@@ -185,7 +194,25 @@ export const DefaultList = ({
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         )}
+        <ConfirmDialog
+        open={open}
+        message={"Bạn có chắc chắn muốn khoá người dùng này?"}
+          handleClose={() => setOpen(false)}
+          handleClick={() => console.log('====row', 123)}
+        />
       </Widget>
     </>
   );
 };
+                              //{row.status === "STATUS_BLOCKED" ? (
+                                //<IconButton onClick={() => handleUnblock(row)}>
+                                  //<LockOpenIcon
+                                    //fontSize="small"
+                                    //color="primary"
+                                  ///>
+                                //</IconButton>
+                              //) : (
+                                //<IconButton onClick={() => handleBlock(row)}>
+                                  //<LockIcon fontSize="small" color="primary" />
+                                //</IconButton>
+                              //)}
