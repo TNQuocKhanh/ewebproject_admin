@@ -17,11 +17,13 @@ import { makeStyles } from "@material-ui/styles";
 import { ButtonExport, IconButtonDetail, IconButtonEdit } from "./Button";
 import { HeaderAction } from "./HeaderAction";
 import LockIcon from "@material-ui/icons/Lock";
-import { blockUser } from "../apis";
+import { blockCustomer, blockUser } from "../apis";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import { getStatus } from "../utils";
 import { ButtonCreate } from "./Button";
 import { ConfirmDialog } from "./ConfirmDialog";
+import { toast } from "react-toastify";
+import { Toastify } from "./Toastify";
 
 const useStyles = makeStyles((theme) => ({
   tableOverflow: {
@@ -45,12 +47,17 @@ export const DefaultList = ({
   isBlock,
   dataCsv,
   columnAction,
+  isLock,
 }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const [open, setOpen] = useState(false);
+  const [idBlock, setIdBlock] = useState();
+
+  const [openCustomer, setOpenCustomer] = useState(false);
+  const [idCustomer, setIdCustomer] = useState();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -61,12 +68,46 @@ export const DefaultList = ({
     setPage(0);
   };
 
-  const handleBlock = (row) => {
-    blockUser(row.id, { status: "STATUS_BLOCKED" });
+  const handleOpen = (row) => {
+    setOpen(true);
+    setIdBlock(row);
   };
 
-  const handleUnblock = (row) => {
-    blockUser(row.id, { status: "STATUS_ACTIVE" });
+  const handleOpenCustomer = (row) => {
+    setOpenCustomer(true);
+    setIdCustomer(row);
+  };
+
+  const handleClick =async (row) => {
+    try {
+      if (row.status === "STATUS_ACTIVE") {
+        await blockUser(row.id, { status: "STATUS_BLOCKED" });
+        toast.success("Khoá người dùng thành công");
+      } else {
+        await blockUser(row.id, { status: "STATUS_ACTIVE" });
+        toast.success("Mở khoá người dùng thành công");
+      }
+    } catch (err) {
+      console.log("[Block or unblock user] Error", err);
+      toast.error("Có lỗi xảy ra");
+    }
+    setOpen(false);
+  };
+
+  const handleBlockCustomer = async (row) => {
+    try {
+      if (row.status !== "STATUS_BLOCKED") {
+        await blockCustomer(row.id, { status: "STATUS_BLOCKED" });
+        toast.success("Khoá khách hàng thành công");
+      } else {
+        await blockUser(row.id, { status: "STATUS_ACTIVE" });
+        toast.success("Mở khoá khách hàng thành công");
+      }
+    } catch (err) {
+      console.log("[Block or unblock customer] Error", err);
+      toast.error("Có lỗi xảy ra");
+    }
+    setOpenCustomer(false);
   };
 
   return (
@@ -149,28 +190,57 @@ export const DefaultList = ({
                               <IconButtonDetail resource={resource} row={row} />
                             </>
                           )}
-                          {isBlock ? (
+                          {isBlock && row?.roles[0]?.id !== 1 ? (
                             <>
-                            {row.status === "STATUS_BLOCKED" ? (
-                              <Tooltip title="Mở khoá">
-                                <IconButton onClick={() => setOpen(true)}>
-                                  <LockOpenIcon
-                                    fontSize="small"
-                                    color="primary"
-                                  />
-                                </IconButton>
-                              </Tooltip>
-                            ) : (
-                              <Tooltip title='Khoá'>
-                                <IconButton onClick={() => setOpen(true)}>
-                                  <LockIcon fontSize="small" color="primary" />
-                                </IconButton>
-                              </Tooltip>
-
+                              {row.status === "STATUS_BLOCKED" ? (
+                                <Tooltip title="Mở khoá">
+                                  <IconButton onClick={() => handleOpen(row)}>
+                                    <LockOpenIcon
+                                      fontSize="small"
+                                      color="primary"
+                                    />
+                                  </IconButton>
+                                </Tooltip>
+                              ) : (
+                                <Tooltip title="Khoá">
+                                  <IconButton onClick={() => handleOpen(row)}>
+                                    <LockIcon
+                                      fontSize="small"
+                                      color="primary"
+                                    />
+                                  </IconButton>
+                                </Tooltip>
                               )}
                             </>
                           ) : (
                             ""
+                          )}
+                          {isLock && (
+                            <>
+                              {row.status === "STATUS_BLOCKED" ? (
+                                <Tooltip title="Mở khoá">
+                                  <IconButton
+                                    onClick={() => handleOpenCustomer(row)}
+                                  >
+                                    <LockOpenIcon
+                                      fontSize="small"
+                                      color="primary"
+                                    />
+                                  </IconButton>
+                                </Tooltip>
+                              ) : (
+                                <Tooltip title="Khoá">
+                                  <IconButton
+                                    onClick={() => handleOpenCustomer(row)}
+                                  >
+                                    <LockIcon
+                                      fontSize="small"
+                                      color="primary"
+                                    />
+                                  </IconButton>
+                                </Tooltip>
+                              )}
+                            </>
                           )}
                         </TableCell>
                       </TableRow>
@@ -195,24 +265,19 @@ export const DefaultList = ({
           />
         )}
         <ConfirmDialog
-        open={open}
-        message={"Bạn có chắc chắn muốn khoá người dùng này?"}
+          open={open}
+          message={"Bạn có chắc chắn muốn khoá/mở khoá người dùng này?"}
           handleClose={() => setOpen(false)}
-          handleClick={() => console.log('====row', 123)}
+          handleClick={() => handleClick(idBlock)}
         />
+        <ConfirmDialog
+          open={openCustomer}
+          message={"Bạn có chắc chắn muốn khoá/mở khoá khách hàng này?"}
+          handleClose={() => setOpenCustomer(false)}
+          handleClick={() => handleBlockCustomer(idCustomer)}
+        />
+        <Toastify />
       </Widget>
     </>
   );
 };
-                              //{row.status === "STATUS_BLOCKED" ? (
-                                //<IconButton onClick={() => handleUnblock(row)}>
-                                  //<LockOpenIcon
-                                    //fontSize="small"
-                                    //color="primary"
-                                  ///>
-                                //</IconButton>
-                              //) : (
-                                //<IconButton onClick={() => handleBlock(row)}>
-                                  //<LockIcon fontSize="small" color="primary" />
-                                //</IconButton>
-                              //)}

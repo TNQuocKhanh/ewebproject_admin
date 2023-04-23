@@ -7,10 +7,8 @@ import EditIcon from "@material-ui/icons/Edit";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import { ExportToCsv } from "export-to-csv";
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import SaveIcon from '@material-ui/icons/Save'
-import LockIcon from "@material-ui/icons/Lock";
-import LockOpenIcon from "@material-ui/icons/LockOpen";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import SaveIcon from "@material-ui/icons/Save";
 
 export const ButtonCustom = (props) => {
   const {
@@ -73,13 +71,13 @@ export const ButtonReturn = (props) => {
 
 export const ButtonSave = (props) => {
   return (
-      <ButtonCustom
-        style={{ backgroundColor: "#556afe", color: "#fff" }}
-        icon={<SaveIcon />}
-        title="Lưu"
-        type='submit'
-        variant="contained"
-      />
+    <ButtonCustom
+      style={{ backgroundColor: "#556afe", color: "#fff" }}
+      icon={<SaveIcon />}
+      title="Lưu"
+      type="submit"
+      variant="contained"
+    />
   );
 };
 

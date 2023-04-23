@@ -9,8 +9,10 @@ import {
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 import { createProduct, getListCategories, getListSupplier } from "../../apis";
 import { ButtonReturn, ButtonSave } from "../../components/Button";
+import { Toastify } from "../../components/Toastify";
 
 export const ProductCreate = () => {
   const [name, setName] = useState();
@@ -66,13 +68,16 @@ export const ProductCreate = () => {
       description,
     };
     try {
-      const res = await createProduct(data);
-      if (res) {
-        history.push("/products");
-      }
+      await createProduct(data);
+      toast.success("Thêm mới thành công");
     } catch (e) {
-      console.log("==Err", e);
+      console.log("[Create product] Error", e);
+      toast.error("Có lỗi xảy ra");
     }
+
+    setTimeout(() => {
+      history.push("/products");
+    }, 2000);
   };
 
   return (
@@ -95,6 +100,7 @@ export const ProductCreate = () => {
               <TextField
                 type="text"
                 label="Tên sản phẩm"
+                required
                 variant="outlined"
                 value={name}
                 fullWidth
@@ -102,7 +108,7 @@ export const ProductCreate = () => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <FormControl fullWidth variant="outlined">
+              <FormControl fullWidth variant="outlined" required>
                 <InputLabel htmlFor="outlined-age-native-simple">
                   Danh mục
                 </InputLabel>
@@ -125,6 +131,7 @@ export const ProductCreate = () => {
               <TextField
                 fullWidth
                 type="text"
+                required
                 label="Giá nhập"
                 variant="outlined"
                 value={cost}
@@ -132,7 +139,7 @@ export const ProductCreate = () => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <FormControl fullWidth variant="outlined">
+              <FormControl fullWidth variant="outlined" required>
                 <InputLabel htmlFor="outlined-age-native-simple">
                   Nhà cung cấp
                 </InputLabel>
@@ -154,6 +161,7 @@ export const ProductCreate = () => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
+                required
                 type="text"
                 label="Giá bán"
                 variant="outlined"
@@ -176,6 +184,7 @@ export const ProductCreate = () => {
               <TextField
                 fullWidth
                 type="number"
+                required
                 InputProps={{ inputProps: { min: 1 } }}
                 label="Số lượng nhập"
                 variant="outlined"
@@ -213,6 +222,7 @@ export const ProductCreate = () => {
           </div>
         </form>
       </Card>
+      <Toastify />
     </div>
   );
 };

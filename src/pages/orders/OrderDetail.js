@@ -4,13 +4,13 @@ import { useParams } from "react-router";
 import { Typography, Card, Grid } from "@material-ui/core";
 import { ButtonReturn } from "../../components/Button";
 import _ from "lodash";
-import { getStatus } from "../../utils";
+import { formatDateTime, formatPrice, getStatus } from "../../utils";
 
 const headers = [
   { id: "name", label: "Người đặt hàng" },
-  { id: "email", label: "Email" },
   { id: "paymentMethod", label: "Phương thức thanh toán" },
   { id: "orderTime", label: "Ngày đặt hàng" },
+  { id: "total", label: "Tổng tiền" },
   { id: "status", label: "Trạng thái" },
 ];
 
@@ -27,9 +27,10 @@ export const OrderDetail = () => {
       if (res) {
         const transform = {
           ...res,
-          name: res.customer.fullName,
-          email: res.customer.email,
+          name: res.receiver,
+          orderTime: formatDateTime(res.orderTime),
           status: getStatus(res.status).text,
+          total: formatPrice(res.total)
         };
         setData(transform);
       }

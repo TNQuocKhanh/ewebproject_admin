@@ -47,3 +47,19 @@ export const updateCustomer = async (id, data) => {
 
   return res.json();
 }
+
+export const blockCustomer = async (id, data) => {
+  const auth = storage.load('auth')
+  const token = auth.accessToken
+
+  const headers = new Headers();
+  headers.append("Authorization", `Bearer ${token}`);
+
+  const res = await fetch(`${API_URL}/customer/block/${id}`, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(data)
+  });
+
+  return res.json();
+}

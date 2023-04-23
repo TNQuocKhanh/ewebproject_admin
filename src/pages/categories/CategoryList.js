@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Grid } from "@material-ui/core";
 import List from "../../components/List";
-import { useHistory } from "react-router-dom";
-import { storage } from "../../utils";
 import { getListCategories } from "../../apis";
+import { Loader } from "../../components/Loader";
 
 const columns = [
   { id: "name", label: "Tên danh mục", minWidth: 170 },
@@ -17,10 +16,11 @@ const columns = [
 ];
 
 export const CategoryList = () => {
-  const history = useHistory();
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getAllCategories = async () => {
+    setLoading(true);
     try {
       const res = await getListCategories();
 
@@ -33,18 +33,23 @@ export const CategoryList = () => {
     } catch (e) {
       setData([]);
     }
+    setLoading(false);
   };
 
-  const isLogin = storage.load("auth");
-
   useEffect(() => {
-    if (isLogin) {
-      getAllCategories();
-    } else {
-      history.push("/login");
-    }
+    getAllCategories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const transformCsv = [];
+  data?.map((it) =>
+    transformCsv.push({
+      name: it.name,
+      enabled: it.enabled === "true" ? true : false,
+    })
+  );
+
+  if (loading) return <Loader />;
 
   return (
     <>
@@ -55,6 +60,7 @@ export const CategoryList = () => {
             columns={columns}
             data={data}
             title="Danh sách danh mục"
+            dataCsv={transformCsv}
           />
         </Grid>
       </Grid>

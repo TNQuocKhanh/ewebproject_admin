@@ -8,9 +8,11 @@ import {
   Typography,
 } from "@material-ui/core";
 import { useState } from "react";
-import {  useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 import { createUser } from "../../apis/user.api";
 import { ButtonReturn, ButtonSave } from "../../components/Button";
+import { Toastify } from "../../components/Toastify";
 
 export const UserCreate = () => {
   const [fullName, setFullName] = useState();
@@ -25,18 +27,19 @@ export const UserCreate = () => {
     const data = { email, fullName, password, roles: [roles] };
 
     try {
-      const res = await createUser(data);
-      if (res) {
-        history.push("/users");
-      }
+      await createUser(data);
+      toast.success("Thêm mới thành công");
     } catch (err) {
-      console.log("====err", err);
+      console.log("[Create user] Error", err);
+      toast.error("Có lỗi xảy ra");
     }
+    setTimeout(() => {
+      history.push("/users");
+    }, 2000);
   };
 
   return (
     <div>
-      <button>ACBD</button>
       <div
         style={{
           display: "flex",
@@ -109,6 +112,7 @@ export const UserCreate = () => {
           </div>
         </form>
       </Card>
+      <Toastify />
     </div>
   );
 };

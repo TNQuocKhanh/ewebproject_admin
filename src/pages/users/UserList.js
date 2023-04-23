@@ -6,8 +6,8 @@ import { Form, Field } from "react-final-form";
 import { ButtonCustom } from "../../components/Button";
 import { storage } from "../../utils";
 import { getListUsers } from "../../apis";
-import LinearProgress from "@material-ui/core/LinearProgress";
 import SearchIcon from "@material-ui/icons/Search";
+import { Loader } from "../../components/Loader";
 
 const columns = [
   { id: "fullName", label: "Tên người dùng", minWidth: 170 },
@@ -85,11 +85,11 @@ export const UserList = () => {
     setLoading(true);
     try {
       const res = await getListUsers(filterValues);
-      setLoading(false);
       setData(res.content);
     } catch (e) {
       setData([]);
     }
+    setLoading(false);
   };
 
   const isLogin = storage.load("auth");
@@ -108,11 +108,11 @@ export const UserList = () => {
     trans.push({ fullName: it.fullName, email: it.email, status: it.status })
   );
 
-  if (loading) return <LinearProgress />;
+  if (loading) return <Loader />;
 
   return (
     <>
-    <Grid container spacing={4}>
+      <Grid container spacing={4}>
         <Grid item xs={12}>
           <List
             filter={<FilterForm setFilterValues={setFilterValues} />}

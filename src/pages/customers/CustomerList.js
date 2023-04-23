@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Grid } from "@material-ui/core";
 import List from "../../components/List";
-import { useHistory } from "react-router-dom";
-import { storage } from "../../utils";
 import { getListCustomers } from "../../apis";
+import { Loader } from "../../components";
 
 const columns = [
   { id: "fullName", label: "Tên", minWidth: 170 },
@@ -18,30 +17,36 @@ const columns = [
 ];
 
 export const CustomerList = () => {
-  const history = useHistory();
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getAllCustomers = async () => {
+    setLoading(true);
     try {
       const res = await getListCustomers();
-      console.log("===res", res);
       setData(res || []);
     } catch (e) {
-      console.log("===Error", e);
+      console.log("[Get customers] Error", e);
       setData([]);
     }
+    setLoading(false);
   };
 
-  const isLogin = storage.load("auth");
-
   useEffect(() => {
-    if (isLogin) {
-      getAllCustomers();
-    } else {
-      history.push("/login");
-    }
+    getAllCustomers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const transformCsv = [];
+  data?.map((it) =>
+    transformCsv.push({
+      name: it.fullName,
+      email: it.email,
+      status: it.status,
+    })
+  );
+
+  if (loading) return <Loader />;
 
   return (
     <>
@@ -54,6 +59,8 @@ export const CustomerList = () => {
             columns={columns}
             data={data}
             title="Danh sách khách hàng"
+            isLock={true}
+            dataCsv={transformCsv}
           />
         </Grid>
       </Grid>

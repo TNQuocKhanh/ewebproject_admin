@@ -9,13 +9,15 @@ import {
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { getOrderById, updateStatus } from "../../apis";
+import { Toastify } from "../../components";
 import { ButtonReturn, ButtonSave } from "../../components/Button";
 import { formatDateTime } from "../../utils";
 
 export const OrderEdit = () => {
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [total, setTotal] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [orderTime, setOrderTime] = useState("");
   const [status, setStatus] = useState("");
@@ -29,8 +31,8 @@ export const OrderEdit = () => {
     try {
       const res = await getOrderById(Number(id));
       if (res) {
-        setName(res.customer.fullName);
-        setEmail(res.customer.email);
+        setName(res.receiver);
+        setTotal(res.total);
         setStatus(res.status);
         setPaymentMethod(res.paymentMethod);
         setOrderTime(formatDateTime(res.orderTime));
@@ -49,10 +51,13 @@ export const OrderEdit = () => {
     e.preventDefault();
     try {
       await updateStatus(Number(id), { status });
-      history.push("/orders");
+      toast.success("Cập nhật thành công");
     } catch (e) {
-      console.log("====Err", e);
+      console.log("[Update order] Error", e);
     }
+    setTimeout(() => {
+      history.push("/orders");
+    }, 2000);
   };
 
   return (
@@ -87,10 +92,10 @@ export const OrderEdit = () => {
               <TextField
                 fullWidth
                 type="text"
-                onChange={(e) => setEmail(e.target.value)}
-                label="Email"
+                onChange={(e) => setTotal(e.target.value)}
+                label="Tổng tiền"
                 variant="outlined"
-                value={email}
+                value={total}
                 disabled
                 InputLabelProps={{ shrink: true }}
               />
@@ -147,6 +152,7 @@ export const OrderEdit = () => {
           </div>
         </form>
       </Card>
+      <Toastify />
     </div>
   );
 };

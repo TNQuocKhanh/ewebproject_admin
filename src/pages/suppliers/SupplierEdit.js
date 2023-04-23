@@ -1,8 +1,10 @@
 import { TextField, Typography, Card, Grid } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { getSupplierById, updateSupplier } from "../../apis";
 import { ButtonReturn, ButtonSave } from "../../components/Button";
+import { Toastify } from "../../components/Toastify";
 
 export const SupplierEdit = () => {
   const [name, setName] = useState("");
@@ -30,19 +32,23 @@ export const SupplierEdit = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      updateSupplier(Number(id), {
+      await updateSupplier(Number(id), {
         name,
-        phone: phoneNumber,
+        phoneNumber,
         address,
       });
-
-      history.push("/suppliers");
+      toast.success("Cập nhật thành công");
     } catch (e) {
-      console.log("==Err", e);
+      console.log("[Update supplier] Error]", e);
+      toast.error("Có lỗi xảy ra");
     }
+
+    setTimeout(() => {
+      history.push("/suppliers");
+    }, 2000);
   };
 
   return (
@@ -100,6 +106,7 @@ export const SupplierEdit = () => {
           </div>
         </form>
       </Card>
+      <Toastify />
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { Typography, Card, Grid } from "@material-ui/core";
 import { ButtonReturn } from "../../components/Button";
 import _ from "lodash";
+import { formatPrice } from "../../utils";
 
 const headers = [
   { id: "name", label: "Tên sản phẩm" },
@@ -12,10 +13,9 @@ const headers = [
   { id: "discountPercent", label: "Discount" },
   { id: "category", label: "Danh mục" },
   { id: "supplier", label: "Nhà cung cấp" },
-  { id: "sold", label: 'Đã bán'},
-  { id: "inStock", label: 'Còn hàng' },
-  {id: 'description', label: 'Mô tả' },
-  {id: 'specifications', label: 'Thông số sản phẩm'}
+  { id: "sold", label: "Đã bán" },
+  { id: "inStock", label: "Còn hàng" },
+  { id: "description", label: "Mô tả" },
 ];
 
 export const ProductDetail = () => {
@@ -23,6 +23,7 @@ export const ProductDetail = () => {
   const id = params.id;
 
   const [data, setData] = useState();
+  const [spec, setSpec] = useState()
 
   const getProductDetail = async () => {
     try {
@@ -33,11 +34,14 @@ export const ProductDetail = () => {
           ...res,
           category: res.category.name,
           supplier: res.supplier.name,
-        };
+          cost: formatPrice(res.cost),
+          price: formatPrice(res.price),
+      };
+        setSpec(res.specifications)
         setData(transform);
       }
     } catch (e) {
-      console.log("==Err", e);
+      console.log("[Get product detail] Error", e);
     }
   };
 
@@ -71,6 +75,12 @@ export const ProductDetail = () => {
               )}`}</Grid>
             );
           })}
+            <Grid item md={6}>
+              Thông số sản phẩm:
+              {
+                spec?.split('\n').map((it, idx) => <div key={idx}>- {it}</div>)
+              }
+            </Grid>
         </Grid>
       </Card>
     </div>

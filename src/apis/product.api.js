@@ -70,7 +70,7 @@ export const updateProduct = async (id, data) => {
 export const updateExtraImageProduct = async (id, data) => {
   const auth = storage.load("auth");
   const token = auth.accessToken;
-  console.log("===dataExtra", data, data[0]);
+  
   const headers = new Headers();
   const formdata = new FormData();
 

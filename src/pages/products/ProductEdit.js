@@ -18,8 +18,16 @@ import {
   getListSupplier,
   updateExtraImageProduct,
 } from "../../apis";
-import { ButtonReturn, ButtonSave } from "../../components/Button";
+import {
+  ButtonCustom,
+  ButtonReturn,
+  ButtonSave,
+} from "../../components/Button";
 import { TabPanel } from "../../components";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
+import { Toastify } from "../../components";
+import { toast } from "react-toastify";
 
 const ProductForm = () => {
   const [name, setName] = useState("");
@@ -40,7 +48,7 @@ const ProductForm = () => {
 
   const history = useHistory();
 
-  const getUserDetail = async () => {
+  const getProductDetail = async () => {
     try {
       const res = await getProductById(Number(id));
       setName(res.name);
@@ -53,12 +61,12 @@ const ProductForm = () => {
       setSpecifications(res.specifications);
       setDescription(res.description);
     } catch (e) {
-      console.log("===Err", e);
+      console.log("[Get product detail] Error", e);
     }
   };
 
   useEffect(() => {
-    getUserDetail();
+    getProductDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -85,10 +93,10 @@ const ProductForm = () => {
     getAllSupllier();
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      updateProduct(Number(id), {
+      await updateProduct(Number(id), {
         name,
         cost,
         price,
@@ -100,10 +108,15 @@ const ProductForm = () => {
         description,
       });
 
-      history.push("/products");
+      toast.success("Cập nhật thành công");
     } catch (e) {
-      console.log("===Err", e);
+      console.log("[Update product] Error", e);
+      toast.error("Có lỗi xảy ra");
     }
+
+    setTimeout(() => {
+      history.push("/products");
+    }, 2000);
   };
 
   return (
@@ -117,12 +130,13 @@ const ProductForm = () => {
               label="Tên sản phẩm"
               variant="outlined"
               value={name}
+              required
               onChange={(e) => setName(e.target.value)}
               InputLabelProps={{ shrink: true }}
             />
           </Grid>
           <Grid item md={6} xs={12}>
-            <FormControl fullWidth variant="outlined">
+            <FormControl fullWidth variant="outlined" required>
               <InputLabel shrink htmlFor="outlined-age-native-simple">
                 Danh mục
               </InputLabel>
@@ -144,7 +158,7 @@ const ProductForm = () => {
             </FormControl>
           </Grid>
           <Grid item md={6} xs={12}>
-            <FormControl fullWidth variant="outlined">
+            <FormControl fullWidth variant="outlined" i required>
               <InputLabel htmlFor="outlined-age-native-simple">
                 Nhà cung cấp
               </InputLabel>
@@ -167,6 +181,7 @@ const ProductForm = () => {
             <TextField
               disabled
               fullWidth
+              required
               type="text"
               label="Giá nhập"
               variant="outlined"
@@ -179,6 +194,7 @@ const ProductForm = () => {
             <TextField
               fullWidth
               type="text"
+              required
               label="Giá bán"
               variant="outlined"
               value={price}
@@ -201,6 +217,7 @@ const ProductForm = () => {
             <TextField
               fullWidth
               type="number"
+              required
               InputProps={{ inputProps: { min: 1 } }}
               label="Số lượng nhập"
               InputLabelProps={{ shrink: true }}
@@ -240,12 +257,14 @@ const ProductForm = () => {
           <ButtonSave />
         </div>
       </form>
+      <Toastify />
     </div>
   );
 };
 
 function PreviewMultipleImages({ extra, image }) {
   const [images, setImages] = useState(extra);
+  const [imageChoose, setImageChoose] = useState([]);
 
   const params = useParams();
   const { id } = params;
@@ -253,19 +272,24 @@ function PreviewMultipleImages({ extra, image }) {
   const handleMultipleImages = (evnt) => {
     const selectedFIles = [];
     const targetFiles = evnt.target.files;
+    setImageChoose(targetFiles);
     const targetFilesObject = [...targetFiles];
     targetFilesObject.map((file) => {
       return selectedFIles.push(URL.createObjectURL(file));
     });
-    console.log("====selectedFIles", selectedFIles);
-    try {
-      console.log("===", image, selectedFIles);
-      updateExtraImageProduct(id, targetFiles);
-    } catch (e) {
-      console.log("===Error", e);
-    }
     setImages(selectedFIles);
   };
+
+  const handleUpload = async () => {
+    try {
+      await updateExtraImageProduct(id, imageChoose);
+      toast.success("Cập nhật hình ảnh thành công");
+    } catch (e) {
+      console.log("[Upload image] Error", e);
+      toast.error("Có lỗi xảy ra");
+    }
+  };
+
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -286,8 +310,44 @@ function PreviewMultipleImages({ extra, image }) {
         })}
       </div>
       <div>
-        <input type="file" onChange={handleMultipleImages} multiple />
+        {imageChoose.length > 0 ? (
+          <ButtonCustom
+            style={{ padding: "10px", margin: "10px 0" }}
+            handleClick={handleUpload}
+            icon={<CloudUploadIcon style={{ color: "#536cfe" }} />}
+            title="Tải ảnh"
+          />
+        ) : (
+          <>
+            <label
+              htmlFor="input-upload"
+              style={{
+                cursor: "pointer",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                background: "white",
+                padding: "10px",
+                width: "fit-content",
+                borderRadius: "5px",
+                margin: "10px 0",
+                border: "1px solid #cccccc",
+              }}
+            >
+              <PhotoLibraryIcon style={{ color: "#536cfe" }} />
+              <span style={{ marginLeft: "10px" }}>Chọn ảnh</span>{" "}
+            </label>
+            <input
+              hidden
+              id="input-upload"
+              type="file"
+              multiple
+              onChange={handleMultipleImages}
+            />
+          </>
+        )}
       </div>
+      <Toastify />
     </>
   );
 }

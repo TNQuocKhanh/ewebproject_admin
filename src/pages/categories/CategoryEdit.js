@@ -9,11 +9,10 @@ import {
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { getCategoryById, updateCategory } from "../../apis";
-import {
-  ButtonReturn,
-  ButtonSave,
-} from "../../components/Button";
+import { ButtonReturn, ButtonSave } from "../../components/Button";
+import {Toastify} from "../../components/Toastify";
 
 export const CategoryEdit = () => {
   const [name, setName] = useState("");
@@ -30,7 +29,7 @@ export const CategoryEdit = () => {
       setName(res.name);
       setEnabled(res.enabled);
     } catch (e) {
-      console.log("===Err", e);
+      console.log("[Get category detail] Error", e);
     }
   };
 
@@ -39,18 +38,22 @@ export const CategoryEdit = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      updateCategory(Number(id), {
+      await updateCategory(Number(id), {
         name,
         enabled: enabled === "true" ? true : false,
       });
-
-      history.push("/categories");
+      toast.success("Cập nhật thành công");
     } catch (e) {
-      console.log("===Err", e);
+      console.log("[Update category] Error", e);
+      toast.error("Có lỗi xảy ra");
     }
+
+    setTimeout(() => {
+      history.push("/categories");
+    }, 2000);
   };
 
   return (
@@ -104,6 +107,7 @@ export const CategoryEdit = () => {
           </div>
         </form>
       </Card>
+      <Toastify />
     </div>
   );
 };

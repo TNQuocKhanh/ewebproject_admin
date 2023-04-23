@@ -31,7 +31,7 @@ export const UserEdit = () => {
       setEmail(res.email);
       setRoles(res.roles[0]?.name || "");
     } catch (err) {
-      console.log("===", err);
+      console.log("[Get user detail] Error", err);
     }
   };
 
@@ -66,7 +66,7 @@ export const UserEdit = () => {
           margin: 10,
         }}
       >
-        <Typography onClick={() => toast.success("CABD")}>Cập nhật</Typography>
+        <Typography>Cập nhật</Typography>
         <ButtonReturn resource="users" />
       </div>
       <Card style={{ padding: 10 }}>
@@ -109,7 +109,6 @@ export const UserEdit = () => {
                   label="Roles"
                   InputLabelProps={{ shrink: true }}
                 >
-                  <option aria-label="None" value="" />
                   <option value="ROLE_ADMIN">ADMIN</option>
                   <option value="ROLE_SALESPERSON">Sales person</option>
                   <option value="ROLE_EDITOR">Editor</option>

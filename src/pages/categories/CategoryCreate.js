@@ -1,8 +1,10 @@
 import { TextField, Card, Grid, Typography } from "@material-ui/core";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 import { createCategory } from "../../apis/category.api";
 import { ButtonReturn, ButtonSave } from "../../components/Button";
+import { Toastify } from "../../components/Toastify";
 
 export const CategoryCreate = () => {
   const [name, setName] = useState();
@@ -13,13 +15,16 @@ export const CategoryCreate = () => {
     e.preventDefault();
     const data = { name };
     try {
-      const res = await createCategory(data);
-      if (res) {
-        history.push("/categories");
-      }
+      await createCategory(data);
+      toast.success("Thêm mới thành công");
     } catch (e) {
-      console.log("==Err", e);
+      console.log("[Create category] Error", e);
+      toast.error("Có lỗi xảy ra");
     }
+
+    setTimeout(() => {
+      history.push("/categories");
+    }, 2000);
   };
 
   return (
@@ -55,6 +60,7 @@ export const CategoryCreate = () => {
           </div>
         </form>
       </Card>
+      <Toastify />
     </div>
   );
 };

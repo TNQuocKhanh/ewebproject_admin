@@ -15,3 +15,9 @@ export const formatDateTime = (value) =>{
         Dec: "12"
     }[a[1]] + "/" + a[3] + " " + a[4]
 }
+
+export const formatPrice = (value) => {
+  const result = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value)
+  return result
+}
+

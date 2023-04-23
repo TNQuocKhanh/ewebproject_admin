@@ -1,8 +1,10 @@
 import { TextField, Card, Grid, Typography } from "@material-ui/core";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 import { createSupplier } from "../../apis";
 import { ButtonReturn, ButtonSave } from "../../components/Button";
+import { Toastify } from "../../components/Toastify";
 
 export const SupplierCreate = () => {
   const [name, setName] = useState();
@@ -13,15 +15,17 @@ export const SupplierCreate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = { name, phone, address };
+    const data = { name, phoneNumber: phone, address };
     try {
-      const res = await createSupplier(data);
-      if (res) {
-        history.push("/suppliers");
-      }
+      await createSupplier(data);
+      toast.success("Thêm mới thành công");
     } catch (e) {
-      console.log("===Err", e);
+      console.log("[Create supllier] Error", e);
+      toast.error("Có lỗi xảy ra");
     }
+    setTimeout(() => {
+      history.push("/suppliers");
+    }, 2000);
   };
 
   return (
@@ -46,6 +50,7 @@ export const SupplierCreate = () => {
                 label="Tên nhà cung cấp"
                 variant="outlined"
                 value={name}
+                required
                 fullWidth
                 onChange={(e) => setName(e.target.value)}
               />
@@ -55,6 +60,7 @@ export const SupplierCreate = () => {
                 type="text"
                 label="Số điện thoại"
                 variant="outlined"
+                required
                 value={phone}
                 fullWidth
                 onChange={(e) => setPhone(e.target.value)}
@@ -64,6 +70,7 @@ export const SupplierCreate = () => {
               <TextField
                 type="text"
                 label="Địa chỉ"
+                required
                 variant="outlined"
                 value={address}
                 fullWidth
@@ -76,6 +83,7 @@ export const SupplierCreate = () => {
           </div>
         </form>
       </Card>
+      <Toastify />
     </div>
   );
 };

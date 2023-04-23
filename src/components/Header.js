@@ -201,23 +201,6 @@ export default function Header() {
         </Typography>
         <div className={classes.grow} />
         <IconButton
-          color="inherit"
-          aria-haspopup="true"
-          aria-controls="mail-menu"
-          onClick={(e) => {
-            setNotificationsMenu(e.currentTarget);
-            setIsNotificationsUnread(false);
-          }}
-          className={classes.headerMenuButton}
-        >
-          <Badge
-            badgeContent={isNotificationsUnread ? notifications.length : null}
-            color="warning"
-          >
-            <NotificationsIcon classes={{ root: classes.headerIcon }} />
-          </Badge>
-        </IconButton>
-        <IconButton
           aria-haspopup="true"
           color="inherit"
           className={classes.headerMenuButton}
@@ -294,3 +277,21 @@ export default function Header() {
     </AppBar>
   );
 }
+
+//<IconButton
+//color="inherit"
+//aria-haspopup="true"
+//aria-controls="mail-menu"
+//onClick={(e) => {
+//setNotificationsMenu(e.currentTarget);
+//setIsNotificationsUnread(false);
+//}}
+//className={classes.headerMenuButton}
+//>
+//<Badge
+//badgeContent={isNotificationsUnread ? notifications.length : null}
+//color="warning"
+//>
+//<NotificationsIcon classes={{ root: classes.headerIcon }} />
+//</Badge>
+//</IconButton>
