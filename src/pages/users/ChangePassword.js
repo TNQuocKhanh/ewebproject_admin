@@ -57,6 +57,7 @@ export const ChangePassword = () => {
                   <TextField
                     fullWidth
                     type="text"
+                    required
                     label="Nhập mật khẩu cũ"
                     variant="outlined"
                     value={oldPassword}
@@ -68,6 +69,7 @@ export const ChangePassword = () => {
                   <TextField
                     fullWidth
                     type="text"
+                    required
                     label="Nhập mật khẩu mới"
                     variant="outlined"
                     value={changePassword}

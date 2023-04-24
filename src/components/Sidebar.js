@@ -5,7 +5,6 @@ import {
   ArrowBack as ArrowBackIcon,
 } from "@material-ui/icons";
 import GroupIcon from "@material-ui/icons/Group";
-import SettingsIcon from "@material-ui/icons/Settings";
 import { useTheme } from "@material-ui/styles";
 import { withRouter } from "react-router-dom";
 import classNames from "classnames";
@@ -23,12 +22,11 @@ import {
   useLayoutDispatch,
   toggleSidebar,
 } from "../context/LayoutContext";
-//import {storage} from "../utils";
+import { storage } from "../utils";
 
-//const auth = storage.load('auth')
-//console.log('===', auth.roles[0])
+const auth = storage.load("auth");
 
-const structure = [
+const adminRole = [
   { id: 0, label: "Dashboard", link: "/dashboard", icon: <HomeIcon /> },
   { id: 1, label: "Người dùng", link: "/users", icon: <GroupIcon /> },
   { id: 2, label: "Danh mục", link: "/categories", icon: <CategoryIcon /> },
@@ -37,10 +35,58 @@ const structure = [
   { id: 5, label: "Khách hàng", link: "/customers", icon: <PersonIcon /> },
   { id: 6, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
   { id: 7, label: "Thống kê", link: "/statistics", icon: <EqualizerIcon /> },
-  //{ id: 8, type: "divider" },
-  //{ id: 9, type: "title", label: "Config" },
-  //{ id: 10, label: "Config", link: "/settings", icon: <SettingsIcon /> },
 ];
+
+const saleRole = [
+  { id: 0, label: "Dashboard", link: "/dashboard", icon: <HomeIcon /> },
+  { id: 2, label: "Danh mục", link: "/categories", icon: <CategoryIcon /> },
+  { id: 3, label: "Nhà cung cấp", link: "/suppliers", icon: <BusinessIcon /> },
+  { id: 4, label: "Sản phẩm", link: "/products", icon: <BookIcon /> },
+  { id: 5, label: "Khách hàng", link: "/customers", icon: <PersonIcon /> },
+  { id: 6, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
+  { id: 7, label: "Thống kê", link: "/statistics", icon: <EqualizerIcon /> },
+];
+
+const editorRole = [
+  { id: 0, label: "Dashboard", link: "/dashboard", icon: <HomeIcon /> },
+  { id: 1, label: "Danh mục", link: "/categories", icon: <CategoryIcon /> },
+  { id: 2, label: "Nhà cung cấp", link: "/suppliers", icon: <BusinessIcon /> },
+  { id: 3, label: "Sản phẩm", link: "/products", icon: <BookIcon /> },
+  { id: 4, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
+  { id: 7, label: "Thống kê", link: "/statistics", icon: <EqualizerIcon /> },
+];
+
+const assistantRole = [
+  { id: 0, label: "Dashboard", link: "/dashboard", icon: <HomeIcon /> },
+  { id: 2, label: "Danh mục", link: "/categories", icon: <CategoryIcon /> },
+  { id: 3, label: "Nhà cung cấp", link: "/suppliers", icon: <BusinessIcon /> },
+  { id: 4, label: "Sản phẩm", link: "/products", icon: <BookIcon /> },
+  { id: 6, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
+  { id: 7, label: "Thống kê", link: "/statistics", icon: <EqualizerIcon /> },
+];
+
+let structure = [];
+
+switch (auth.roles[0]) {
+  case "ROLE_ASSISTANT":
+    structure = assistantRole;
+    break;
+
+  case "ROLE_ADMIN":
+    structure = adminRole;
+    break;
+
+  case "ROLE_SALESPERSON":
+    structure = saleRole;
+    break;
+
+  case "ROLE_EDITOR":
+    structure = editorRole;
+    break;
+
+  default:
+    structure = editorRole;
+}
 
 const drawerWidth = 240;
 

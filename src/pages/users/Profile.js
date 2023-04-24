@@ -1,9 +1,21 @@
-import { TextField, Typography, Card, Grid, Box } from "@material-ui/core";
+import {
+  TextField,
+  Typography,
+  Card,
+  Grid,
+  Box,
+  CircularProgress,
+} from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { getProfile, updatePhotoProfile, updateProfile } from "../../apis";
 import { ButtonSave, ButtonCustom } from "../../components/Button";
 import { Link } from "react-router-dom";
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { Toastify } from "../../components";
+
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
+import { toast } from "react-toastify";
 
 export const Profile = () => {
   const [fullName, setFullName] = useState();
@@ -13,6 +25,7 @@ export const Profile = () => {
   const [photo, setPhoto] = useState();
 
   const [selectedFile, setSelectedFile] = useState();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!selectedFile) {
@@ -39,7 +52,13 @@ export const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await updateProfile({ phoneNumber, address, fullName });
+    try {
+      await updateProfile({ phoneNumber, address, fullName });
+      toast.success("Cập nhật thành công");
+    } catch (err) {
+      console.log("[Update profile] Error", err);
+      toast.success("Có lỗi xảy ra");
+    }
   };
 
   const onSelectFile = (e) => {
@@ -51,11 +70,16 @@ export const Profile = () => {
   };
 
   const handleUploadPhoto = async () => {
+    setLoading(true);
     try {
       await updatePhotoProfile(selectedFile);
+      toast.success("Cập nhật hình ảnh thành công");
+      setLoading(false);
     } catch (error) {
-      console.log("====Error", error);
+      console.log("[Update photo] Error", error);
+      toast.success("Có lỗi xảy ra");
     }
+    setLoading(false);
   };
 
   return (
@@ -93,11 +117,44 @@ export const Profile = () => {
                 <img src={photo} alt="avatar" width="200px" height="200px" />
               </Box>
               <div style={{ textAlign: "center", marginTop: "10px" }}>
-                <input type="file" onChange={onSelectFile} />
-              </div>
-              <div style={{ textAlign: "center", marginTop: "10px" }}>
-                {selectedFile && (
-                  <button onClick={handleUploadPhoto}>Upload</button>
+                {selectedFile ? (
+                  loading ? (
+                    <CircularProgress />
+                  ) : (
+                    <ButtonCustom
+                      style={{ padding: "10px", margin: "10px 0" }}
+                      handleClick={handleUploadPhoto}
+                      icon={<CloudUploadIcon style={{ color: "#536cfe" }} />}
+                      title="Tải ảnh"
+                    />
+                  )
+                ) : (
+                  <div style={{ textAlign: "center", marginTop: "10px" }}>
+                    <label
+                      htmlFor="input-upload"
+                      style={{
+                        cursor: "pointer",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        background: "white",
+                        padding: "10px",
+                        width: "fit-content",
+                        borderRadius: "5px",
+                        margin: "10px 0",
+                        border: "1px solid #cccccc",
+                      }}
+                    >
+                      <PhotoLibraryIcon style={{ color: "#536cfe" }} />
+                      <span style={{ marginLeft: "10px" }}>Chọn ảnh</span>{" "}
+                    </label>
+                    <input
+                      hidden
+                      id="input-upload"
+                      type="file"
+                      multiple
+                      onChange={onSelectFile}
+                    />
+                  </div>
                 )}
               </div>
             </div>
@@ -159,6 +216,7 @@ export const Profile = () => {
           </Grid>
         </Grid>
       </Card>
+      <Toastify />
     </div>
   );
 };

@@ -86,7 +86,7 @@ export default function SidebarLink({
   type,
 }) {
   var classes = useStyles();
-
+  
   // local
   var [isOpen, setIsOpen] = useState(false);
   var isLinkActive =
@@ -152,7 +152,7 @@ export default function SidebarLink({
             [classes.linkNested]: nested,
           }),
         }}
-        disableRipple
+      disableRipple
       >
         <ListItemIcon
           className={classnames(classes.linkIcon, {
