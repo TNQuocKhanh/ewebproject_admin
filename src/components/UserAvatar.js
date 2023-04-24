@@ -1,7 +1,7 @@
 import React from "react";
 import { useTheme } from "@material-ui/styles";
 import { makeStyles } from "@material-ui/styles";
-import { Typography } from "./Wrapper";
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles(() => ({
   avatar: {
@@ -15,6 +15,7 @@ const useStyles = makeStyles(() => ({
   },
   text: {
     color: "white",
+    textTransform: "uppercase",
   },
 }));
 
@@ -34,7 +35,7 @@ export default function UserAvatar({ color = "primary", ...props }) {
       className={classes.avatar}
       style={{ backgroundColor: theme.palette[color].main }}
     >
-      <Typography variant='h6'  className={classes.text}>{letters}</Typography>
+      <Avatar className={classes.text}>{letters}</Avatar>
     </div>
   );
 }

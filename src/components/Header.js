@@ -207,7 +207,7 @@ export default function Header() {
           aria-controls="profile-menu"
           onClick={(e) => setProfileMenu(e.currentTarget)}
         >
-          <AccountIcon classes={{ root: classes.headerIcon }} />
+        <UserAvatar name={username} />
         </IconButton>
         <Menu
           id="notifications-menu"
@@ -272,7 +272,6 @@ export default function Header() {
             </Typography>
           </div>
         </Menu>
-        <UserAvatar name={username} />
       </Toolbar>
     </AppBar>
   );
