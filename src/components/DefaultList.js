@@ -100,7 +100,7 @@ export const DefaultList = ({
         await blockCustomer(row.id, { status: "STATUS_BLOCKED" });
         toast.success("Khoá khách hàng thành công");
       } else {
-        await blockUser(row.id, { status: "STATUS_ACTIVE" });
+        await blockCustomer(row.id, { status: "STATUS_ACTIVE" });
         toast.success("Mở khoá khách hàng thành công");
       }
     } catch (err) {

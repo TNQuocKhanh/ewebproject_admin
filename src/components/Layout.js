@@ -16,6 +16,8 @@ import {CategoryList, CategoryCreate, CategoryEdit, CategoryDetail } from '../pa
 import { CustomerList }  from '../pages/customers'
 import { OrderDetail, OrderEdit, OrderList } from '../pages/orders'
 import {SupplierList, SupplierEdit, SupplierDetail, SupplierCreate} from '../pages/suppliers'
+import {PaymentList} from '../pages/reports/report-by-payment'
+import {FeatureProduct} from '../pages/reports/report-by-product'
 
 const useStyles =  makeStyles(theme => ({
   root: {
@@ -80,6 +82,8 @@ function Layout(props) {
               <Route path="/suppliers/:id/detail" exact component={SupplierDetail} />
               <Route path="/profile" exact component={Profile}/>
               <Route path="/change-password" exact component={ChangePassword}/>
+              <Route path="/report/payment" exact component={PaymentList}/>
+              <Route path="/report/product" exact component={FeatureProduct}/>
             </Switch>
           </div>
         </>

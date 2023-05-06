@@ -34,7 +34,16 @@ const adminRole = [
   { id: 4, label: "Sản phẩm", link: "/products", icon: <BookIcon /> },
   { id: 5, label: "Khách hàng", link: "/customers", icon: <PersonIcon /> },
   { id: 6, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
-  { id: 7, label: "Thống kê", link: "/statistics", icon: <EqualizerIcon /> },
+  {
+    id: 7,
+    label: "Báo cáo",
+    link: "/report",
+    icon: <EqualizerIcon />,
+    children: [
+      { label: "Payment", link: "/report/payment" },
+      { label: "Products", link: "/report/product" },
+    ],
+  },
 ];
 
 const saleRole = [
@@ -44,7 +53,7 @@ const saleRole = [
   { id: 4, label: "Sản phẩm", link: "/products", icon: <BookIcon /> },
   { id: 5, label: "Khách hàng", link: "/customers", icon: <PersonIcon /> },
   { id: 6, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
-  { id: 7, label: "Thống kê", link: "/statistics", icon: <EqualizerIcon /> },
+  { id: 7, label: "Báo cáo", link: "/report", icon: <EqualizerIcon /> },
 ];
 
 const editorRole = [
@@ -53,7 +62,7 @@ const editorRole = [
   { id: 2, label: "Nhà cung cấp", link: "/suppliers", icon: <BusinessIcon /> },
   { id: 3, label: "Sản phẩm", link: "/products", icon: <BookIcon /> },
   { id: 4, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
-  { id: 7, label: "Thống kê", link: "/statistics", icon: <EqualizerIcon /> },
+  { id: 7, label: "Báo cáo", link: "/report", icon: <EqualizerIcon /> },
 ];
 
 const assistantRole = [
@@ -62,12 +71,12 @@ const assistantRole = [
   { id: 3, label: "Nhà cung cấp", link: "/suppliers", icon: <BusinessIcon /> },
   { id: 4, label: "Sản phẩm", link: "/products", icon: <BookIcon /> },
   { id: 6, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
-  { id: 7, label: "Thống kê", link: "/statistics", icon: <EqualizerIcon /> },
+  { id: 7, label: "Báo cáo", link: "/report", icon: <EqualizerIcon /> },
 ];
 
 let structure = [];
 
-switch (auth.roles[0]) {
+switch (auth?.roles[0]) {
   case "ROLE_ASSISTANT":
     structure = assistantRole;
     break;

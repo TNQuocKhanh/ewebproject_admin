@@ -54,6 +54,7 @@ export const blockCustomer = async (id, data) => {
 
   const headers = new Headers();
   headers.append("Authorization", `Bearer ${token}`);
+  headers.append("Content-Type", "application/json");
 
   const res = await fetch(`${API_URL}/customer/block/${id}`, {
     method: "PUT",

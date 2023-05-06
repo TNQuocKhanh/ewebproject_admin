@@ -40,6 +40,12 @@ const ProductForm = () => {
   const [quantity, setQuantity] = useState();
   const [specifications, setSpecifications] = useState();
   const [description, setDescription] = useState();
+
+  const [length, setLength] = useState();
+  const [height, setHeight] = useState();
+  const [width, setWidth] = useState();
+  const [weight, setWeight] = useState();
+
   const params = useParams();
   const id = params.id;
 
@@ -60,6 +66,10 @@ const ProductForm = () => {
       setQuantity(res.quantity);
       setSpecifications(res.specifications);
       setDescription(res.description);
+      setLength(res.length);
+      setHeight(res.height);
+      setWidth(res.width);
+      setWeight(res.weight);
     } catch (e) {
       console.log("[Get product detail] Error", e);
     }
@@ -106,8 +116,11 @@ const ProductForm = () => {
         quantity,
         specifications,
         description,
+        height,
+        length,
+        width,
+        weight,
       });
-
       toast.success("Cập nhật thành công");
     } catch (e) {
       console.log("[Update product] Error", e);
@@ -226,7 +239,19 @@ const ProductForm = () => {
               onChange={(e) => setQuantity(e.target.value)}
             />
           </Grid>
-          <Grid item md={6}></Grid>
+          <Grid item md={6} xs={12}>
+            <TextField
+              fullWidth
+              type="number"
+              required
+              InputLabelProps={{ shrink: true }}
+              InputProps={{ inputProps: { min: 1 } }}
+              label="Chieu cao(cm)"
+              variant="outlined"
+              value={height}
+              onChange={(e) => setHeight(e.target.value)}
+            />
+          </Grid>
           <Grid item md={6} xs={12}>
             <TextField
               fullWidth
@@ -239,7 +264,19 @@ const ProductForm = () => {
               onChange={(e) => setSpecifications(e.target.value)}
             />
           </Grid>
-          <Grid item md={6}></Grid>
+          <Grid item md={6} xs={12}>
+            <TextField
+              fullWidth
+              type="number"
+              required
+              InputLabelProps={{ shrink: true }}
+              InputProps={{ inputProps: { min: 1 } }}
+              label="Can nang(g)"
+              variant="outlined"
+              value={weight}
+              onChange={(e) => setWeight(e.target.value)}
+            />
+          </Grid>
           <Grid item md={6} xs={12}>
             <TextField
               fullWidth
@@ -250,6 +287,34 @@ const ProductForm = () => {
               variant="outlined"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+            />
+          </Grid>
+          <Grid item md={6} xs={12}></Grid>
+          <Grid item md={6} xs={12}>
+            <TextField
+              fullWidth
+              type="number"
+              required
+              InputProps={{ inputProps: { min: 1 } }}
+              label="Chieu dai(cm)"
+              InputLabelProps={{ shrink: true }}
+              variant="outlined"
+              value={length}
+              onChange={(e) => setLength(e.target.value)}
+            />
+          </Grid>
+          <Grid item md={6} xs={12}></Grid>
+          <Grid item md={6} xs={12}>
+            <TextField
+              fullWidth
+              type="number"
+              required
+              InputLabelProps={{ shrink: true }}
+              InputProps={{ inputProps: { min: 1 } }}
+              label="Chieu rong(cm)"
+              variant="outlined"
+              value={width}
+              onChange={(e) => setWidth(e.target.value)}
             />
           </Grid>
         </Grid>

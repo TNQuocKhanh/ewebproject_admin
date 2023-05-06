@@ -26,6 +26,11 @@ export const ProductCreate = () => {
   const [specifications, setSpecifications] = useState();
   const [description, setDescription] = useState();
 
+  const [length, setLength] = useState();
+  const [height, setHeight] = useState();
+  const [width, setWdith] = useState();
+  const [weight, setWeight] = useState();
+
   const [categoryArr, setCategoryArr] = useState([]);
   const [supplierArr, setSupplierArr] = useState([]);
 
@@ -66,6 +71,10 @@ export const ProductCreate = () => {
       quantity,
       specifications,
       description,
+      height,
+      length, 
+      width,
+      weight
     };
     try {
       await createProduct(data);
@@ -192,7 +201,18 @@ export const ProductCreate = () => {
                 onChange={(e) => setQuantity(e.target.value)}
               />
             </Grid>
-            <Grid item md={6}></Grid>
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                type="number"
+                required
+                InputProps={{ inputProps: { min: 1 } }}
+                label="Chieu cao(cm)"
+                variant="outlined"
+                value={height}
+                onChange={(e) => setHeight(e.target.value)}
+              />
+            </Grid>
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
@@ -204,7 +224,18 @@ export const ProductCreate = () => {
                 onChange={(e) => setSpecifications(e.target.value)}
               />
             </Grid>
-            <Grid item md={6}></Grid>
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                type="number"
+                required
+                InputProps={{ inputProps: { min: 1 } }}
+                label="Can nang(g)"
+                variant="outlined"
+                value={weight}
+                onChange={(e) => setWeight(e.target.value)}
+              />
+            </Grid>
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
@@ -214,6 +245,32 @@ export const ProductCreate = () => {
                 variant="outlined"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+              />
+            </Grid>
+            <Grid item md={6} xs={12}></Grid>
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                type="number"
+                required
+                InputProps={{ inputProps: { min: 1 } }}
+                label="Chieu dai(cm)"
+                variant="outlined"
+                value={length}
+                onChange={(e) => setLength(e.target.value)}
+              />
+            </Grid>
+            <Grid item md={6} xs={12}></Grid>
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                type="number"
+                required
+                InputProps={{ inputProps: { min: 1 } }}
+                label="Chieu rong(cm)"
+                variant="outlined"
+                value={width}
+                onChange={(e) => setWdith(e.target.value)}
               />
             </Grid>
           </Grid>
