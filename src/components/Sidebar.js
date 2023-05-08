@@ -55,7 +55,6 @@ const saleRole = [
   { id: 4, label: "Sản phẩm", link: "/products", icon: <BookIcon /> },
   { id: 5, label: "Khách hàng", link: "/customers", icon: <PersonIcon /> },
   { id: 6, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
-  { id: 7, label: "Báo cáo", link: "/report", icon: <EqualizerIcon /> },
   {
     id: 8,
     label: "Báo cáo",
@@ -76,7 +75,6 @@ const editorRole = [
   { id: 2, label: "Nhà cung cấp", link: "/suppliers", icon: <BusinessIcon /> },
   { id: 3, label: "Sản phẩm", link: "/products", icon: <BookIcon /> },
   { id: 4, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
-  { id: 7, label: "Báo cáo", link: "/report", icon: <EqualizerIcon /> },
   {
     id: 8,
     label: "Báo cáo",
@@ -97,7 +95,6 @@ const assistantRole = [
   { id: 3, label: "Nhà cung cấp", link: "/suppliers", icon: <BusinessIcon /> },
   { id: 4, label: "Sản phẩm", link: "/products", icon: <BookIcon /> },
   { id: 6, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
-  { id: 7, label: "Báo cáo", link: "/report", icon: <EqualizerIcon /> },
   {
     id: 8,
     label: "Báo cáo",
