@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { Typography, Card, Grid } from "@material-ui/core";
 import { ButtonReturn } from "../../components/Button";
 import _ from "lodash";
+import { Loader } from "../../components/Loader";
 
 const headers = [
   { id: "fullName", label: "Tên người dùng" },
@@ -16,8 +17,10 @@ export const UserDetail = () => {
   const id = params.id;
 
   const [data, setData] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const getUserDetail = async () => {
+    setLoading(true);
     try {
       const res = await getUserById(Number(id));
       console.log("==res", res);
@@ -31,12 +34,15 @@ export const UserDetail = () => {
     } catch (e) {
       console.log("===Err", e);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
     getUserDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (loading) return <Loader />;
 
   return (
     <div>

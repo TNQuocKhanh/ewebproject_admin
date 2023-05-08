@@ -23,7 +23,7 @@ import {
   ButtonReturn,
   ButtonSave,
 } from "../../components/Button";
-import { TabPanel } from "../../components";
+import { Loader, TabPanel } from "../../components";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import { Toastify } from "../../components";
@@ -46,6 +46,8 @@ const ProductForm = () => {
   const [width, setWidth] = useState();
   const [weight, setWeight] = useState();
 
+  const [loading, setLoading] = useState(false);
+
   const params = useParams();
   const id = params.id;
 
@@ -55,6 +57,7 @@ const ProductForm = () => {
   const history = useHistory();
 
   const getProductDetail = async () => {
+    setLoading(true);
     try {
       const res = await getProductById(Number(id));
       setName(res.name);
@@ -73,6 +76,7 @@ const ProductForm = () => {
     } catch (e) {
       console.log("[Get product detail] Error", e);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -131,6 +135,8 @@ const ProductForm = () => {
       history.push("/products");
     }, 2000);
   };
+
+  if (loading) return <Loader />;
 
   return (
     <div>
@@ -246,22 +252,10 @@ const ProductForm = () => {
               required
               InputLabelProps={{ shrink: true }}
               InputProps={{ inputProps: { min: 1 } }}
-              label="Chieu cao(cm)"
+              label="Chiều cao(cm)"
               variant="outlined"
               value={height}
               onChange={(e) => setHeight(e.target.value)}
-            />
-          </Grid>
-          <Grid item md={6} xs={12}>
-            <TextField
-              fullWidth
-              label="Thông số sản phẩm"
-              rows={3}
-              variant="outlined"
-              multiline
-              value={specifications}
-              InputLabelProps={{ shrink: true }}
-              onChange={(e) => setSpecifications(e.target.value)}
             />
           </Grid>
           <Grid item md={6} xs={12}>
@@ -271,12 +265,39 @@ const ProductForm = () => {
               required
               InputLabelProps={{ shrink: true }}
               InputProps={{ inputProps: { min: 1 } }}
-              label="Can nang(g)"
+              label="Cân nặng(g)"
               variant="outlined"
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
             />
           </Grid>
+          <Grid item md={6} xs={12}>
+            <TextField
+              fullWidth
+              type="number"
+              required
+              InputProps={{ inputProps: { min: 1 } }}
+              label="Chiều dài(cm)"
+              InputLabelProps={{ shrink: true }}
+              variant="outlined"
+              value={length}
+              onChange={(e) => setLength(e.target.value)}
+            />
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <TextField
+              fullWidth
+              type="number"
+              required
+              InputLabelProps={{ shrink: true }}
+              InputProps={{ inputProps: { min: 1 } }}
+              label="Chiều rộng(cm)"
+              variant="outlined"
+              value={width}
+              onChange={(e) => setWidth(e.target.value)}
+            />
+          </Grid>
+          <Grid item md={6} xs={12}></Grid>
           <Grid item md={6} xs={12}>
             <TextField
               fullWidth
@@ -293,28 +314,13 @@ const ProductForm = () => {
           <Grid item md={6} xs={12}>
             <TextField
               fullWidth
-              type="number"
-              required
-              InputProps={{ inputProps: { min: 1 } }}
-              label="Chieu dai(cm)"
-              InputLabelProps={{ shrink: true }}
+              label="Thông số sản phẩm"
+              rows={3}
               variant="outlined"
-              value={length}
-              onChange={(e) => setLength(e.target.value)}
-            />
-          </Grid>
-          <Grid item md={6} xs={12}></Grid>
-          <Grid item md={6} xs={12}>
-            <TextField
-              fullWidth
-              type="number"
-              required
+              multiline
+              value={specifications}
               InputLabelProps={{ shrink: true }}
-              InputProps={{ inputProps: { min: 1 } }}
-              label="Chieu rong(cm)"
-              variant="outlined"
-              value={width}
-              onChange={(e) => setWidth(e.target.value)}
+              onChange={(e) => setSpecifications(e.target.value)}
             />
           </Grid>
         </Grid>
@@ -327,7 +333,7 @@ const ProductForm = () => {
   );
 };
 
-function PreviewMultipleImages({ extra, image }) {
+function PreviewMultipleImages({ extra, image, loading }) {
   const [images, setImages] = useState(extra);
   const [imageChoose, setImageChoose] = useState([]);
 
@@ -355,6 +361,7 @@ function PreviewMultipleImages({ extra, image }) {
     }
   };
 
+  if (loading) return <Loader />;
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -363,7 +370,7 @@ function PreviewMultipleImages({ extra, image }) {
             <div
               key={idx}
               style={{
-                border: "1px solid #000",
+                border: "1px solid #f2f2f2",
                 width: "200px",
                 height: "200px",
                 marginRight: 5,
@@ -429,8 +436,10 @@ export const ProductEdit = () => {
 
   const [mainImage, setMainImage] = useState();
   const [extraImage, setExtraImage] = useState();
+  const [loading, setLoading] = useState(false);
 
   const getUserDetail = async () => {
+    setLoading(true);
     try {
       const res = await getProductById(Number(id));
       setMainImage(res.mainImage);
@@ -438,6 +447,7 @@ export const ProductEdit = () => {
     } catch (e) {
       console.log("===Err", e);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -473,7 +483,11 @@ export const ProductEdit = () => {
         <TabPanel value={value} index={1}>
           <Grid container spacing={2}>
             <Grid item xs={12} md={12}>
-              <PreviewMultipleImages extra={extraImage} image={mainImage} />
+              <PreviewMultipleImages
+                extra={extraImage}
+                image={mainImage}
+                loading={loading}
+              />
             </Grid>
           </Grid>
         </TabPanel>

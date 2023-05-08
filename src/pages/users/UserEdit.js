@@ -13,11 +13,14 @@ import { getUserById, updateRole, updateUser } from "../../apis";
 import { ButtonReturn, ButtonSave } from "../../components/Button";
 import { Toastify } from "../../components/Toastify";
 import { toast } from "react-toastify";
+import {Loader} from "../../components/Loader";
 
 export const UserEdit = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [roles, setRoles] = useState("");
+
+  const [loading, setLoading] = useState(false)
 
   const params = useParams();
   const id = params.id;
@@ -25,6 +28,7 @@ export const UserEdit = () => {
   const history = useHistory();
 
   const getUserDetail = async () => {
+    setLoading(true)
     try {
       const res = await getUserById(Number(id));
       setFullName(res.fullName);
@@ -33,6 +37,7 @@ export const UserEdit = () => {
     } catch (err) {
       console.log("[Get user detail] Error", err);
     }
+    setLoading(false)
   };
 
   useEffect(() => {
@@ -42,19 +47,19 @@ export const UserEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     try {
       const res = await updateUser(Number(id), { fullName, email });
       await updateRole(id, { roles: [roles] });
-      if (res.id) {
-        toast.success("Cập nhật thành công");
-      }
+      history.push("/users");
     } catch (e) {
       console.log("[Update user] Error", e);
+      toast.error("Có lỗi xảy ra");
     }
-
-    setTimeout(() => history.push("/users"), 2000);
-    //history.push("/users")
+    setLoading(false)
   };
+
+  if(loading) return <Loader />
 
   return (
     <div>

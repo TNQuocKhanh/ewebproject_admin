@@ -5,6 +5,7 @@ import { Typography, Card, Grid } from "@material-ui/core";
 import { ButtonReturn } from "../../components/Button";
 import _ from "lodash";
 import { formatPrice } from "../../utils";
+import { Loader } from "../../components/Loader";
 
 const headers = [
   { id: "name", label: "Tên sản phẩm" },
@@ -23,9 +24,11 @@ export const ProductDetail = () => {
   const id = params.id;
 
   const [data, setData] = useState();
-  const [spec, setSpec] = useState()
+  const [spec, setSpec] = useState();
+  const [loading, setLoading] = useState(false);
 
   const getProductDetail = async () => {
+    setLoading(true);
     try {
       const res = await getProductById(Number(id));
 
@@ -36,19 +39,22 @@ export const ProductDetail = () => {
           supplier: res.supplier.name,
           cost: formatPrice(res.cost),
           price: formatPrice(res.price),
-      };
-        setSpec(res.specifications)
+        };
+        setSpec(res.specifications);
         setData(transform);
       }
     } catch (e) {
       console.log("[Get product detail] Error", e);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
     getProductDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (loading) return <Loader />;
 
   return (
     <div>
@@ -75,12 +81,12 @@ export const ProductDetail = () => {
               )}`}</Grid>
             );
           })}
-            <Grid item md={6}>
-              Thông số sản phẩm:
-              {
-                spec?.split('\n').map((it, idx) => <div key={idx}>- {it}</div>)
-              }
-            </Grid>
+          <Grid item md={6}>
+            Thông số sản phẩm:
+            {spec?.split("\n").map((it, idx) => (
+              <div key={idx}>{it}</div>
+            ))}
+          </Grid>
         </Grid>
       </Card>
     </div>

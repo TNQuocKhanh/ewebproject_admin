@@ -4,12 +4,14 @@ import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getSupplierById, updateSupplier } from "../../apis";
 import { ButtonReturn, ButtonSave } from "../../components/Button";
+import { Loader } from "../../components/Loader";
 import { Toastify } from "../../components/Toastify";
 
 export const SupplierEdit = () => {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const params = useParams();
   const id = params.id;
@@ -17,6 +19,7 @@ export const SupplierEdit = () => {
   const history = useHistory();
 
   const getCategoryDetail = async () => {
+    setLoading(true);
     try {
       const res = await getSupplierById(Number(id));
       setName(res.name);
@@ -25,6 +28,7 @@ export const SupplierEdit = () => {
     } catch (e) {
       console.log("===Err", e);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -34,22 +38,22 @@ export const SupplierEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await updateSupplier(Number(id), {
         name,
         phoneNumber,
         address,
       });
-      toast.success("Cập nhật thành công");
+      history.push("/suppliers");
     } catch (e) {
       console.log("[Update supplier] Error]", e);
       toast.error("Có lỗi xảy ra");
     }
-
-    setTimeout(() => {
-      history.push("/suppliers");
-    }, 2000);
+    setLoading(false);
   };
+
+  if (loading) return <Loader />;
 
   return (
     <div>

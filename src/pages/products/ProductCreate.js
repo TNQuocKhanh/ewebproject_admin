@@ -12,6 +12,7 @@ import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { createProduct, getListCategories, getListSupplier } from "../../apis";
 import { ButtonReturn, ButtonSave } from "../../components/Button";
+import {Loader} from "../../components/Loader";
 import { Toastify } from "../../components/Toastify";
 
 export const ProductCreate = () => {
@@ -33,6 +34,8 @@ export const ProductCreate = () => {
 
   const [categoryArr, setCategoryArr] = useState([]);
   const [supplierArr, setSupplierArr] = useState([]);
+
+  const [loading, setLoading] = useState(false);
 
   const history = useHistory();
 
@@ -61,6 +64,7 @@ export const ProductCreate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const data = {
       name,
       cost,
@@ -72,22 +76,21 @@ export const ProductCreate = () => {
       specifications,
       description,
       height,
-      length, 
+      length,
       width,
-      weight
+      weight,
     };
     try {
       await createProduct(data);
-      toast.success("Thêm mới thành công");
+      history.push("/products");
     } catch (e) {
       console.log("[Create product] Error", e);
       toast.error("Có lỗi xảy ra");
     }
-
-    setTimeout(() => {
-      history.push("/products");
-    }, 2000);
+    setLoading(false);
   };
+
+  if(loading) return <Loader />
 
   return (
     <div>
@@ -207,12 +210,49 @@ export const ProductCreate = () => {
                 type="number"
                 required
                 InputProps={{ inputProps: { min: 1 } }}
-                label="Chieu cao(cm)"
+                label="Chiều cao(cm)"
                 variant="outlined"
                 value={height}
                 onChange={(e) => setHeight(e.target.value)}
               />
             </Grid>
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                type="number"
+                required
+                InputProps={{ inputProps: { min: 1 } }}
+                label="Cân nặng(g)"
+                variant="outlined"
+                value={weight}
+                onChange={(e) => setWeight(e.target.value)}
+              />
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                type="number"
+                required
+                InputProps={{ inputProps: { min: 1 } }}
+                label="Chiều dài(cm)"
+                variant="outlined"
+                value={length}
+                onChange={(e) => setLength(e.target.value)}
+              />
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                type="number"
+                required
+                InputProps={{ inputProps: { min: 1 } }}
+                label="Chiều rộng(cm)"
+                variant="outlined"
+                value={width}
+                onChange={(e) => setWdith(e.target.value)}
+              />
+            </Grid>
+            <Grid item md={6} xs={12}></Grid>
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
@@ -224,18 +264,7 @@ export const ProductCreate = () => {
                 onChange={(e) => setSpecifications(e.target.value)}
               />
             </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                type="number"
-                required
-                InputProps={{ inputProps: { min: 1 } }}
-                label="Can nang(g)"
-                variant="outlined"
-                value={weight}
-                onChange={(e) => setWeight(e.target.value)}
-              />
-            </Grid>
+            <Grid item md={6} xs={12}></Grid>
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
@@ -248,31 +277,6 @@ export const ProductCreate = () => {
               />
             </Grid>
             <Grid item md={6} xs={12}></Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                type="number"
-                required
-                InputProps={{ inputProps: { min: 1 } }}
-                label="Chieu dai(cm)"
-                variant="outlined"
-                value={length}
-                onChange={(e) => setLength(e.target.value)}
-              />
-            </Grid>
-            <Grid item md={6} xs={12}></Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                type="number"
-                required
-                InputProps={{ inputProps: { min: 1 } }}
-                label="Chieu rong(cm)"
-                variant="outlined"
-                value={width}
-                onChange={(e) => setWdith(e.target.value)}
-              />
-            </Grid>
           </Grid>
           <div style={{ margin: "20px 0" }}>
             <ButtonSave />

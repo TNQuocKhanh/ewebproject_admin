@@ -11,7 +11,7 @@ import { getProfile, updatePhotoProfile, updateProfile } from "../../apis";
 import { ButtonSave, ButtonCustom } from "../../components/Button";
 import { Link } from "react-router-dom";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import { Toastify } from "../../components";
+import { Loader, Toastify } from "../../components";
 
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
@@ -38,12 +38,14 @@ export const Profile = () => {
   }, [selectedFile]);
 
   const getUserDetail = async () => {
+    setLoading(true)
     const res = await getProfile();
     setFullName(res.fullName);
     setEmail(res.email);
     setPhoneNumber(res.phoneNumber);
     setAddress(res.address);
     setPhoto(res.photos);
+    setLoading(false)
   };
 
   useEffect(() => {
@@ -52,6 +54,7 @@ export const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     try {
       await updateProfile({ phoneNumber, address, fullName });
       toast.success("Cập nhật thành công");
@@ -59,6 +62,7 @@ export const Profile = () => {
       console.log("[Update profile] Error", err);
       toast.success("Có lỗi xảy ra");
     }
+    setLoading(false)
   };
 
   const onSelectFile = (e) => {
@@ -81,6 +85,8 @@ export const Profile = () => {
     }
     setLoading(false);
   };
+
+  if(loading) return <Loader />
 
   return (
     <div>
@@ -108,7 +114,7 @@ export const Profile = () => {
             <div>
               <Box
                 style={{
-                  border: "1px solid #000",
+                  border: "1px solid #f2f2f2",
                   height: "200px",
                   width: "200px",
                   margin: "auto",

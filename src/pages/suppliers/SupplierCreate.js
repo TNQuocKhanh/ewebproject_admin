@@ -4,29 +4,32 @@ import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { createSupplier } from "../../apis";
 import { ButtonReturn, ButtonSave } from "../../components/Button";
+import { Loader } from "../../components/Loader";
 import { Toastify } from "../../components/Toastify";
 
 export const SupplierCreate = () => {
   const [name, setName] = useState();
   const [phone, setPhone] = useState();
   const [address, setAddress] = useState();
+  const [loading, setLoading] = useState(false);
 
   const history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const data = { name, phoneNumber: phone, address };
     try {
       await createSupplier(data);
-      toast.success("Thêm mới thành công");
+      history.push("/suppliers");
     } catch (e) {
       console.log("[Create supllier] Error", e);
       toast.error("Có lỗi xảy ra");
     }
-    setTimeout(() => {
-      history.push("/suppliers");
-    }, 2000);
+    setLoading(false);
   };
+
+  if (loading) return <Loader />;
 
   return (
     <div>

@@ -12,11 +12,13 @@ import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getCategoryById, updateCategory } from "../../apis";
 import { ButtonReturn, ButtonSave } from "../../components/Button";
-import {Toastify} from "../../components/Toastify";
+import { Loader } from "../../components/Loader";
+import { Toastify } from "../../components/Toastify";
 
 export const CategoryEdit = () => {
   const [name, setName] = useState("");
   const [enabled, setEnabled] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const params = useParams();
   const id = params.id;
@@ -24,6 +26,7 @@ export const CategoryEdit = () => {
   const history = useHistory();
 
   const getCategoryDetail = async () => {
+    setLoading(true);
     try {
       const res = await getCategoryById(Number(id));
       setName(res.name);
@@ -31,6 +34,7 @@ export const CategoryEdit = () => {
     } catch (e) {
       console.log("[Get category detail] Error", e);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -40,21 +44,21 @@ export const CategoryEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await updateCategory(Number(id), {
         name,
         enabled: enabled === "true" ? true : false,
       });
-      toast.success("Cập nhật thành công");
+      history.push("/categories");
     } catch (e) {
       console.log("[Update category] Error", e);
       toast.error("Có lỗi xảy ra");
     }
-
-    setTimeout(() => {
-      history.push("/categories");
-    }, 2000);
+    setLoading(false);
   };
+
+  if (loading) return <Loader />;
 
   return (
     <div>

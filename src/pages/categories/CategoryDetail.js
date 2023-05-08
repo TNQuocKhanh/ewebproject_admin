@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { Typography, Card, Grid } from "@material-ui/core";
 import { ButtonReturn } from "../../components/Button";
 import _ from "lodash";
+import {Loader} from "../../components/Loader";
 
 const headers = [
   { id: "name", label: "Tên danh mục" },
@@ -15,8 +16,10 @@ export const CategoryDetail = () => {
   const id = params.id;
 
   const [data, setData] = useState();
+  const [loading, setLoading] = useState(false)
 
   const getCategoryDetail = async () => {
+    setLoading(true)
     try {
       const res = await getCategoryById(Number(id));
 
@@ -30,12 +33,15 @@ export const CategoryDetail = () => {
     } catch (e) {
       console.log("===Err", e);
     }
+    setLoading(false)
   };
 
   useEffect(() => {
     getCategoryDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if(loading) return <Loader />
 
   return (
     <div>

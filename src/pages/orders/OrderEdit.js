@@ -11,9 +11,9 @@ import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getOrderById, updateStatus } from "../../apis";
-import { Toastify } from "../../components";
+import { Loader, Toastify } from "../../components";
 import { ButtonReturn, ButtonSave } from "../../components/Button";
-import { formatDateTime } from "../../utils";
+import { formatDateTime, formatPrice } from "../../utils";
 
 export const OrderEdit = () => {
   const [name, setName] = useState("");
@@ -21,6 +21,8 @@ export const OrderEdit = () => {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [orderTime, setOrderTime] = useState("");
   const [status, setStatus] = useState("");
+  const [address, setAddress] = useState("")
+  const [loading, setLoading] = useState(false);
 
   const params = useParams();
   const id = params.id;
@@ -28,18 +30,21 @@ export const OrderEdit = () => {
   const history = useHistory();
 
   const getOrderDetail = async () => {
+    setLoading(true)
     try {
       const res = await getOrderById(Number(id));
       if (res) {
         setName(res.receiver);
-        setTotal(res.total);
+        setTotal(formatPrice(res.total));
         setStatus(res.status);
         setPaymentMethod(res.paymentMethod);
         setOrderTime(formatDateTime(res.orderTime));
+        setAddress(`${res.street}, ${res.ward}, ${res.district}`)
       }
     } catch (e) {
       console.log("===Err", e);
     }
+    setLoading(false)
   };
 
   useEffect(() => {
@@ -59,6 +64,8 @@ export const OrderEdit = () => {
       history.push("/orders");
     }, 2000);
   };
+
+  if(loading) return <Loader />
 
   return (
     <div>
@@ -138,13 +145,24 @@ export const OrderEdit = () => {
                 >
                   <option value="NEW">Chờ xác nhận</option>
                   <option value="PAID">Đã thanh toán</option>
-                  <option value="DELIVERED">Đã giao hàng</option>
                   <option value="PROCESSING">Đang xử lý</option>
-                  <option value="PACKAGED">Đã đóng gói</option>
                   <option value="SHIPPING">Đang giao hàng</option>
-                  <option value="RETURNED">Đã trả lại</option>
+                  <option value="DELIVERED">Đã giao hàng</option>
+                  <option value="RETURNED">Đã huỷ</option>
                 </Select>
               </FormControl>
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                type="text"
+                label="Địa chỉ"
+                onChange={(e) => setAddress(e.target.value)}
+                variant="outlined"
+                value={address}
+                disabled
+                InputLabelProps={{ shrink: true }}
+              />
             </Grid>
           </Grid>
           <div style={{ margin: "20px 0" }}>

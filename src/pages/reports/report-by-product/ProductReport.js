@@ -50,6 +50,7 @@ export const ProductReport = () => {
             title="Doanh thu theo sản phẩm"
             isCreate={false}
             isExport={false}
+            columnAction={false}
           />
         </Grid>
       </Grid>

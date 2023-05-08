@@ -5,17 +5,29 @@ import { changeUserPassword } from "../../apis/user.api";
 import { ButtonCustom, ButtonSave } from "../../components/Button";
 import { storage } from "../../utils";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { Loader, Toastify } from "../../components";
+import { toast } from "react-toastify";
 
 export const ChangePassword = () => {
   const email = storage.load("auth").email;
 
   const [oldPassword, setOldPassword] = useState();
   const [changePassword, setChangePassword] = useState();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
-    changeUserPassword({ oldPassword, changePassword });
+    try {
+      await changeUserPassword({ oldPassword, changePassword });
+      toast.success("Thay đổi mật khẩu thành công");
+    } catch (e) {
+      console.log("[Change password] Error", e);
+    }
+    setLoading(false);
   };
+
+  if (loading) return <Loader />;
 
   return (
     <div>
@@ -85,6 +97,7 @@ export const ChangePassword = () => {
           </Grid>
         </Grid>
       </Card>
+      <Toastify />
     </div>
   );
 };

@@ -12,6 +12,7 @@ import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { createUser } from "../../apis/user.api";
 import { ButtonReturn, ButtonSave } from "../../components/Button";
+import { Loader } from "../../components/Loader";
 import { Toastify } from "../../components/Toastify";
 
 export const UserCreate = () => {
@@ -19,24 +20,25 @@ export const UserCreate = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [roles, setRoles] = useState();
+  const [loading, setLoading] = useState();
 
   const history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = { email, fullName, password, roles: [roles] };
-
+    setLoading(true);
     try {
       await createUser(data);
-      toast.success("Thêm mới thành công");
+      history.push("/users");
     } catch (err) {
       console.log("[Create user] Error", err);
       toast.error("Có lỗi xảy ra");
     }
-    setTimeout(() => {
-      history.push("/users");
-    }, 2000);
+    setLoading(false);
   };
+
+  if (loading) return <Loader />;
 
   return (
     <div>
@@ -90,19 +92,19 @@ export const UserCreate = () => {
             <Grid item md={6} xs={12}>
               <FormControl required fullWidth variant="outlined">
                 <InputLabel htmlFor="outlined-age-native-simple">
-                  Roles
+                  Vai trò
                 </InputLabel>
                 <Select
                   native
                   value={roles}
                   onChange={(e) => setRoles(e.target.value)}
-                  label="Roles"
+                  label="Vai trò"
                 >
                   <option aria-label="None" value="" />
-                  <option value="ROLE_ADMIN">ADMIN</option>
-                  <option value="ROLE_SALESPERSON">sale person</option>
-                  <option value="ROLE_EDITOR">editor</option>
-                  <option value="ROLE_ASSISTANT">assistant</option>
+                  <option value="ROLE_ADMIN">Admin</option>
+                  <option value="ROLE_SALESPERSON">Sale person</option>
+                  <option value="ROLE_EDITOR">Editor</option>
+                  <option value="ROLE_ASSISTANT">Assistant</option>
                 </Select>
               </FormControl>
             </Grid>

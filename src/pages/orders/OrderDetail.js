@@ -5,6 +5,7 @@ import { Typography, Card, Grid } from "@material-ui/core";
 import { ButtonReturn } from "../../components/Button";
 import _ from "lodash";
 import { formatDateTime, formatPrice, getStatus } from "../../utils";
+import {Loader} from "../../components/Loader";
 
 const headers = [
   { id: "name", label: "Người đặt hàng" },
@@ -12,6 +13,7 @@ const headers = [
   { id: "orderTime", label: "Ngày đặt hàng" },
   { id: "total", label: "Tổng tiền" },
   { id: "status", label: "Trạng thái" },
+  { id: "address", label: "Địa chỉ"}
 ];
 
 export const OrderDetail = () => {
@@ -19,8 +21,10 @@ export const OrderDetail = () => {
   const id = params.id;
 
   const [data, setData] = useState();
+  const [loading, setLoading] = useState(false);
 
   const getOrderDetail = async () => {
+    setLoading(true)
     try {
       const res = await getOrderById(Number(id));
 
@@ -30,19 +34,23 @@ export const OrderDetail = () => {
           name: res.receiver,
           orderTime: formatDateTime(res.orderTime),
           status: getStatus(res.status).text,
-          total: formatPrice(res.total)
+          total: formatPrice(res.total),
+          address: `${res.street}, ${res.ward}, ${res.district}` 
         };
         setData(transform);
       }
     } catch (e) {
       console.log("====Err", e);
     }
+    setLoading(false)
   };
 
   useEffect(() => {
     getOrderDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if(loading) return <Loader />
 
   return (
     <div>
