@@ -277,20 +277,3 @@ export default function Header() {
   );
 }
 
-//<IconButton
-//color="inherit"
-//aria-haspopup="true"
-//aria-controls="mail-menu"
-//onClick={(e) => {
-//setNotificationsMenu(e.currentTarget);
-//setIsNotificationsUnread(false);
-//}}
-//className={classes.headerMenuButton}
-//>
-//<Badge
-//badgeContent={isNotificationsUnread ? notifications.length : null}
-//color="warning"
-//>
-//<NotificationsIcon classes={{ root: classes.headerIcon }} />
-//</Badge>
-//</IconButton>

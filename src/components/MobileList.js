@@ -32,7 +32,8 @@ export const MobileList = ({
   isCreate,
   isBlock,
   columnAction,
-  isLock
+  isLock,
+  isExport
 }) => {
   const classes = useStyles();
 

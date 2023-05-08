@@ -101,7 +101,7 @@ export const updateUser = async (id, data) => {
 
 export const getProfile = async () => {
   const auth = storage.load("auth");
-  const token = auth.accessToken;
+  const token = auth?.accessToken;
 
   const headers = new Headers();
   headers.append("Content-Type", "application/json");

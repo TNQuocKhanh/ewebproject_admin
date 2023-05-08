@@ -48,6 +48,7 @@ export const DefaultList = ({
   dataCsv,
   columnAction,
   isLock,
+  isExport
 }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
@@ -117,7 +118,7 @@ export const DefaultList = ({
         actions={
           <div className={classes.actions}>
             {isCreate && <ButtonCreate resource={resource} />}
-            <ButtonExport columns={columns} transformCsv={dataCsv} />
+            {isExport && <ButtonExport columns={columns} transformCsv={dataCsv} />}
           </div>
         }
       />

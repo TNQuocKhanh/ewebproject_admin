@@ -17,7 +17,8 @@ import { CustomerList }  from '../pages/customers'
 import { OrderDetail, OrderEdit, OrderList } from '../pages/orders'
 import {SupplierList, SupplierEdit, SupplierDetail, SupplierCreate} from '../pages/suppliers'
 import {PaymentList} from '../pages/reports/report-by-payment'
-import {FeatureProduct} from '../pages/reports/report-by-product'
+import {FeatureProduct, ProductReport} from '../pages/reports/report-by-product'
+import { UnsoldProduct } from "../pages/reports/report-by-product";
 
 const useStyles =  makeStyles(theme => ({
   root: {
@@ -83,7 +84,9 @@ function Layout(props) {
               <Route path="/profile" exact component={Profile}/>
               <Route path="/change-password" exact component={ChangePassword}/>
               <Route path="/report/payment" exact component={PaymentList}/>
-              <Route path="/report/product" exact component={FeatureProduct}/>
+              <Route path="/report/feature" exact component={FeatureProduct}/>
+              <Route path="/report/unsold" exact component={UnsoldProduct}/>
+              <Route path="/report/product" exact component={ProductReport}/>
             </Switch>
           </div>
         </>

@@ -40,8 +40,10 @@ const adminRole = [
     link: "/report",
     icon: <EqualizerIcon />,
     children: [
-      { label: "Payment", link: "/report/payment" },
-      { label: "Products", link: "/report/product" },
+      { label: "Phương thức thanh toán", link: "/report/payment" },
+      { label: "Theo sản phẩm", link: "/report/product" },
+      { label: "Sản phẩm tồn kho", link: "/report/unsold" },
+      { label: "Sản phẩm nổi bật", link: "/report/feature" },
     ],
   },
 ];
@@ -54,6 +56,18 @@ const saleRole = [
   { id: 5, label: "Khách hàng", link: "/customers", icon: <PersonIcon /> },
   { id: 6, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
   { id: 7, label: "Báo cáo", link: "/report", icon: <EqualizerIcon /> },
+  {
+    id: 8,
+    label: "Báo cáo",
+    link: "/report",
+    icon: <EqualizerIcon />,
+    children: [
+      { label: "Phương thức thanh toán", link: "/report/payment" },
+      { label: "Theo sản phẩm", link: "/report/product" },
+      { label: "Sản phẩm tồn kho", link: "/report/unsold" },
+      { label: "Sản phẩm nổi bật", link: "/report/feature" },
+    ],
+  },
 ];
 
 const editorRole = [
@@ -63,6 +77,18 @@ const editorRole = [
   { id: 3, label: "Sản phẩm", link: "/products", icon: <BookIcon /> },
   { id: 4, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
   { id: 7, label: "Báo cáo", link: "/report", icon: <EqualizerIcon /> },
+  {
+    id: 8,
+    label: "Báo cáo",
+    link: "/report",
+    icon: <EqualizerIcon />,
+    children: [
+      { label: "Phương thức thanh toán", link: "/report/payment" },
+      { label: "Theo sản phẩm", link: "/report/product" },
+      { label: "Sản phẩm tồn kho", link: "/report/unsold" },
+      { label: "Sản phẩm nổi bật", link: "/report/feature" },
+    ],
+  },
 ];
 
 const assistantRole = [
@@ -72,32 +98,33 @@ const assistantRole = [
   { id: 4, label: "Sản phẩm", link: "/products", icon: <BookIcon /> },
   { id: 6, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
   { id: 7, label: "Báo cáo", link: "/report", icon: <EqualizerIcon /> },
+  {
+    id: 8,
+    label: "Báo cáo",
+    link: "/report",
+    icon: <EqualizerIcon />,
+    children: [
+      { label: "Phương thức thanh toán", link: "/report/payment" },
+      { label: "Theo sản phẩm", link: "/report/product" },
+      { label: "Sản phẩm tồn kho", link: "/report/unsold" },
+      { label: "Sản phẩm nổi bật", link: "/report/feature" },
+    ],
+  },
 ];
 
 let structure = [];
 
-switch (auth?.roles[0]) {
-  case "ROLE_ASSISTANT":
-    structure = assistantRole;
-    break;
-
-  case "ROLE_ADMIN":
-    structure = adminRole;
-    break;
-
-  case "ROLE_SALESPERSON":
+if (auth?.roles.includes("ROLE_ADMIN")) {
+  structure = adminRole;
+} else {
+  if (auth?.roles.includes("ROLE_SALESPERSON")) {
     structure = saleRole;
-    break;
-
-  case "ROLE_EDITOR":
-    structure = editorRole;
-    break;
-
-  default:
-    structure = editorRole;
+  } else {
+    structure = assistantRole;
+  }
 }
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {

@@ -9,7 +9,7 @@ export default function App() {
     <BrowserRouter>
       <Switch>
         <Route exact path="/login" component={Login} />
-        <Route exact path="/" render={() => <Redirect to="/dashboard" />} />
+        <Route exact path="/" render={() => <Redirect to="/login" />} />
         <Route path="/" component={Layout} />
         <Route path="*" component={Error} />
       </Switch>

@@ -29,10 +29,6 @@ function Login(props) {
 
   const history = useHistory();
 
-  useEffect(() => {
-    storage.load("auth") && history.push("/dashboard");
-  });
-
   const handleLogin = async () => {
     setIsLoading(true);
     const res = await login(loginValue, passwordValue);

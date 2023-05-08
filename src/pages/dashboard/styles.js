@@ -83,7 +83,9 @@ export default makeStyles(theme => ({
     width: "100%",
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
+    //justifyContent: "flex-end",
+    justifyContent: 'space-between',
+    padding: '10px 0',
     [theme.breakpoints.only("xs")]: {
       flexWrap: "wrap",
     },

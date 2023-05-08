@@ -358,7 +358,7 @@ function PreviewMultipleImages({ extra, image }) {
   return (
     <>
       <div style={{ display: "flex" }}>
-        {images.map((url, idx) => {
+        {images?.map((url, idx) => {
           return (
             <div
               key={idx}

@@ -2,6 +2,18 @@ import { storage } from "../utils";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
+export const countInDashboard = async () => {
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
+
+  const res = await fetch(`${API_URL}/count-all`, {
+    method: "GET",
+    headers,
+  });
+
+  return res.json();
+}
+
 export const getPaymentReport = async () => {
   const auth = storage.load("auth");
   const token = auth.accessToken;
@@ -50,7 +62,7 @@ export const getUnsold = async () => {
   return res.json();
 };
 
-export const getProductReportByTime =async (data) => {
+export const getProductReportByTime =async () => {
   const auth = storage.load("auth");
   const token = auth.accessToken;
 
@@ -58,7 +70,7 @@ export const getProductReportByTime =async (data) => {
   headers.append("Content-Type", "application/json");
   headers.append("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${API_URL}/sales-report-by-time?day=60`, {
+  const res = await fetch(`${API_URL}/sales-report-by-time?day=7`, {
     method: "GET",
     headers,
   });
@@ -66,15 +78,20 @@ export const getProductReportByTime =async (data) => {
   return res.json();
 }
 
-export const getOrderReportByTime =async (data) => {
+export const getOrderReportByTime =async (method) => {
   const auth = storage.load("auth");
-  const token = auth.accessToken;
+  const token = auth?.accessToken;
+
+  const data = {
+    paymentMethod: method,
+    day: 1000
+  }
 
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
   headers.append("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${API_URL}/orders-report-by-time?day=120`, {
+  const res = await fetch(`${API_URL}/orders-report-by-time?` + new URLSearchParams(data), {
     method: "GET",
     headers,
   });
@@ -82,7 +99,7 @@ export const getOrderReportByTime =async (data) => {
   return res.json();
 }
 
-export const getOrderReportByType =async (data) => {
+export const getOrderReportByType =async (type) => {
   const auth = storage.load("auth");
   const token = auth.accessToken;
 
@@ -90,7 +107,7 @@ export const getOrderReportByType =async (data) => {
   headers.append("Content-Type", "application/json");
   headers.append("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${API_URL}/orders-report-by-type?type=WEEK`, {
+  const res = await fetch(`${API_URL}/orders-report-by-type?type=${type}`, {
     method: "GET",
     headers,
   });

@@ -4,7 +4,6 @@ import List from "../../components/List";
 import { useHistory } from "react-router-dom";
 import { Form, Field } from "react-final-form";
 import { ButtonCustom } from "../../components/Button";
-import { storage } from "../../utils";
 import { getListUsers } from "../../apis";
 import SearchIcon from "@material-ui/icons/Search";
 import { Loader } from "../../components/Loader";
@@ -74,7 +73,6 @@ const FilterForm = (props) => {
 };
 
 export const UserList = () => {
-  const history = useHistory();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filterValues, setFilterValues] = useState({
@@ -92,14 +90,8 @@ export const UserList = () => {
     setLoading(false);
   };
 
-  const isLogin = storage.load("auth");
-
   useEffect(() => {
-    if (isLogin) {
       getAllUsers();
-    } else {
-      history.push("/login");
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterValues]);
 

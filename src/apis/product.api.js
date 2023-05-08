@@ -2,7 +2,7 @@ import { storage } from "../utils";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-export const getListProducts = async () => {
+export const getListProducts = async (filter) => {
   const auth = storage.load("auth");
   const token = auth.accessToken;
 
@@ -10,7 +10,7 @@ export const getListProducts = async () => {
   headers.append("Content-Type", "application/json");
   headers.append("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${API_URL}/products`, {
+  const res = await fetch(`${API_URL}/products/filter?` + new URLSearchParams(filter), {
     method: "GET",
     headers,
   });

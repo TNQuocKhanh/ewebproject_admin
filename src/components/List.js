@@ -15,6 +15,7 @@ export default function List({
   dataCsv,
   columnAction = true,
   isLock = false,
+  isExport = true,
 }) {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
@@ -33,6 +34,7 @@ export default function List({
           dataCsv={dataCsv}
           columnAction={columnAction}
           isLock={isLock}
+          isExport={isExport}
         />
       ) : (
         <MobileList
@@ -45,6 +47,7 @@ export default function List({
           isBlock={isBlock}
           columnAction={columnAction}
           isLock={isLock}
+          isExport={isExport}
         />
       )}
     </>

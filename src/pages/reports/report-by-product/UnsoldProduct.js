@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getFeature } from "../../../apis/report.api";
+import { getUnsold } from "../../../apis";
 import { Grid } from "@material-ui/core";
 import List from "../../../components/List";
 import { Loader } from "../../../components";
@@ -9,14 +9,14 @@ const columns = [
   { id: "sold", label: "Đã bán", minWidth: 170 },
 ];
 
-export const FeatureProduct = () => {
+export const UnsoldProduct = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const getFeatureProduct = async () => {
     setLoading(true);
     try {
-      const res = await getFeature();
+      const res = await getUnsold();
       setData(res.content);
     } catch (err) {
       console.log("[Get feature product] Error", err);
@@ -38,7 +38,7 @@ export const FeatureProduct = () => {
             resource="categories"
             columns={columns}
             data={data}
-            title="Sản phẩm nổi bật"
+            title="Danh sách sản phẩm tồn kho"
             columnAction={false}
             isCreate={false}
             isExport={false}

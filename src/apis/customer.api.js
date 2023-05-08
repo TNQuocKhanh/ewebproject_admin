@@ -2,14 +2,14 @@ import { storage } from "../utils";
 
 const API_URL = process.env.REACT_APP_API_URL
 
-export const getListCustomers = async () => {
+export const getListCustomers = async (filter) => {
   const auth = storage.load('auth')
   const token = auth.accessToken
 
   const headers = new Headers();
   headers.append("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${API_URL}/customers`, {
+  const res = await fetch(`${API_URL}/customers/filter?` + new URLSearchParams(filter), {
     method: "GET",
     headers,
   });
