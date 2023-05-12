@@ -1,4 +1,4 @@
-export const formatDateTime = (value, isShowTime=true) => {
+export const formatDateTime = (value, isShowTime = true) => {
   const a = new Date(value).toString().split(/\s/);
   if (isShowTime) {
     return (
@@ -54,3 +54,35 @@ export const formatPrice = (value) => {
   }).format(value);
   return result;
 };
+
+export const getNow = () => {
+  const dateNow = new Date();
+  const year = dateNow.getFullYear();
+  const monthWithOffset = dateNow.getUTCMonth() + 1;
+  const month =
+    monthWithOffset.toString().length < 2
+      ? `0${monthWithOffset}`
+      : monthWithOffset;
+  const date =
+    dateNow.getUTCDate().toString().length < 2
+      ? `0${dateNow.getUTCDate()}`
+      : dateNow.getUTCDate();
+
+  return `${year}-${month}-${date}`;
+};
+
+export const getPreviousNow = () => {
+  const dateNow = new Date();
+  const year = dateNow.getFullYear();
+  const monthWithOffset = dateNow.getUTCMonth();
+  const month =
+    monthWithOffset.toString().length < 2
+      ? `0${monthWithOffset}`
+      : monthWithOffset;
+  const date =
+    dateNow.getUTCDate().toString().length < 2
+      ? `0${dateNow.getUTCDate()}`
+      : dateNow.getUTCDate();
+
+  return `${year}-${month}-${date}`;
+}

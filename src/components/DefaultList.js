@@ -24,6 +24,7 @@ import { ButtonCreate } from "./Button";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { toast } from "react-toastify";
 import { Toastify } from "./Toastify";
+import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles((theme) => ({
   tableOverflow: {
@@ -129,8 +130,8 @@ export const DefaultList = ({
         bodyClass={classes.tableOverflow}
       >
         {filter && cloneElement(filter)}
-        <hr />
-        {data && data.length > 0 && (
+      <Divider />
+      {data && data.length > 0 && (
           <Typography style={{ margin: "10px" }}>
             Tổng số bản ghi: {data.length || 0}
           </Typography>
