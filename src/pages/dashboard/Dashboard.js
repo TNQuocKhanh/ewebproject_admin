@@ -203,7 +203,7 @@ export default function Dashboard(props) {
             }
           >
             <LineChart
-              width={800}
+              width={type === YEAR ? 1000 : 800}
               height={300}
               data={_dataChart}
               margin={{
@@ -259,7 +259,7 @@ export default function Dashboard(props) {
             }
           >
             <BarChart
-              width={800}
+              width={type === YEAR ? 1000 : 800}
               height={400}
               data={_dataChart}
               margin={{
