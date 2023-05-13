@@ -182,7 +182,7 @@ export const changeUserPassword = async (data) => {
     body: JSON.stringify(data),
   });
 
-  return res.json();
+  return res;
 };
 
 export const updateRole = async (id, data) => {

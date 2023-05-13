@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Grid } from "@material-ui/core";
 import List from "../../components/List";
 import { useHistory } from "react-router-dom";
-import { storage, formatPrice } from "../../utils";
+import { formatPrice } from "../../utils";
 import { getListProducts } from "../../apis";
 import { Loader } from "../../components";
 import { Form, Field } from "react-final-form";

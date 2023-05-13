@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { AppBar, Toolbar, IconButton, Menu, MenuItem } from "@material-ui/core";
 import {
   Menu as MenuIcon,
-  NotificationsNone as NotificationsIcon,
   Person as AccountIcon,
 } from "@material-ui/icons";
 import MenuOpenIcon from "@material-ui/icons/MenuOpen";
@@ -10,7 +9,7 @@ import classNames from "classnames";
 
 import { makeStyles } from "@material-ui/styles";
 
-import { Badge, Typography } from "./Wrapper";
+import { Typography } from "./Wrapper";
 import Notification from "./Notification";
 import UserAvatar from "./UserAvatar";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
@@ -138,7 +137,6 @@ export default function Header() {
   var layoutDispatch = useLayoutDispatch();
 
   var [notificationsMenu, setNotificationsMenu] = useState(null);
-  var [isNotificationsUnread, setIsNotificationsUnread] = useState(true);
   var [profileMenu, setProfileMenu] = useState(null);
 
   const [username, setUserName] = useState();

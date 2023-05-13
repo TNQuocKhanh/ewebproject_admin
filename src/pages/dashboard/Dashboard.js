@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Grid } from "@material-ui/core";
+import { Button, Card, Grid } from "@material-ui/core";
 import useStyles from "./styles";
 import Widget from "../../components/Widget";
 import PageTitle from "../../components/PageTitle";
@@ -22,7 +22,12 @@ import {
   getOrderReportByType,
   getProductReportByTime,
 } from "../../apis/report.api";
-import { formatDateTime } from "../../utils";
+import { formatDateTime, formatPrice } from "../../utils";
+
+import BookIcon from "@material-ui/icons/Book";
+import GroupIcon from "@material-ui/icons/Group";
+import PersonIcon from "@material-ui/icons/Person";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 
 const WEEK = "WEEK";
 const MONTH = "MONTH";
@@ -66,6 +71,7 @@ export default function Dashboard(props) {
 
   useEffect(() => {
     getOrderReport();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type]);
 
   useEffect(() => {
@@ -76,7 +82,35 @@ export default function Dashboard(props) {
     getProductReporpt();
   }, []);
 
-  if(loading) return <Loader />
+  const DataFormater = (number) => {
+    if (number > 1000000000) {
+      return (number / 1000000000).toString() + " tỉ";
+    } else if (number > 1000000) {
+      return (number / 1000000).toString() + " triệu";
+    } else if (number > 1000) {
+      return (number / 1000).toString() + " nghìn";
+    } else {
+      return number.toString();
+    }
+  };
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <Card style={{ padding: "5px" }}>
+          <p className="label">{label}</p>
+          <p className="label">{`${payload[0].name} : ${formatPrice(
+            payload[0].value
+          )}`}</p>
+          <p className="label">{`${payload[1].name} : ${formatPrice(
+            payload[1].value
+          )}`}</p>
+        </Card>
+      );
+    }
+
+    return null;
+  };
+  if (loading) return <Loader />;
 
   return (
     <>
@@ -89,6 +123,7 @@ export default function Dashboard(props) {
             disableWidgetMenu={true}
             bodyClass={classes.fullHeightBody}
             className={classes.card}
+            icon={<GroupIcon fontSize="large" color="primary" />}
           >
             <div className={classes.visitsNumberContainer}>
               <Grid container item alignItems={"center"}>
@@ -113,6 +148,7 @@ export default function Dashboard(props) {
             disableWidgetMenu={true}
             bodyClass={classes.fullHeightBody}
             className={classes.card}
+            icon={<BookIcon fontSize="large" color="primary" />}
           >
             <div className={classes.visitsNumberContainer}>
               <Grid container item alignItems={"center"}>
@@ -137,6 +173,7 @@ export default function Dashboard(props) {
             disableWidgetMenu={true}
             bodyClass={classes.fullHeightBody}
             className={classes.card}
+            icon={<PersonIcon fontSize="large" color="primary" />}
           >
             <div className={classes.visitsNumberContainer}>
               <Grid container item alignItems={"center"}>
@@ -161,6 +198,7 @@ export default function Dashboard(props) {
             disableWidgetMenu={true}
             bodyClass={classes.fullHeightBody}
             className={classes.card}
+            icon={<AddShoppingCartIcon fontSize="large" color="primary" />}
           >
             <div className={classes.visitsNumberContainer}>
               <Grid container item alignItems={"center"}>
@@ -215,8 +253,8 @@ export default function Dashboard(props) {
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="time" />
-              <YAxis />
-              <Tooltip />
+              <YAxis tickFormatter={DataFormater} />
+              <Tooltip content={<CustomTooltip />} />
               <Legend />
               <Line
                 type="monotone"
@@ -271,8 +309,8 @@ export default function Dashboard(props) {
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="time" />
-              <YAxis />
-              <Tooltip />
+              <YAxis tickFormatter={DataFormater} />
+              <Tooltip content={<CustomTooltip />} />
               <Legend />
               <Bar dataKey="net" name="Lợi nhuận" fill="#8884d8" />
               <Bar dataKey="gross" name="Doanh thu" fill="#82ca9d" />
@@ -301,7 +339,7 @@ export default function Dashboard(props) {
               }}
             >
               <CartesianGrid stroke="#f5f5f5" />
-              <XAxis type="number" />
+              <XAxis type="number" tickFormatter={DataFormater} />
               <YAxis dataKey="productName" type="category" scale="band" />
               <Tooltip />
               <Legend />

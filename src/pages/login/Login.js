@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Grid,
   CircularProgress,
@@ -57,7 +57,7 @@ function Login(props) {
             </Typography>
             <Fade in={error}>
               <Typography color="secondary" className={classes.errorMessage}>
-                Có lỗi xảy ra, vui lòng thử lại!
+               Email hoặc mật khẩu không đúng, vui lòng thử lại!
               </Typography>
             </Fade>
             <TextField

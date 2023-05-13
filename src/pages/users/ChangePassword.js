@@ -19,8 +19,12 @@ export const ChangePassword = () => {
     setLoading(true);
     e.preventDefault();
     try {
-      await changeUserPassword({ oldPassword, changePassword });
-      toast.success("Thay đổi mật khẩu thành công");
+      const res = await changeUserPassword({ oldPassword, changePassword });
+      if (res.status === 200) {
+        toast.success("Thay đổi mật khẩu thành công");
+      } else {
+        toast.warn("Mật khẩu cũ không trùng khớp");
+      }
     } catch (e) {
       console.log("[Change password] Error", e);
     }

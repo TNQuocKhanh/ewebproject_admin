@@ -69,26 +69,6 @@ const saleRole = [
   },
 ];
 
-const editorRole = [
-  { id: 0, label: "Dashboard", link: "/dashboard", icon: <HomeIcon /> },
-  { id: 1, label: "Danh mục", link: "/categories", icon: <CategoryIcon /> },
-  { id: 2, label: "Nhà cung cấp", link: "/suppliers", icon: <BusinessIcon /> },
-  { id: 3, label: "Sản phẩm", link: "/products", icon: <BookIcon /> },
-  { id: 4, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
-  {
-    id: 8,
-    label: "Báo cáo",
-    link: "/report",
-    icon: <EqualizerIcon />,
-    children: [
-      { label: "Phương thức thanh toán", link: "/report/payment" },
-      { label: "Theo sản phẩm", link: "/report/product" },
-      { label: "Sản phẩm tồn kho", link: "/report/unsold" },
-      { label: "Sản phẩm nổi bật", link: "/report/feature" },
-    ],
-  },
-];
-
 const assistantRole = [
   { id: 0, label: "Dashboard", link: "/dashboard", icon: <HomeIcon /> },
   { id: 2, label: "Danh mục", link: "/categories", icon: <CategoryIcon /> },
