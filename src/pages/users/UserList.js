@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Grid } from "@material-ui/core";
+import { Grid, TextField } from "@material-ui/core";
 import List from "../../components/List";
 import { useHistory } from "react-router-dom";
-import { Form, Field } from "react-final-form";
 import { ButtonCustom } from "../../components/Button";
 import { getListUsers } from "../../apis";
 import SearchIcon from "@material-ui/icons/Search";
@@ -24,60 +23,57 @@ const FilterForm = (props) => {
   const { setFilterValues } = props;
   const history = useHistory();
 
-  const handleSubmit = (value) => {
+  const [fullName, setFullName] = useState(
+    new URLSearchParams(window.location.search).get("fullName") || ""
+  );
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const value = { fullName };
     setFilterValues(value);
     const url = `${window.location.pathname}?` + new URLSearchParams(value);
     history.push(url);
   };
 
   return (
-    <Form
-      onSubmit={handleSubmit}
-      initialValues={{
-        fullName: new URLSearchParams(window.location.search).get("fullName"),
-      }}
-      setFilterValue={setFilterValues}
-      render={({ handleSubmit, form, submitting, pristine, values }) => (
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={4}>
-              <label>Tên người dùng: </label>
-              <Field
-                style={{ width: "200px", margin: "5px", height: "30px" }}
-                name="fullName"
-                component="input"
-                type="text"
-                placeholder="Tên người dùng"
-              />
-            </Grid>
-          </Grid>
-          <div
-            className="buttons"
-            style={{ margin: "20px 5px", textAlign: "center" }}
-          >
-            <ButtonCustom
-              disabled={submitting || pristine}
-              title="Tìm kiếm"
-              variant="contained"
-              handleClick={handleSubmit}
-              icon={<SearchIcon />}
-              style={
-                pristine ? {} : { backgroundColor: "#556afe", color: "#fff" }
-              }
+    <div style={{ padding: "10px" }}>
+      <form onSubmit={handleSubmit}>
+        <Grid container spacing={2}>
+          <Grid item md={4} xs={12}>
+            <TextField
+              fullWidth
+              label="Tên người dùng"
+              variant="outlined"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              InputLabelProps={{ shrink: true }}
             />
-          </div>
-        </form>
-      )}
-    />
+          </Grid>
+        </Grid>
+        <div
+          style={{
+            margin: "20px 0",
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+          <ButtonCustom
+            title="Tìm kiếm"
+            variant="contained"
+            handleClick={handleSubmit}
+            icon={<SearchIcon />}
+            style={{ backgroundColor: "#556afe", color: "#fff" }}
+          />
+        </div>
+      </form>
+    </div>
   );
 };
 
 export const UserList = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [filterValues, setFilterValues] = useState({
-    fullName: new URLSearchParams(window.location.search).get("fullName") || "",
-  });
+  const [filterValues, setFilterValues] = useState();
 
   const getAllUsers = async () => {
     setLoading(true);
@@ -91,7 +87,7 @@ export const UserList = () => {
   };
 
   useEffect(() => {
-      getAllUsers();
+    getAllUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterValues]);
 

@@ -99,7 +99,7 @@ export const Profile = () => {
         }}
       >
         <Typography>Thông tin</Typography>
-        <Link to={"/"} style={{ textDecoration: "none" }}>
+        <Link to={"/dashboard"} style={{ textDecoration: "none" }}>
           <ButtonCustom
             style={{ backgroundColor: "#556afe", color: "#fff" }}
             icon={<ArrowBackIcon />}

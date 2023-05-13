@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Grid } from "@material-ui/core";
+import {
+  Grid,
+  FormControl,
+  InputLabel,
+  Select,
+  TextField,
+} from "@material-ui/core";
 import List from "../../components/List";
 import { useHistory } from "react-router-dom";
 import { formatPrice } from "../../utils";
-import { getListProducts } from "../../apis";
+import { getListProducts, getListCategories } from "../../apis";
 import { Loader } from "../../components";
-import { Form, Field } from "react-final-form";
 import { ButtonCustom } from "../../components";
 import SearchIcon from "@material-ui/icons/Search";
 
@@ -21,60 +26,100 @@ const FilterForm = (props) => {
   const { setFilterValues } = props;
   const history = useHistory();
 
-  const handleSubmit = (value) => {
+  const [productName, setProductName] = useState(
+    new URLSearchParams(window.location.search).get("productName") || ""
+  );
+  const [categoryId, setCategoryId] = useState(
+    new URLSearchParams(window.location.search).get("categoryId") || ""
+  );
+
+  const [categoryArr, setCategoryArr] = useState([]);
+
+  const getAllCategories = async () => {
+    try {
+      const res = await getListCategories();
+      setCategoryArr(res);
+    } catch (e) {
+      setCategoryArr([]);
+    }
+  };
+
+  useEffect(() => {
+    getAllCategories();
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const value = {
+      productName,
+      categoryId,
+    };
     setFilterValues(value);
     const url = `${window.location.pathname}?` + new URLSearchParams(value);
     history.push(url);
   };
 
   return (
-    <Form
-      onSubmit={handleSubmit}
-      initialValues={{
-        productName: new URLSearchParams(window.location.search).get("productName"),
-      }}
-      setFilterValue={setFilterValues}
-      render={({ handleSubmit, form, submitting, pristine, values }) => (
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={4}>
-              <label>Tên sản phẩm: </label>
-              <Field
-                style={{ width: "200px", margin: "5px", height: "30px" }}
-                name="productName"
-                component="input"
-                type="text"
-                placeholder="Tên sản phẩm"
-              />
-            </Grid>
-          </Grid>
-          <div
-            className="buttons"
-            style={{ margin: "20px 5px", textAlign: "center" }}
-          >
-            <ButtonCustom
-              disabled={submitting || pristine}
-              title="Tìm kiếm"
-              variant="contained"
-              handleClick={handleSubmit}
-              icon={<SearchIcon />}
-              style={
-                pristine ? {} : { backgroundColor: "#556afe", color: "#fff" }
-              }
+    <div style={{ padding: "10px" }}>
+      <form onSubmit={handleSubmit}>
+        <Grid container spacing={2}>
+          <Grid item md={4} xs={12}>
+            <TextField
+              fullWidth
+              label="Tên sản phẩm"
+              variant="outlined"
+              value={productName}
+              onChange={(e) => setProductName(e.target.value)}
+              InputLabelProps={{ shrink: true }}
             />
-          </div>
-        </form>
-      )}
-    />
+          </Grid>
+          <Grid item md={4} xs={12}>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel shrink htmlFor="outlined-age-native-simple">
+                Danh mục
+              </InputLabel>
+              <Select
+                notched
+                native
+                value={categoryId}
+                onChange={(e) => setCategoryId(e.target.value)}
+                label="Danh mục"
+                InputLabelProps={{ shrink: true }}
+              >
+                <option aria-label="None" value="" />
+                {categoryArr.map((it) => (
+                  <option key={it.id} value={it.id}>
+                    {it.name}
+                  </option>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+        <div
+          style={{
+            margin: "20px 0",
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+          <ButtonCustom
+            title="Tìm kiếm"
+            variant="contained"
+            handleClick={handleSubmit}
+            icon={<SearchIcon />}
+            style={{ backgroundColor: "#556afe", color: "#fff" }}
+          />
+        </div>
+      </form>
+    </div>
   );
 };
 
 export const ProductList = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [filterValues, setFilterValues] = useState({
-    productName: new URLSearchParams(window.location.search).get("productName") || "",
-  });
+  const [filterValues, setFilterValues] = useState();
 
   const getAllProducts = async () => {
     setLoading(true);
@@ -96,7 +141,7 @@ export const ProductList = () => {
   };
 
   useEffect(() => {
-      getAllProducts();
+    getAllProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterValues]);
 
