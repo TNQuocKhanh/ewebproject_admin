@@ -38,12 +38,15 @@ const FilterForm = (props) => {
   const history = useHistory();
 
   const [startDate, setStartDate] = useState(
-    new URLSearchParams(window.location.search).get("startDate") || getPreviousNow()
+    new URLSearchParams(window.location.search).get("startDate") ||
+      getPreviousNow()
   );
   const [endDate, setEndDate] = useState(
     new URLSearchParams(window.location.search).get("endDate") || getNow()
   );
-  const [paymentMethod, setPaymentMethod] = useState("COD");
+  const [paymentMethod, setPaymentMethod] = useState(
+    new URLSearchParams(window.location.search).get("paymentMethod") || "COD"
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -75,7 +78,7 @@ const FilterForm = (props) => {
                 InputLabelProps={{ shrink: true }}
               >
                 <option value="COD">COD</option>
-                <option value="VNPay">VNPay</option>
+                <option value="VNPAY">VNPay</option>
               </Select>
             </FormControl>
           </Grid>
