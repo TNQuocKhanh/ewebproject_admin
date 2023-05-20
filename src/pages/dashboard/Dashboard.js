@@ -49,7 +49,7 @@ export default function Dashboard(props) {
 
   const getOrderReport = async () => {
     const res = await getOrderReportByType(type);
-    setDataChart(res);
+    setDataChart(res.reverse());
   };
 
   const getProductReporpt = async () => {
