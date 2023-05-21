@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { createProduct, getListCategories, getListSupplier } from "../../apis";
-import { ButtonReturn, ButtonSave } from "../../components/Button";
+import { ButtonList, ButtonSave } from "../../components/Button";
 import {Loader} from "../../components/Loader";
 import { Toastify } from "../../components/Toastify";
 
@@ -103,7 +103,7 @@ export const ProductCreate = () => {
         }}
       >
         <Typography>Thêm mới</Typography>
-        <ButtonReturn resource="products" />
+        <ButtonList resource="products" />
       </div>
       <Card style={{ padding: 10 }}>
         <form onSubmit={handleSubmit}>

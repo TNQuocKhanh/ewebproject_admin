@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getSupplierById, updateSupplier } from "../../apis";
-import { ButtonReturn, ButtonSave } from "../../components/Button";
+import { ButtonList, ButtonSave } from "../../components/Button";
 import { Loader } from "../../components/Loader";
 import { Toastify } from "../../components/Toastify";
 
@@ -66,7 +66,7 @@ export const SupplierEdit = () => {
         }}
       >
         <Typography>Cập nhật</Typography>
-        <ButtonReturn resource="suppliers" />
+        <ButtonList resource="suppliers" />
       </div>
       <Card style={{ padding: 10 }}>
         <form onSubmit={handleSubmit}>

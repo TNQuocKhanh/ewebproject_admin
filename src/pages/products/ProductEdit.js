@@ -18,11 +18,7 @@ import {
   getListSupplier,
   updateExtraImageProduct,
 } from "../../apis";
-import {
-  ButtonCustom,
-  ButtonReturn,
-  ButtonSave,
-} from "../../components/Button";
+import { ButtonCustom, ButtonList, ButtonSave } from "../../components/Button";
 import { Loader, TabPanel } from "../../components";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
@@ -186,6 +182,7 @@ const ProductForm = () => {
                 value={supplierId}
                 onChange={(e) => setSupplierId(e.target.value)}
                 label="Nhà cung cấp"
+                InputLabelProps={{ shrink: true }}
               >
                 <option aria-label="None" value="" />
                 {supplierArr.map((it) => (
@@ -466,7 +463,7 @@ export const ProductEdit = () => {
         }}
       >
         <Typography>Cập nhật</Typography>
-        <ButtonReturn resource="products" />
+        <ButtonList resource="products" />
       </div>
       <Card>
         <Tabs

@@ -11,7 +11,7 @@ import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { createUser } from "../../apis/user.api";
-import { ButtonReturn, ButtonSave } from "../../components/Button";
+import { ButtonList, ButtonSave } from "../../components/Button";
 import { Loader } from "../../components/Loader";
 import { Toastify } from "../../components/Toastify";
 
@@ -51,7 +51,7 @@ export const UserCreate = () => {
         }}
       >
         <Typography>Thêm mới</Typography>
-        <ButtonReturn resource="users" />
+        <ButtonList resource="users" />
       </div>
       <Card style={{ padding: 10 }}>
         <form onSubmit={handleSubmit}>

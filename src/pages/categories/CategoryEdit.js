@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getCategoryById, updateCategory } from "../../apis";
-import { ButtonReturn, ButtonSave } from "../../components/Button";
+import { ButtonList, ButtonSave } from "../../components/Button";
 import { Loader } from "../../components/Loader";
 import { Toastify } from "../../components/Toastify";
 
@@ -71,7 +71,7 @@ export const CategoryEdit = () => {
         }}
       >
         <Typography>Cập nhật</Typography>
-        <ButtonReturn resource="categories" />
+        <ButtonList resource="categories" />
       </div>
       <Card style={{ padding: 10 }}>
         <form onSubmit={handleSubmit}>

@@ -12,16 +12,17 @@ import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getOrderById, updateStatus } from "../../apis";
 import { Loader, Toastify } from "../../components";
-import { ButtonReturn, ButtonSave } from "../../components/Button";
+import { ButtonDetail, ButtonList, ButtonSave } from "../../components/Button";
 import { formatDateTime, formatPrice } from "../../utils";
 
 export const OrderEdit = () => {
   const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [total, setTotal] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [orderTime, setOrderTime] = useState("");
   const [status, setStatus] = useState("");
-  const [address, setAddress] = useState("")
+  const [address, setAddress] = useState("");
   const [loading, setLoading] = useState(false);
 
   const params = useParams();
@@ -30,21 +31,22 @@ export const OrderEdit = () => {
   const history = useHistory();
 
   const getOrderDetail = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const res = await getOrderById(Number(id));
       if (res) {
         setName(res.receiver);
+        setPhoneNumber(res.phoneNumber);
         setTotal(formatPrice(res.total));
         setStatus(res.status);
         setPaymentMethod(res.paymentMethod);
         setOrderTime(formatDateTime(res.orderTime));
-        setAddress(`${res.street}, ${res.ward}, ${res.district}`)
+        setAddress(`${res.street}, ${res.ward}, ${res.district}`);
       }
     } catch (e) {
       console.log("===Err", e);
     }
-    setLoading(false)
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -65,7 +67,7 @@ export const OrderEdit = () => {
     }, 2000);
   };
 
-  if(loading) return <Loader />
+  if (loading) return <Loader />;
 
   return (
     <div>
@@ -78,7 +80,10 @@ export const OrderEdit = () => {
         }}
       >
         <Typography>Cập nhật</Typography>
-        <ButtonReturn resource="orders" />
+        <div>
+          <ButtonDetail resource={`orders/${id}/detail`} />
+          <ButtonList resource="orders" />
+        </div>
       </div>
       <Card style={{ padding: 10 }}>
         <form onSubmit={handleSubmit}>
@@ -98,11 +103,23 @@ export const OrderEdit = () => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
+                onChange={(e) => setName(e.target.value)}
                 type="text"
-                onChange={(e) => setTotal(e.target.value)}
-                label="Tổng tiền"
+                label="Số điên thoại"
                 variant="outlined"
-                value={total}
+                value={phoneNumber}
+                InputLabelProps={{ shrink: true }}
+                disabled
+              />
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                type="text"
+                label="Địa chỉ"
+                onChange={(e) => setAddress(e.target.value)}
+                variant="outlined"
+                value={address}
                 disabled
                 InputLabelProps={{ shrink: true }}
               />
@@ -132,6 +149,18 @@ export const OrderEdit = () => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                type="text"
+                onChange={(e) => setTotal(e.target.value)}
+                label="Tổng tiền"
+                variant="outlined"
+                value={total}
+                disabled
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+            <Grid item md={6} xs={12}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel shrink htmlFor="outlined-age-native-simple">
                   Trạng thái
@@ -151,18 +180,6 @@ export const OrderEdit = () => {
                   <option value="RETURNED">Đã huỷ</option>
                 </Select>
               </FormControl>
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                type="text"
-                label="Địa chỉ"
-                onChange={(e) => setAddress(e.target.value)}
-                variant="outlined"
-                value={address}
-                disabled
-                InputLabelProps={{ shrink: true }}
-              />
             </Grid>
           </Grid>
           <div style={{ margin: "20px 0" }}>

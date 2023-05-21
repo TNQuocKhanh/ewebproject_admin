@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { getUserById, updateRole, updateUser } from "../../apis";
-import { ButtonReturn, ButtonSave } from "../../components/Button";
+import { ButtonList, ButtonSave } from "../../components/Button";
 import { Toastify } from "../../components/Toastify";
 import { toast } from "react-toastify";
 import { Loader } from "../../components/Loader";
@@ -72,7 +72,7 @@ export const UserEdit = () => {
         }}
       >
         <Typography>Cập nhật</Typography>
-        <ButtonReturn resource="users" />
+        <ButtonList resource="users" />
       </div>
       <Card style={{ padding: 10 }}>
         <form onSubmit={handleSubmit}>

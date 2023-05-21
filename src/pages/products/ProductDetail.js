@@ -2,7 +2,7 @@ import { getProductById } from "../../apis";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { Typography, Card, Grid } from "@material-ui/core";
-import { ButtonReturn } from "../../components/Button";
+import { ButtonList } from "../../components/Button";
 import _ from "lodash";
 import { formatPrice } from "../../utils";
 import { Loader } from "../../components/Loader";
@@ -67,22 +67,21 @@ export const ProductDetail = () => {
         }}
       >
         <Typography>Chi tiết</Typography>
-        <ButtonReturn resource="products" />
+        <ButtonList resource="products" />
       </div>
       <Card style={{ padding: 10 }}>
         <Grid container spacing={2}>
           {headers.map((item, idx) => {
             const val = item?.id;
             return (
-              <Grid key={idx} item md={6}>{`${item.label}: ${_.get(
-                data,
-                val,
-                ""
-              )}`}</Grid>
+              <Grid key={idx} item md={6} xs={12}>
+                <strong>{item.label}: </strong>
+                {_.get(data, val, "")}
+              </Grid>
             );
           })}
-          <Grid item md={6}>
-            Thông số sản phẩm:
+          <Grid item md={6} xs={12}>
+            <strong>Thông số sản phẩm:</strong>
             {spec?.split("\n").map((it, idx) => (
               <div key={idx}>{it}</div>
             ))}

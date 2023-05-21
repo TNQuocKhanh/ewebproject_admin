@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { createCategory } from "../../apis/category.api";
-import { ButtonReturn, ButtonSave } from "../../components/Button";
+import { ButtonList, ButtonSave } from "../../components/Button";
 import { Loader } from "../../components/Loader";
 import { Toastify } from "../../components/Toastify";
 
@@ -40,7 +40,7 @@ export const CategoryCreate = () => {
         }}
       >
         <Typography>Thêm mới</Typography>
-        <ButtonReturn resource="categories" />
+        <ButtonList resource="categories" />
       </div>
       <Card style={{ padding: 10 }}>
         <form onSubmit={handleSubmit}>

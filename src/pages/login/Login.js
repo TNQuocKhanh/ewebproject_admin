@@ -9,9 +9,8 @@ import {
   InputAdornment,
   IconButton,
 } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
 import useStyles from "./styles";
-import img from './image.png'
+import img from "./image.png";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import { login } from "../../apis";
@@ -27,8 +26,6 @@ function Login(props) {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const history = useHistory();
-
   const handleLogin = async () => {
     setIsLoading(true);
     const res = await login(loginValue, passwordValue);
@@ -36,7 +33,7 @@ function Login(props) {
     if (res.status === 200) {
       const data = await res.json();
       storage.save("auth", data);
-      history.push("/dashboard");
+      window.location.replace("/dashboard");
     } else {
       setError(true);
     }
@@ -51,13 +48,13 @@ function Login(props) {
       </div>
       <div className={classes.formContainer}>
         <div className={classes.form}>
-          <React.Fragment>
+          <form onSubmit={handleLogin}>
             <Typography variant="h2" className={classes.greeting}>
               Chào mừng đến trang quản trị
             </Typography>
             <Fade in={error}>
               <Typography color="secondary" className={classes.errorMessage}>
-               Email hoặc mật khẩu không đúng, vui lòng thử lại!
+                Email hoặc mật khẩu không đúng, vui lòng thử lại!
               </Typography>
             </Fade>
             <TextField
@@ -110,6 +107,7 @@ function Login(props) {
                 <CircularProgress size={26} className={classes.loginLoader} />
               ) : (
                 <Button
+                  type="submit"
                   disabled={
                     loginValue.length === 0 || passwordValue.length === 0
                   }
@@ -122,7 +120,7 @@ function Login(props) {
                 </Button>
               )}
             </div>
-          </React.Fragment>
+          </form>
         </div>
       </div>
     </Grid>

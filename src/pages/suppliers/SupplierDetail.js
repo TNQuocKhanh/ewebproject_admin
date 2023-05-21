@@ -2,7 +2,7 @@ import { getSupplierById } from "../../apis";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { Typography, Card, Grid } from "@material-ui/core";
-import { ButtonReturn } from "../../components/Button";
+import { ButtonList } from "../../components/Button";
 import _ from "lodash";
 import { Loader } from "../../components/Loader";
 
@@ -51,18 +51,17 @@ export const SupplierDetail = () => {
         }}
       >
         <Typography>Chi tiết</Typography>
-        <ButtonReturn resource="suppliers" />
+        <ButtonList resource="suppliers" />
       </div>
       <Card style={{ padding: 10 }}>
         <Grid container spacing={2}>
           {headers.map((item, idx) => {
             const val = item?.id;
             return (
-              <Grid key={idx} item md={6} xs={12}>{`${item.label}: ${_.get(
-                data,
-                val,
-                ""
-              )}`}</Grid>
+              <Grid key={idx} item md={6} xs={12}>
+                <strong>{item.label}: </strong>
+                {_.get(data, val, "")}
+              </Grid>
             );
           })}
         </Grid>

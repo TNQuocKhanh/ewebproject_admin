@@ -9,6 +9,7 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import { ExportToCsv } from "export-to-csv";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import SaveIcon from "@material-ui/icons/Save";
+import ListIcon from "@material-ui/icons/List";
 
 export const ButtonCustom = (props) => {
   const {
@@ -64,6 +65,59 @@ export const ButtonReturn = (props) => {
         icon={<ArrowBackIcon />}
         title="Quay lại"
         variant="contained"
+      />
+    </Link>
+  );
+};
+
+export const ButtonList = (props) => {
+  const { resource } = props;
+
+  return (
+    <Link to={`/${resource}`} style={{ textDecoration: "none" }}>
+      <ButtonCustom
+        style={{ backgroundColor: "#556afe", color: "#fff" }}
+        icon={<ListIcon />}
+        title="Về danh sách"
+        variant="contained"
+      />
+    </Link>
+  );
+};
+
+export const ButtonDetail = (props) => {
+  const { resource } = props;
+
+  return (
+    <Link to={`/${resource}`} style={{ textDecoration: "none" }}>
+      <ButtonCustom
+        style={{
+          backgroundColor: "#556afe",
+          color: "#fff",
+          marginRight: "5px",
+        }}
+        icon={<VisibilityIcon />}
+        title="Chi tiết"
+        variant="outlined"
+      />
+    </Link>
+  );
+};
+
+export const ButtonEdit = (props) => {
+  const { resource } = props;
+
+  return (
+    <Link to={`/${resource}`} style={{ textDecoration: "none" }}>
+      <ButtonCustom
+        style={{
+          backgroundColor: "#556afe",
+          color: "#fff",
+          marginRight: "5px",
+        }}
+        icon={<EditIcon />}
+        title="Cập nhật"
+        variant="outlined"
       />
     </Link>
   );

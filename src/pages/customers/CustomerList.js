@@ -6,10 +6,12 @@ import { Loader } from "../../components";
 import { useHistory } from "react-router-dom";
 import { ButtonCustom } from "../../components";
 import SearchIcon from "@material-ui/icons/Search";
+import { formatDateTime } from "../../utils";
 
 const columns = [
   { id: "fullName", label: "Tên", minWidth: 170 },
   { id: "email", label: "Email", minWidth: 170 },
+  { id: "createdTime", label: "Ngày tạo", minWidth: 170 },
   {
     id: "status",
     label: "Trạng thái",
@@ -25,7 +27,6 @@ const FilterForm = (props) => {
 
   const [fullName, setFullName] = useState(
     new URLSearchParams(window.location.search).get("fullName") || ""
-
   );
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -79,7 +80,11 @@ export const CustomerList = () => {
     setLoading(true);
     try {
       const res = await getListCustomers(filterValues);
-      setData(res.content);
+      const transform = res.content.map((it) => ({
+        ...it,
+        createdTime: formatDateTime(it.createdTime),
+      }));
+      setData(transform);
     } catch (e) {
       console.log("[Get customers] Error", e);
       setData([]);

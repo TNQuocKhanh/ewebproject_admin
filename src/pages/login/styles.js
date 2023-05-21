@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/styles";
 
-export default makeStyles(theme => ({
+export default makeStyles((theme) => ({
   container: {
     height: "100vh",
     width: "100vw",
@@ -108,6 +108,8 @@ export default makeStyles(theme => ({
   },
   errorMessage: {
     textAlign: "center",
+    color: "red",
+    marginTop: "10px",
   },
   textFieldUnderline: {
     "&:before": {
