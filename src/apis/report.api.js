@@ -12,7 +12,7 @@ export const countInDashboard = async () => {
   });
 
   return res.json();
-}
+};
 
 export const getPaymentReport = async () => {
   const auth = storage.load("auth");
@@ -62,7 +62,7 @@ export const getUnsold = async () => {
   return res.json();
 };
 
-export const getProductReportByTime =async () => {
+export const getProductReportByTime = async () => {
   const auth = storage.load("auth");
   const token = auth.accessToken;
 
@@ -76,30 +76,33 @@ export const getProductReportByTime =async () => {
   });
 
   return res.json();
-}
+};
 
-export const getOrderReportByTime =async (method) => {
+export const getOrderReportByTime = async (method) => {
   const auth = storage.load("auth");
   const token = auth?.accessToken;
 
   const data = {
     paymentMethod: method,
-    day: 1000
-  }
+    day: 1000,
+  };
 
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
   headers.append("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${API_URL}/orders-report-by-time?` + new URLSearchParams(data), {
-    method: "GET",
-    headers,
-  });
+  const res = await fetch(
+    `${API_URL}/orders-report-by-time?` + new URLSearchParams(data),
+    {
+      method: "GET",
+      headers,
+    }
+  );
 
   return res.json();
-}
+};
 
-export const getOrderReportByType =async (type) => {
+export const getOrderReportByType = async (type) => {
   const auth = storage.load("auth");
   const token = auth.accessToken;
 
@@ -113,4 +116,39 @@ export const getOrderReportByType =async (type) => {
   });
 
   return res.json();
-}
+};
+
+export const getOrderReportByTypePlus = async (type) => {
+  const auth = storage.load("auth");
+  const token = auth.accessToken;
+
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
+  headers.append("Authorization", `Bearer ${token}`);
+
+  const res = await fetch(
+    `${API_URL}/orders-report-by-type-plus?type=${type}`,
+    {
+      method: "GET",
+      headers,
+    }
+  );
+
+  return res.json();
+};
+
+export const getCategoryReport = async () => {
+  const auth = storage.load("auth");
+  const token = auth.accessToken;
+
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
+  headers.append("Authorization", `Bearer ${token}`);
+
+  const res = await fetch(`${API_URL}/category-report-by-time?day=60`, {
+    method: "GET",
+    headers,
+  });
+
+  return res.json();
+};

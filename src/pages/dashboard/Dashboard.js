@@ -5,8 +5,6 @@ import Widget from "../../components/Widget";
 import PageTitle from "../../components/PageTitle";
 import { Typography } from "../../components/Wrapper";
 import {
-  LineChart,
-  Line,
   CartesianGrid,
   XAxis,
   YAxis,
@@ -14,13 +12,18 @@ import {
   BarChart,
   Bar,
   Legend,
-  ComposedChart,
+  Area,
+  AreaChart,
+  Pie,
+  Sector,
+  PieChart,
 } from "recharts";
 import { Loader } from "../../components";
 import {
   countInDashboard,
+  getCategoryReport,
   getOrderReportByType,
-  getProductReportByTime,
+  getOrderReportByTypePlus,
 } from "../../apis/report.api";
 import { formatDateTime, formatPrice } from "../../utils";
 
@@ -39,23 +42,47 @@ export default function Dashboard(props) {
   const [amount, setAmount] = useState({});
   const [type, setType] = useState(WEEK);
   const [dataChart, setDataChart] = useState([]);
-  const [productData, setProductData] = useState([]);
+  const [areaChart, setAreaChart] = useState([]);
+  const [circleData, setCircleData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [activeNetIndex, setActiveNexIndex] = useState(0);
+  const [activeGrossIndex, setActiveGrossIndex] = useState(0);
 
   const getAmount = async () => {
-    const res = await countInDashboard();
-    setAmount(res[0]);
+    try {
+      const res = await countInDashboard();
+      setAmount(res[0]);
+    } catch (err) {
+      console.log("[Get amount] Error", err);
+    }
   };
 
   const getOrderReport = async () => {
-    const res = await getOrderReportByType(type);
-    setDataChart(res.reverse());
+    try {
+      const res = await getOrderReportByType(type);
+      setDataChart(res);
+    } catch (err) {
+      console.log("[Get order report] Error", err);
+    }
   };
 
-  const getProductReporpt = async () => {
+  const getOrderReportPlus = async () => {
+    try {
+      const res = await getOrderReportByTypePlus(type);
+      setAreaChart(res);
+    } catch (err) {
+      console.log("[Get order report plus] Error", err);
+    }
+  };
+
+  const getReportByCategory = async () => {
     setLoading(true);
-    const res = await getProductReportByTime();
-    setProductData(res);
+    try {
+      const res = await getCategoryReport();
+      setCircleData(res);
+    } catch (err) {
+      console.log("[Get report by category] Error", err);
+    }
     setLoading(false);
   };
 
@@ -69,8 +96,19 @@ export default function Dashboard(props) {
     };
   });
 
+  const _areaChart = areaChart.map((item) => {
+    return {
+      time: formatDateTime(item.time, false),
+      net: item.orderReports[0].netSale ? item.orderReports[0].netSale : 0,
+      gross: item.orderReports[0].grossSale
+        ? item.orderReports[0].grossSale
+        : 0,
+    };
+  });
+
   useEffect(() => {
     getOrderReport();
+    getOrderReportPlus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type]);
 
@@ -79,7 +117,7 @@ export default function Dashboard(props) {
   }, []);
 
   useEffect(() => {
-    getProductReporpt();
+    getReportByCategory();
   }, []);
 
   const DataFormater = (number) => {
@@ -110,6 +148,153 @@ export default function Dashboard(props) {
 
     return null;
   };
+
+  const renderActiveNetShape = (props) => {
+    const RADIAN = Math.PI / 180;
+    const {
+      cx,
+      cy,
+      midAngle,
+      innerRadius,
+      outerRadius,
+      startAngle,
+      endAngle,
+      fill,
+      payload,
+      percent,
+      value,
+    } = props;
+    const sin = Math.sin(-RADIAN * midAngle);
+    const cos = Math.cos(-RADIAN * midAngle);
+    const sx = cx + (outerRadius + 10) * cos;
+    const sy = cy + (outerRadius + 10) * sin;
+    const mx = cx + (outerRadius + 30) * cos;
+    const my = cy + (outerRadius + 30) * sin;
+    const ex = mx + (cos >= 0 ? 1 : -1) * 22;
+    const ey = my;
+    const textAnchor = cos >= 0 ? "start" : "end";
+
+    return (
+      <g>
+        <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+          {payload.categoryName}
+        </text>
+        <Sector
+          cx={cx}
+          cy={cy}
+          innerRadius={innerRadius}
+          outerRadius={outerRadius}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          fill={fill}
+        />
+        <Sector
+          cx={cx}
+          cy={cy}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          innerRadius={outerRadius + 6}
+          outerRadius={outerRadius + 10}
+          fill={fill}
+        />
+        <path
+          d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
+          stroke={fill}
+          fill="none"
+        />
+        <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
+        <text
+          x={ex + (cos >= 0 ? 1 : -1) * 12}
+          y={ey}
+          textAnchor={textAnchor}
+          fill="#333"
+        >{`Lợi nhuận ${formatPrice(value)}`}</text>
+        <text
+          x={ex + (cos >= 0 ? 1 : -1) * 12}
+          y={ey}
+          dy={18}
+          textAnchor={textAnchor}
+          fill="#999"
+        >
+          {`(Tỷ lệ ${(percent * 100).toFixed(2)}%)`}
+        </text>
+      </g>
+    );
+  };
+
+  const renderActiveGrossShape = (props) => {
+    const RADIAN = Math.PI / 180;
+    const {
+      cx,
+      cy,
+      midAngle,
+      innerRadius,
+      outerRadius,
+      startAngle,
+      endAngle,
+      fill,
+      payload,
+      percent,
+      value,
+    } = props;
+    const sin = Math.sin(-RADIAN * midAngle);
+    const cos = Math.cos(-RADIAN * midAngle);
+    const sx = cx + (outerRadius + 10) * cos;
+    const sy = cy + (outerRadius + 10) * sin;
+    const mx = cx + (outerRadius + 30) * cos;
+    const my = cy + (outerRadius + 30) * sin;
+    const ex = mx + (cos >= 0 ? 1 : -1) * 22;
+    const ey = my;
+    const textAnchor = cos >= 0 ? "start" : "end";
+
+    return (
+      <g>
+        <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+          {payload.categoryName}
+        </text>
+        <Sector
+          cx={cx}
+          cy={cy}
+          innerRadius={innerRadius}
+          outerRadius={outerRadius}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          fill={fill}
+        />
+        <Sector
+          cx={cx}
+          cy={cy}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          innerRadius={outerRadius + 6}
+          outerRadius={outerRadius + 10}
+          fill={fill}
+        />
+        <path
+          d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
+          stroke={fill}
+          fill="none"
+        />
+        <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
+        <text
+          x={ex + (cos >= 0 ? 1 : -1) * 12}
+          y={ey}
+          textAnchor={textAnchor}
+          fill="#333"
+        >{`Doanh thu ${formatPrice(value)}`}</text>
+        <text
+          x={ex + (cos >= 0 ? 1 : -1) * 12}
+          y={ey}
+          dy={18}
+          textAnchor={textAnchor}
+          fill="#999"
+        >
+          {`(Tỷ lệ ${(percent * 100).toFixed(2)}%)`}
+        </text>
+      </g>
+    );
+  };
+
   if (loading) return <Loader />;
 
   return (
@@ -240,36 +425,39 @@ export default function Dashboard(props) {
               </div>
             }
           >
-            <LineChart
+            <AreaChart
               width={type === YEAR ? 1000 : 800}
               height={300}
-              data={_dataChart}
+              data={_areaChart}
               margin={{
-                top: 5,
+                top: 10,
                 right: 30,
-                left: 20,
-                bottom: 5,
+                left: 0,
+                bottom: 0,
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="time" />
               <YAxis tickFormatter={DataFormater} />
               <Tooltip content={<CustomTooltip />} />
-              <Legend />
-              <Line
+              <Area
                 type="monotone"
                 dataKey="net"
+                stackId="1"
                 name="Lợi nhuận"
                 stroke="#8884d8"
-                activeDot={{ r: 8 }}
+                fill="#8884d8"
               />
-              <Line
+              <Area
                 type="monotone"
                 dataKey="gross"
+                stackId="1"
+                i
                 name="Doanh thu"
                 stroke="#82ca9d"
+                fill="#82ca9d"
               />
-            </LineChart>
+            </AreaChart>
           </Widget>
         </Grid>
         <Grid item xs={12}>
@@ -322,41 +510,44 @@ export default function Dashboard(props) {
             bodyClass={classes.mainChartBody}
             header={
               <div className={classes.mainChartHeader}>
-                <Typography>Sản phẩm trong tuần</Typography>
+                <Typography>Danh mục sản phẩm</Typography>
               </div>
             }
           >
-            <ComposedChart
-              layout="vertical"
-              width={800}
-              height={500}
-              data={productData}
-              margin={{
-                top: 20,
-                right: 20,
-                bottom: 20,
-                left: 20,
-              }}
-            >
-              <CartesianGrid stroke="#f5f5f5" />
-              <XAxis type="number" tickFormatter={DataFormater} />
-              <YAxis dataKey="productName" type="category" scale="band" />
-              <Tooltip />
-              <Legend />
-              <Bar
-                dataKey="totalPrice"
-                name="Giá bán"
-                barSize={20}
-                fill="#8884d8"
-              />
-              <Bar
-                dataKey="totalCost"
-                name="Giá nhập"
-                barSize={20}
-                fill="#82ca9d"
-              />
-              <Line dataKey="profit" name="Lợi nhuận" />
-            </ComposedChart>
+            <Grid container>
+              <Grid item md={6} xs={12}>
+                <PieChart width={600} height={500}>
+                  <Pie
+                    activeIndex={activeGrossIndex}
+                    activeShape={renderActiveGrossShape}
+                    data={circleData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="grossSale"
+                    onMouseEnter={(_, index) => setActiveGrossIndex(index)}
+                  />
+                </PieChart>
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <PieChart width={600} height={500}>
+                  <Pie
+                    activeIndex={activeNetIndex}
+                    activeShape={renderActiveNetShape}
+                    data={circleData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="netSale"
+                    onMouseEnter={(_, index) => setActiveNexIndex(index)}
+                  />
+                </PieChart>
+              </Grid>
+            </Grid>
           </Widget>
         </Grid>
       </Grid>
