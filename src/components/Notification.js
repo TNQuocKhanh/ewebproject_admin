@@ -18,13 +18,15 @@ import {
 import { useTheme } from "@material-ui/styles";
 import classnames from "classnames";
 import tinycolor from "tinycolor2";
+import { Link, useHistory } from "react-router-dom";
 
 // styles
-import {makeStyles} from "@material-ui/styles";
+import { makeStyles } from "@material-ui/styles";
 // components
 import { Typography } from "./Wrapper";
+import { formatDateTime } from "../utils";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   notificationContainer: {
     display: "flex",
     alignItems: "center",
@@ -61,6 +63,7 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center",
     justifyContent: "space-between",
     flexGrow: 1,
+    textDecoration: "none",
   },
   extraButton: {
     color: "white",
@@ -86,6 +89,10 @@ const typesIcons = {
 };
 
 export default function Notification({ variant, ...props }) {
+  const { orderTime, id, receiver } = props;
+
+  const history = useHistory();
+
   var classes = useStyles();
   var theme = useTheme();
 
@@ -131,31 +138,61 @@ export default function Notification({ variant, ...props }) {
       >
         {iconWithStyles}
       </div>
-      <div className={classes.messageContainer}>
-        <Typography
-          className={classnames({
-            [classes.containedTypography]: variant === "contained",
-          })}
-          variant={props.typographyVariant}
-          size={variant !== "contained" && !props.typographyVariant && "md"}
-        >
-          {props.message}
-        </Typography>
-        {props.extraButton && props.extraButtonClick && (
-          <Button
-            onClick={props.extraButtonClick}
-            disableRipple
-            className={classes.extraButton}
+      {!id ? (
+        <Link to={`/orders`} className={classes.messageContainer}>
+          <Typography
+            className={classnames({
+              [classes.containedTypography]: variant === "contained",
+            })}
+            variant={props.typographyVariant}
+            size={variant !== "contained" && !props.typographyVariant && "md"}
           >
-            {props.extraButton}
-          </Button>
-        )}
-      </div>
+            {props.message}
+          </Typography>
+          {props.extraButton && props.extraButtonClick && (
+            <Button
+              onClick={props.extraButtonClick}
+              disableRipple
+              className={classes.extraButton}
+            >
+              {props.extraButton}
+            </Button>
+          )}
+        </Link>
+      ) : (
+        <div
+          onClick={() => history.push(`/orders/${id}/edit`)}
+          className={classes.messageContainer}
+        >
+          <Typography
+            className={classnames({
+              [classes.containedTypography]: variant === "contained",
+            })}
+            variant={props.typographyVariant}
+            size={variant !== "contained" && !props.typographyVariant && "md"}
+          >
+            Đơn hàng của {<strong>{receiver}</strong>} đang chờ xác nhận
+            <br />
+            <Typography variant="caption">
+              {formatDateTime(orderTime)}
+            </Typography>
+          </Typography>
+          <br />
+          {props.extraButton && props.extraButtonClick && (
+            <Button
+              onClick={props.extraButtonClick}
+              disableRipple
+              className={classes.extraButton}
+            >
+              {props.extraButton}
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
 
-// ####################################################################
-function getIconByType(type = "offer") {
+function getIconByType(type = "customer") {
   return typesIcons[type];
 }

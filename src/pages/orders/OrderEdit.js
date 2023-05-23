@@ -7,6 +7,7 @@ import {
   Card,
   Grid,
 } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -14,6 +15,26 @@ import { getOrderById, updateStatus } from "../../apis";
 import { Loader, Toastify } from "../../components";
 import { ButtonDetail, ButtonList, ButtonSave } from "../../components/Button";
 import { formatDateTime, formatPrice } from "../../utils";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightBold,
+  },
+}));
 
 export const OrderEdit = () => {
   const [name, setName] = useState("");
@@ -24,11 +45,11 @@ export const OrderEdit = () => {
   const [status, setStatus] = useState("");
   const [address, setAddress] = useState("");
   const [loading, setLoading] = useState(false);
+  const [orderDetail, setOrderDetail] = useState([]);
 
+  const classes = useStyles();
   const params = useParams();
   const id = params.id;
-
-  const history = useHistory();
 
   const getOrderDetail = async () => {
     setLoading(true);
@@ -42,6 +63,7 @@ export const OrderEdit = () => {
         setPaymentMethod(res.paymentMethod);
         setOrderTime(formatDateTime(res.orderTime));
         setAddress(`${res.street}, ${res.ward}, ${res.district}`);
+        setOrderDetail(res.orderDetails);
       }
     } catch (e) {
       console.log("===Err", e);
@@ -52,7 +74,7 @@ export const OrderEdit = () => {
   useEffect(() => {
     getOrderDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,7 +85,7 @@ export const OrderEdit = () => {
       console.log("[Update order] Error", e);
     }
     setTimeout(() => {
-      history.push("/orders");
+      window.location.replace("/orders");
     }, 2000);
   };
 
@@ -188,6 +210,67 @@ export const OrderEdit = () => {
         </form>
       </Card>
       <Toastify />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          margin: "20px 10px",
+        }}
+      >
+        <Typography>Sản phẩm đã đặt</Typography>
+      </div>
+      <div className={classes.root}>
+        {orderDetail.map((item, idx) => (
+          <Accordion key={idx} defaultExpanded={true}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography className={classes.heading}>
+                {`${idx + 1}. ${item.productName}`}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <TableContainer>
+                <Table className={classes.table}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Hình ảnh</TableCell>
+                      <TableCell align="right">Số lượng</TableCell>
+                      <TableCell align="right">Giá</TableCell>
+                      <TableCell align="right">Phí vận chuyển</TableCell>
+                      <TableCell align="right">Tổng</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>
+                        <img
+                          src={item.productImage}
+                          width="50px"
+                          height="50px"
+                          alt="product-img"
+                        />
+                      </TableCell>
+                      <TableCell align="right">x{item.quantity}</TableCell>
+                      <TableCell align="right">
+                        {formatPrice(item.productPrice)}
+                      </TableCell>
+                      <TableCell align="right">
+                        {formatPrice(item.shippingFee)}
+                      </TableCell>
+                      <TableCell align="right">
+                        {formatPrice(
+                          item.shippingFee * item.quantity +
+                            item.productPrice * item.quantity
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </AccordionDetails>
+          </Accordion>
+        ))}
+      </div>
     </div>
   );
 };

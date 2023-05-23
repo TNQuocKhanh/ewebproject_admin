@@ -118,7 +118,7 @@ export const OrderDetail = () => {
       </div>
       <div className={classes.root}>
         {orderDetail.map((item, idx) => (
-          <Accordion key={idx}>
+          <Accordion key={idx} defaultExpanded={true}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography className={classes.heading}>
                 {`${idx + 1}. ${item.productName}`}
@@ -154,7 +154,10 @@ export const OrderDetail = () => {
                         {formatPrice(item.shippingFee)}
                       </TableCell>
                       <TableCell align="right">
-                        {formatPrice(item.shippingFee + item.productPrice)}
+                        {formatPrice(
+                          item.shippingFee * item.quantity +
+                            item.productPrice * item.quantity
+                        )}
                       </TableCell>
                     </TableRow>
                   </TableBody>

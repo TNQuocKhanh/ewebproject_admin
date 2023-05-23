@@ -3,13 +3,14 @@ import { AppBar, Toolbar, IconButton, Menu, MenuItem } from "@material-ui/core";
 import {
   Menu as MenuIcon,
   Person as AccountIcon,
+  NotificationsNone as NotificationsIcon,
 } from "@material-ui/icons";
 import MenuOpenIcon from "@material-ui/icons/MenuOpen";
 import classNames from "classnames";
 
 import { makeStyles } from "@material-ui/styles";
 
-import { Typography } from "./Wrapper";
+import { Typography, Badge } from "./Wrapper";
 import Notification from "./Notification";
 import UserAvatar from "./UserAvatar";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
@@ -18,7 +19,7 @@ import {
   useLayoutDispatch,
   toggleSidebar,
 } from "../context/LayoutContext";
-import { getProfile, logout } from "../apis";
+import { getListOrders, getProfile, logout } from "../apis";
 import { useHistory, Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -108,28 +109,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const notifications = [
-  { id: 0, color: "warning", message: "Check out this awesome ticket" },
-  {
-    id: 1,
-    color: "success",
-    type: "info",
-    message: "What is the best way to get ...",
-  },
-  {
-    id: 2,
-    color: "secondary",
-    type: "notification",
-    message: "This is just a simple notification",
-  },
-  {
-    id: 3,
-    color: "primary",
-    type: "e-commerce",
-    message: "12 new orders has arrived today",
-  },
-];
-
 export default function Header() {
   var classes = useStyles();
 
@@ -140,27 +119,67 @@ export default function Header() {
   var [profileMenu, setProfileMenu] = useState(null);
 
   const [username, setUserName] = useState();
+  const [total, setTotal] = useState(0);
+  const [notifications, setNotifications] = useState([
+    {
+      id: 0,
+      color: "secondary",
+      type: "feedback",
+      message: "Không có đơn hàng mới nào.",
+    },
+  ]);
 
   const history = useHistory();
 
+  const getNewOrder = async () => {
+    try {
+      const res = await getListOrders();
+      const result = res.filter((item) => item.status === "NEW");
+      if (result.length > 0) {
+        setNotifications(result.reverse());
+        setTotal(result.length);
+      } else {
+        setNotifications([
+          {
+            id: 0,
+            color: "secondary",
+            type: "feedback",
+            message: "Không có đơn hàng mới nào.",
+          },
+        ]);
+        setTotal(0);
+      }
+    } catch (err) {
+      console.log("[Get new order] Error", err);
+    }
+  };
+
   const handleLogout = async () => {
-    const res = await logout();
-    if (res) {
-      localStorage.removeItem("auth");
-      history.push("/login");
+    try {
+      const res = await logout();
+      if (res) {
+        localStorage.removeItem("auth");
+        history.push("/login");
+      }
+    } catch (err) {
+      console.log("[Logour] Error", err);
     }
   };
 
   const getUserProfile = async () => {
-    const res = await getProfile();
-    //console.log('===profile', res)
-    if (res) {
-      setUserName(res.fullName);
+    try {
+      const res = await getProfile();
+      if (res) {
+        setUserName(res.fullName);
+      }
+    } catch (err) {
+      console.log("[Get profile] Error", err);
     }
   };
 
   useEffect(() => {
     getUserProfile();
+    getNewOrder();
   }, []);
 
   return (
@@ -199,13 +218,26 @@ export default function Header() {
         </Typography>
         <div className={classes.grow} />
         <IconButton
+          color="inherit"
+          aria-haspopup="true"
+          aria-controls="mail-menu"
+          onClick={(e) => {
+            setNotificationsMenu(e.currentTarget);
+          }}
+          className={classes.headerMenuButton}
+        >
+          <Badge badgeContent={total} color="warning">
+            <NotificationsIcon classes={{ root: classes.headerIcon }} />
+          </Badge>
+        </IconButton>
+        <IconButton
           aria-haspopup="true"
           color="inherit"
           className={classes.headerMenuButton}
           aria-controls="profile-menu"
           onClick={(e) => setProfileMenu(e.currentTarget)}
         >
-        <UserAvatar name={username} />
+          <UserAvatar name={username} />
         </IconButton>
         <Menu
           id="notifications-menu"
@@ -215,15 +247,16 @@ export default function Header() {
           className={classes.headerMenu}
           disableAutoFocusItem
         >
-          {notifications.map((notification) => (
-            <MenuItem
-              key={notification.id}
-              onClick={() => setNotificationsMenu(null)}
-              className={classes.headerMenuItem}
-            >
-              <Notification {...notification} typographyVariant="inherit" />
-            </MenuItem>
-          ))}
+          {notifications.length > 0 &&
+            notifications.map((notification) => (
+              <MenuItem
+                key={notification.id}
+                onClick={() => setNotificationsMenu(null)}
+                className={classes.headerMenuItem}
+              >
+                <Notification {...notification} typographyVariant="inherit" />
+              </MenuItem>
+            ))}
         </Menu>
         <Menu
           id="profile-menu"
@@ -274,4 +307,3 @@ export default function Header() {
     </AppBar>
   );
 }
-
