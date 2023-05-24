@@ -6,11 +6,16 @@ export const getListProducts = async (filter) => {
   const auth = storage.load("auth");
   const token = auth.accessToken;
 
+  const _filter = {
+    ...filter,
+    size: 1000
+  }
+
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
   headers.append("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${API_URL}/products/filter?` + new URLSearchParams(filter), {
+  const res = await fetch(`${API_URL}/products/filter?` + new URLSearchParams(_filter), {
     method: "GET",
     headers,
   });
