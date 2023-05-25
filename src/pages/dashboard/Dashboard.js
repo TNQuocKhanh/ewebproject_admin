@@ -541,7 +541,7 @@ export default function Dashboard(props) {
                     cy="50%"
                     innerRadius={60}
                     outerRadius={80}
-                    fill="#8884d8"
+                    fill="#82ca9d"
                     dataKey="netSale"
                     onMouseEnter={(_, index) => setActiveNexIndex(index)}
                   />

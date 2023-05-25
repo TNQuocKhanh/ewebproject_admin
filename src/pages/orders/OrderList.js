@@ -77,6 +77,7 @@ const FilterForm = (props) => {
                 label="Phương thức thanh toán"
                 InputLabelProps={{ shrink: true }}
               >
+                <option value="-1">Tất cả</option>
                 <option value="COD">COD</option>
                 <option value="VNPAY">VNPay</option>
               </Select>

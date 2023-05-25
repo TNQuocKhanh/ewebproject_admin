@@ -134,7 +134,7 @@ export default function Header() {
   const getNewOrder = async () => {
     try {
       const res = await getListOrders();
-      const result = res.filter((item) => item.status === "NEW");
+      const result = res.filter((item) => item.status === "NEW" || item.status==="PAID" && item.paymentMethod === "VNPAY");
       if (result.length > 0) {
         setNotifications(result.reverse());
         setTotal(result.length);
