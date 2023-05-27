@@ -86,7 +86,7 @@ const FilterForm = (props) => {
                 label="Danh mục"
                 InputLabelProps={{ shrink: true }}
               >
-                <option aria-label="None" value="" />
+                <option aria-label="None" value="-1">Tất cả</option>
                 {categoryArr.map((it) => (
                   <option key={it.id} value={it.id}>
                     {it.name}

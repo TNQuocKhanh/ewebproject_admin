@@ -162,7 +162,7 @@ export const ButtonExport = (props) => {
         marginLeft: 5,
       }}
       icon={<GetAppIcon />}
-      title="Export"
+      title="Xuất"
       handleClick={handleExportData}
     />
   );

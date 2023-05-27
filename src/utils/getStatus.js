@@ -5,9 +5,9 @@ export const getStatus = (value) => {
     case "STATUS_LOGOUT":
       return { text: "Đã đăng xuất", color: "#a2dea7" };
     case "STATUS_BLOCKED":
-      return { text: "Đã khoá", color: "#a2dea7" };
+      return { text: "Đã khoá", color: "#d9534f" };
     case "STATUS_INITIAL":
-      return { text: "Khởi tạo", color: "#a2dea7" };
+      return { text: "Khởi tạo", color: "#5cb85c" };
     case "true":
       return { text: "Hoạt động", color: "#eaf6f9" };
     case "false":
@@ -15,17 +15,17 @@ export const getStatus = (value) => {
     case "NEW":
       return { text: "Chờ xác nhận", color: "#eaf6f9" };
     case "PAID":
-      return { text: "Đã thanh toán", color: "#eaf6f9" };
+      return { text: "Đã thanh toán", color: "#5bc0de" };
     case "DELIVERED":
-      return { text: "Đã giao hàng", color: "#eaf6f9" };
+      return { text: "Đã giao hàng", color: "##5cb85c" };
     case "PROCESSING":
-      return { text: "Đang xử lý", color: "#eaf6f9" };
+      return { text: "Đang xử lý", color: "#f0ad4e" };
     case "PACKAGED":
-      return { text: "Đang xử lý", color: "#eaf6f9" };
+      return { text: "Đang xử lý", color: "#f0ad4e" };
     case "SHIPPING":
-      return { text: "Đang giao hàng", color: "#eaf6f9" };
+      return { text: "Đang giao hàng", color: "#b5b1cd" };
     case "RETURNED":
-      return { text: "Đã huỷ", color: "#eaf6f9" };
+      return { text: "Đã huỷ", color: "#d9534f" };
     default:
       return { text: "Không xác định", color: "#d7d8da" };
   }

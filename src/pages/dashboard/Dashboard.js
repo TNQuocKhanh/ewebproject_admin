@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Button, Card, Grid } from "@material-ui/core";
 import useStyles from "./styles";
 import Widget from "../../components/Widget";
@@ -27,6 +27,9 @@ import {
 } from "../../apis/report.api";
 import { formatDateTime, formatPrice } from "../../utils";
 
+import { useCurrentPng } from "recharts-to-png";
+import FileSaver from "file-saver";
+
 import BookIcon from "@material-ui/icons/Book";
 import GroupIcon from "@material-ui/icons/Group";
 import PersonIcon from "@material-ui/icons/Person";
@@ -47,6 +50,23 @@ export default function Dashboard(props) {
   const [loading, setLoading] = useState(false);
   const [activeNetIndex, setActiveNexIndex] = useState(0);
   const [activeGrossIndex, setActiveGrossIndex] = useState(0);
+
+  const [getAreaPng, { ref: areaRef }] = useCurrentPng();
+  const [getBarPng, { ref: barRef }] = useCurrentPng();
+
+  const handleAreaDownload = useCallback(async () => {
+    const png = await getAreaPng();
+    if (png) {
+      FileSaver.saveAs(png, "report-avenue-profit.png");
+    }
+  }, [getAreaPng]);
+
+  const handleBarDownload = useCallback(async () => {
+    const png = await getBarPng();
+    if (png) {
+      FileSaver.saveAs(png, "report-avenue-profit-bar-chart.png");
+    }
+  }, [getBarPng]);
 
   const getAmount = async () => {
     try {
@@ -408,17 +428,29 @@ export default function Dashboard(props) {
               <div className={classes.mainChartHeader}>
                 <Typography>Doanh thu</Typography>
                 <div>
-                  <Button variant="outlined" onClick={() => setType(WEEK)}>
+                  <Button
+                    variant="outlined"
+                    style={type === WEEK ? { background: "#e8deff" } : {}}
+                    onClick={() => setType(WEEK)}
+                  >
                     Trong tuần
                   </Button>
                   <Button
                     variant="outlined"
-                    style={{ margin: "0 5px" }}
+                    style={
+                      type === MONTH
+                        ? { background: "#e8deff", margin: "0 5px" }
+                        : { margin: "0 5px" }
+                    }
                     onClick={() => setType(MONTH)}
                   >
                     Trong tháng
                   </Button>
-                  <Button variant="outlined" onClick={() => setType(YEAR)}>
+                  <Button
+                    style={type === YEAR ? { background: "#e8deff" } : {}}
+                    variant="outlined"
+                    onClick={() => setType(YEAR)}
+                  >
                     Trong năm
                   </Button>
                 </div>
@@ -426,13 +458,14 @@ export default function Dashboard(props) {
             }
           >
             <AreaChart
+              ref={areaRef}
               width={type === YEAR ? 1000 : 800}
               height={300}
               data={_areaChart}
               margin={{
                 top: 10,
                 right: 30,
-                left: 0,
+                left: 10,
                 bottom: 0,
               }}
             >
@@ -440,6 +473,7 @@ export default function Dashboard(props) {
               <XAxis dataKey="time" />
               <YAxis tickFormatter={DataFormater} />
               <Tooltip content={<CustomTooltip />} />
+              <Legend />
               <Area
                 type="monotone"
                 dataKey="net"
@@ -458,6 +492,15 @@ export default function Dashboard(props) {
                 fill="#82ca9d"
               />
             </AreaChart>
+            <div>
+              <Button
+                onClick={handleAreaDownload}
+                variant="outlined"
+                style={{ margin: "20px 0" }}
+              >
+                <code>Xuất biểu đồ</code>
+              </Button>
+            </div>
           </Widget>
         </Grid>
         <Grid item xs={12}>
@@ -467,17 +510,29 @@ export default function Dashboard(props) {
               <div className={classes.mainChartHeader}>
                 <Typography>Doanh thu</Typography>
                 <div>
-                  <Button variant="outlined" onClick={() => setType(WEEK)}>
+                  <Button
+                    variant="outlined"
+                    style={type === WEEK ? { background: "#e8deff" } : {}}
+                    onClick={() => setType(WEEK)}
+                  >
                     Trong tuần
                   </Button>
                   <Button
                     variant="outlined"
-                    style={{ margin: "0 5px" }}
+                    style={
+                      type === MONTH
+                        ? { background: "#e8deff", margin: "0 5px" }
+                        : { margin: "0 5px" }
+                    }
                     onClick={() => setType(MONTH)}
                   >
                     Trong tháng
                   </Button>
-                  <Button variant="outlined" onClick={() => setType(YEAR)}>
+                  <Button
+                    style={type === YEAR ? { background: "#e8deff" } : {}}
+                    variant="outlined"
+                    onClick={() => setType(YEAR)}
+                  >
                     Trong năm
                   </Button>
                 </div>
@@ -485,6 +540,7 @@ export default function Dashboard(props) {
             }
           >
             <BarChart
+              ref={barRef}
               width={type === YEAR ? 1000 : 800}
               height={400}
               data={_dataChart}
@@ -503,6 +559,15 @@ export default function Dashboard(props) {
               <Bar dataKey="net" name="Lợi nhuận" fill="#8884d8" />
               <Bar dataKey="gross" name="Doanh thu" fill="#82ca9d" />
             </BarChart>
+            <div>
+              <Button
+                onClick={handleBarDownload}
+                variant="outlined"
+                style={{ margin: "20px 0" }}
+              >
+                <code>Xuất biểu đồ</code>
+              </Button>
+            </div>
           </Widget>
         </Grid>
         <Grid item xs={12}>

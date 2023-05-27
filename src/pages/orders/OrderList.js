@@ -45,13 +45,17 @@ const FilterForm = (props) => {
     new URLSearchParams(window.location.search).get("endDate") || getNow()
   );
   const [paymentMethod, setPaymentMethod] = useState(
-    new URLSearchParams(window.location.search).get("paymentMethod") || "COD"
+    new URLSearchParams(window.location.search).get("paymentMethod") || "-1"
+  );
+  const [status, setStatus] = useState(
+    new URLSearchParams(window.location.search).get("status") || "-1"
   );
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const value = {
       paymentMethod,
+      status,
       startDate,
       endDate,
     };
@@ -80,6 +84,29 @@ const FilterForm = (props) => {
                 <option value="-1">Tất cả</option>
                 <option value="COD">COD</option>
                 <option value="VNPAY">VNPay</option>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item md={4} xs={12}>
+            <FormControl required fullWidth variant="outlined">
+              <InputLabel shrink htmlFor="outlined-age-native-simple">
+                Trạng thái
+              </InputLabel>
+              <Select
+                notched
+                native
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                label="Trạng thái"
+                InputLabelProps={{ shrink: true }}
+              >
+                <option value="-1">Tất cả</option>
+                <option value="NEW">Chờ xác nhận</option>
+                <option value="PAID">Đã thanh toán</option>
+                <option value="PROCESSING">Đang xử lý</option>
+                <option value="SHIPPING">Đang giao hàng</option>
+                <option value="DELIVERED">Đã giao hàng</option>
+                <option value="RETURNED">Đã huỷ</option>
               </Select>
             </FormControl>
           </Grid>

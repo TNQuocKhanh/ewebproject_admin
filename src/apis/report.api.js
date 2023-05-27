@@ -62,29 +62,36 @@ export const getUnsold = async () => {
   return res.json();
 };
 
-export const getProductReportByTime = async () => {
+export const getProductReportByTime = async (day) => {
   const auth = storage.load("auth");
   const token = auth.accessToken;
+
+  const filter = {
+    day: day || 30,
+  };
 
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
   headers.append("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${API_URL}/sales-report-by-time?day=7`, {
-    method: "GET",
-    headers,
-  });
+  const res = await fetch(
+    `${API_URL}/sales-report-by-time?` + new URLSearchParams(filter),
+    {
+      method: "GET",
+      headers,
+    }
+  );
 
   return res.json();
 };
 
-export const getOrderReportByTime = async (method) => {
+export const getOrderReportByTime = async (method, day) => {
   const auth = storage.load("auth");
   const token = auth?.accessToken;
 
   const data = {
     paymentMethod: method,
-    day: 1000,
+    day: day || 30,
   };
 
   const headers = new Headers();

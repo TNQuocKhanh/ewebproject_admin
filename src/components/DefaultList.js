@@ -151,7 +151,7 @@ export const DefaultList = ({
                       {column.label}
                     </TableCell>
                   ))}
-                  <TableCell>Thao tác</TableCell>
+                  <TableCell>{columnAction && 'Thao tác'}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
