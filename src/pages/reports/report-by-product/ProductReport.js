@@ -99,6 +99,7 @@ export const ProductReport = () => {
 
   useEffect(() => {
     getProductReporpt();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterValues]);
 
   if (loading) return <Loader />;
@@ -108,7 +109,7 @@ export const ProductReport = () => {
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <List
-          filter={<FilterForm setFilterValues={setFilterValues} />}
+            filter={<FilterForm setFilterValues={setFilterValues} />}
             resource="products"
             columns={columns}
             data={data}

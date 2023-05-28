@@ -109,6 +109,7 @@ export const PaymentList = () => {
   useEffect(() => {
     getPaymentCOD();
     getPaymentVNPay();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterValues]);
 
   const paymentData = [
