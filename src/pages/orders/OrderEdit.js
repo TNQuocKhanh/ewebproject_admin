@@ -146,14 +146,29 @@ export const OrderEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await updateStatus(Number(id), { status, paymentStatus });
-      toast.success("Cập nhật thành công");
+      const res = await updateStatus(Number(id), { status, paymentStatus });
+      console.log("===", res);
+      if (res.code === "08") {
+        toast.warning(
+          "Trạng thái đã hoàn tiền chỉ được cập nhật cho đơn hàng đã huỷ"
+        );
+      } else if (res.code === "02") {
+        toast.warning(
+          "Trạng thái đã thanh toán không được cập nhật cho đơn hàng đã huỷ"
+        );
+      } else if (res.code === "05") {
+        toast.warning(
+          "Trạng thái chưa thanh toán không được cập nhật cho đơn hàng chờ hoàn tiền"
+        );
+      } else {
+        toast.success("Cập nhật thành công");
+      }
     } catch (e) {
       console.log("[Update order] Error", e);
     }
-    setTimeout(() => {
-      window.location.replace("/orders");
-    }, 2000);
+    //setTimeout(() => {
+    //window.location.replace("/orders");
+    //}, 2000);
   };
 
   if (loading) return <Loader />;
