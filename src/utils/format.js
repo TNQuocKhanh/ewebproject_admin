@@ -85,4 +85,15 @@ export const getPreviousNow = () => {
       : dateNow.getUTCDate();
 
   return `${year}-${month}-${date}`;
-}
+};
+
+export const formatStringDate = (stringDate) => {
+  const year = stringDate.slice(0, 4);
+  const month = stringDate.slice(4, 6);
+  const day = stringDate.slice(6, 8);
+  const hour = stringDate.slice(8, 10);
+  const min = stringDate.slice(10, 12);
+  const sec = stringDate.slice(12, 14);
+
+  return `${day}/${month}/${year} - ${hour}:${min}:${sec}`;
+};

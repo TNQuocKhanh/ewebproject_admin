@@ -134,7 +134,11 @@ export default function Header() {
   const getNewOrder = async () => {
     try {
       const res = await getListOrders();
-      const result = res.filter((item) => item.status === "NEW" || (item.status==="PAID" && item.paymentMethod === "VNPAY"));
+      const result = res.filter(
+        (item) =>
+          item.status === "NEW" ||
+        (item.status === "REFUND_PENDING")
+      );
       if (result.length > 0) {
         setNotifications(result.reverse());
         setTotal(result.length);
@@ -155,12 +159,10 @@ export default function Header() {
   };
 
   const handleLogout = async () => {
+    localStorage.removeItem("auth");
+    history.push("/login");
     try {
       const res = await logout();
-      if (res) {
-        localStorage.removeItem("auth");
-        history.push("/login");
-      }
     } catch (err) {
       console.log("[Logour] Error", err);
     }
@@ -169,8 +171,10 @@ export default function Header() {
   const getUserProfile = async () => {
     try {
       const res = await getProfile();
-      if (res) {
+      if (res.id) {
         setUserName(res.fullName);
+      } else {
+        console.log("==else");
       }
     } catch (err) {
       console.log("[Get profile] Error", err);

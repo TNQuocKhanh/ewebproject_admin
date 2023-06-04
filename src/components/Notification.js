@@ -89,7 +89,7 @@ const typesIcons = {
 };
 
 export default function Notification({ variant, ...props }) {
-  const { orderTime, id, receiver } = props;
+  const { orderTime, id, receiver, status } = props;
 
   const history = useHistory();
 
@@ -171,8 +171,17 @@ export default function Notification({ variant, ...props }) {
             variant={props.typographyVariant}
             size={variant !== "contained" && !props.typographyVariant && "md"}
           >
-            Đơn hàng của {<strong>{receiver}</strong>} đang chờ xác nhận
-            <br />
+            {status === "REFUND_PENDING" ? (
+              <div>
+                Đơn hàng của {<strong>{receiver}</strong>} đang{" "}
+                {<strong>yêu cầu hoàn tiền</strong>}
+              </div>
+            ) : (
+              <div>
+                Đơn hàng của {<strong>{receiver}</strong>} đang{" "}
+                {<strong>chờ xác nhận</strong>}
+              </div>
+            )}
             <Typography variant="caption">
               {formatDateTime(orderTime)}
             </Typography>

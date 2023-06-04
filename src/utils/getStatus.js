@@ -24,8 +24,10 @@ export const getStatus = (value) => {
       return { text: "Đang xử lý", color: "#f0ad4e" };
     case "SHIPPING":
       return { text: "Đang giao hàng", color: "#b5b1cd" };
-    case "RETURNED":
+    case "CANCELED":
       return { text: "Đã huỷ", color: "#d9534f" };
+    case "REFUND_PENDING":
+      return { text: "Đang chờ hoàn tiền", color: "#eaf6f9" };
     default:
       return { text: "Không xác định", color: "#d7d8da" };
   }

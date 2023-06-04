@@ -67,3 +67,42 @@ export const filteOrders = async (filter) => {
 
   return res.json();
 };
+
+export const getOrderRefund = async (id) => {
+  const auth  =storage.load('auth')
+  const token = auth.accessToken
+
+  const headers = new Headers();
+  headers.append("Authorization", `Bearer ${token}`);
+  headers.append("Content-Type", "application/json");
+
+  const res = await fetch(
+    `${API_URL}/order/refund/${id}`,
+    {
+      method: "GET",
+      headers,
+    }
+  );
+
+  return res.json();
+}
+
+export const updateOrderRefund = async (data) => {
+  const auth  =storage.load('auth')
+  const token = auth.accessToken
+
+  const headers = new Headers();
+  headers.append("Authorization", `Bearer ${token}`);
+  headers.append("Content-Type", "application/json");
+
+  const res = await fetch(
+    `${API_URL}/order/refund`,
+    {
+      method: "PUT",
+      headers,
+      body: JSON.stringify(data)
+    }
+  );
+
+  return res.json();
+}
