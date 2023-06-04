@@ -134,7 +134,9 @@ export default function Header() {
   const getNewOrder = async () => {
     try {
       const res = await getListOrders();
-      const result = res.filter((item) => item.status === "NEW" || (item.status==="PAID" && item.paymentMethod === "VNPAY"));
+      const result = res.filter(
+        (item) => item.status === "NEW" || item.status === "REFUND_PENDING"
+      );
       if (result.length > 0) {
         setNotifications(result.reverse());
         setTotal(result.length);
@@ -156,11 +158,9 @@ export default function Header() {
 
   const handleLogout = async () => {
     try {
-      const res = await logout();
-      if (res) {
-        localStorage.removeItem("auth");
-        history.push("/login");
-      }
+      await logout();
+      localStorage.removeItem("auth");
+      history.push("/login");
     } catch (err) {
       console.log("[Logour] Error", err);
     }
@@ -169,7 +169,10 @@ export default function Header() {
   const getUserProfile = async () => {
     try {
       const res = await getProfile();
-      if (res) {
+      if (res.status === 401) {
+        history.push("/login");
+      }
+      if (res.id) {
         setUserName(res.fullName);
       }
     } catch (err) {
