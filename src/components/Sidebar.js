@@ -15,6 +15,7 @@ import BookIcon from "@material-ui/icons/Book";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import EqualizerIcon from "@material-ui/icons/Equalizer";
 import BusinessIcon from "@material-ui/icons/Business";
+import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
 
 import { makeStyles } from "@material-ui/styles";
 import {
@@ -32,10 +33,11 @@ const adminRole = [
   { id: 2, label: "Danh mục", link: "/categories", icon: <CategoryIcon /> },
   { id: 3, label: "Nhà cung cấp", link: "/suppliers", icon: <BusinessIcon /> },
   { id: 4, label: "Sản phẩm", link: "/products", icon: <BookIcon /> },
-  { id: 5, label: "Khách hàng", link: "/customers", icon: <PersonIcon /> },
-  { id: 6, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
+  { id: 5, label: "Mã giảm giá", link: "/vouchers", icon: <ConfirmationNumberIcon /> },
+  { id: 6, label: "Khách hàng", link: "/customers", icon: <PersonIcon /> },
+  { id: 7, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
   {
-    id: 7,
+    id: 8,
     label: "Báo cáo",
     link: "/report",
     icon: <EqualizerIcon />,
@@ -51,7 +53,6 @@ const adminRole = [
 const saleRole = [
   { id: 0, label: "Dashboard", link: "/dashboard", icon: <HomeIcon /> },
   { id: 2, label: "Danh mục", link: "/categories", icon: <CategoryIcon /> },
-  { id: 3, label: "Nhà cung cấp", link: "/suppliers", icon: <BusinessIcon /> },
   { id: 4, label: "Sản phẩm", link: "/products", icon: <BookIcon /> },
   { id: 5, label: "Khách hàng", link: "/customers", icon: <PersonIcon /> },
   { id: 6, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
@@ -72,7 +73,6 @@ const saleRole = [
 const assistantRole = [
   { id: 0, label: "Dashboard", link: "/dashboard", icon: <HomeIcon /> },
   { id: 2, label: "Danh mục", link: "/categories", icon: <CategoryIcon /> },
-  { id: 3, label: "Nhà cung cấp", link: "/suppliers", icon: <BusinessIcon /> },
   { id: 4, label: "Sản phẩm", link: "/products", icon: <BookIcon /> },
   { id: 6, label: "Đơn hàng", link: "/orders", icon: <AddShoppingCartIcon /> },
   {

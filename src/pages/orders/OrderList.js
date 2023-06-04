@@ -126,10 +126,10 @@ const FilterForm = (props) => {
               >
                 <option value="-1">Tất cả</option>
                 <option value="NEW">Chờ xác nhận</option>
-                <option value="PAID">Đã thanh toán</option>
                 <option value="PROCESSING">Đang xử lý</option>
                 <option value="SHIPPING">Đang giao hàng</option>
                 <option value="DELIVERED">Đã giao hàng</option>
+                <option value="REFUND_PENDING">Đang chờ hoàn tiền</option>
                 <option value="RETURNED">Đã huỷ</option>
               </Select>
             </FormControl>

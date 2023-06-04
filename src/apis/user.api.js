@@ -112,6 +112,9 @@ export const getProfile = async () => {
     headers,
   });
 
+  if (res.status === 401) {
+    return res;
+  }
   return res.json();
 };
 

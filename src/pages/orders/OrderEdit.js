@@ -146,7 +146,7 @@ export const OrderEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await updateStatus(Number(id), { status });
+      await updateStatus(Number(id), { status, paymentStatus });
       toast.success("Cập nhật thành công");
     } catch (e) {
       console.log("[Update order] Error", e);

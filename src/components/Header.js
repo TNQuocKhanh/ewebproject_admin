@@ -135,9 +135,7 @@ export default function Header() {
     try {
       const res = await getListOrders();
       const result = res.filter(
-        (item) =>
-          item.status === "NEW" ||
-        (item.status === "REFUND_PENDING")
+        (item) => item.status === "NEW" || item.status === "REFUND_PENDING"
       );
       if (result.length > 0) {
         setNotifications(result.reverse());
@@ -159,10 +157,10 @@ export default function Header() {
   };
 
   const handleLogout = async () => {
-    localStorage.removeItem("auth");
-    history.push("/login");
     try {
-      const res = await logout();
+      await logout();
+      localStorage.removeItem("auth");
+      history.push("/login");
     } catch (err) {
       console.log("[Logour] Error", err);
     }
@@ -171,10 +169,11 @@ export default function Header() {
   const getUserProfile = async () => {
     try {
       const res = await getProfile();
+      if (res.status === 401) {
+        history.push("/login");
+      }
       if (res.id) {
         setUserName(res.fullName);
-      } else {
-        console.log("==else");
       }
     } catch (err) {
       console.log("[Get profile] Error", err);

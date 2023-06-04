@@ -12,6 +12,10 @@ export const getStatus = (value) => {
       return { text: "Hoạt động", color: "#eaf6f9" };
     case "false":
       return { text: "Không hoạt động", color: "#d7d8da" };
+    case true:
+      return { text: "Hoạt động", color: "#eaf6f9" };
+    case false:
+      return { text: "Không hoạt động", color: "#d7d8da" };
     case "NEW":
       return { text: "Chờ xác nhận", color: "#eaf6f9" };
     case "PAID":
