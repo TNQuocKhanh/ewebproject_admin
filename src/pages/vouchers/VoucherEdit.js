@@ -1,12 +1,4 @@
-import {
-  TextField,
-  Card,
-  Grid,
-  Typography,
-  FormControl,
-  InputLabel,
-  Select,
-} from "@material-ui/core";
+import { TextField, Card, Grid, Typography } from "@material-ui/core";
 import { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -56,7 +48,6 @@ export const VoucherEdit = () => {
     const data = {
       name,
       endDate,
-      enabled: enabled === "true" ? true : false,
     };
 
     try {
@@ -159,24 +150,6 @@ export const VoucherEdit = () => {
                 fullWidth
                 onChange={(e) => setOrderApply(e.target.value)}
               />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <FormControl fullWidth variant="outlined">
-                <InputLabel shrink htmlFor="outlined-age-native-simple">
-                  Trạng thái
-                </InputLabel>
-                <Select
-                  notched
-                  native
-                  value={enabled}
-                  onChange={(e) => setEnabled(e.target.value)}
-                  label="Trạng thái"
-                  InputLabelProps={{ shrink: true }}
-                >
-                  <option value={true}>Hoạt động</option>
-                  <option value={false}>Không hoạt động</option>
-                </Select>
-              </FormControl>
             </Grid>
           </Grid>
           <div style={{ margin: "20px 0" }}>

@@ -81,3 +81,20 @@ export const deleteVoucher = async (id) => {
 
   return res.json();
 };
+
+export const checkVoucher = async (data) => {
+  const auth = storage.load("auth");
+  const token = auth.accessToken;
+
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
+  headers.append("Authorization", `Bearer ${token}`);
+
+  const res = await fetch(`${API_URL}/voucher/check-number`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(data)
+  });
+
+  return res.json();
+}

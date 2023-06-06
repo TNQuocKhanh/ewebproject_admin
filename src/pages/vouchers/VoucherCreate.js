@@ -1,11 +1,19 @@
-import { TextField, Card, Grid, Typography } from "@material-ui/core";
+import { TextField, Card, Grid, Typography, Button } from "@material-ui/core";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
-import { createVoucher } from "../../apis";
+import { checkVoucher, createVoucher } from "../../apis";
 import { ButtonList, ButtonSave } from "../../components/Button";
 import { Loader } from "../../components/Loader";
 import { Toastify } from "../../components/Toastify";
+import {
+  Dialog,
+  DialogTitle,
+  Divider,
+  DialogContent,
+  DialogActions,
+} from "@material-ui/core";
+import LiveHelpIcon from "@material-ui/icons/LiveHelp";
 
 export const VoucherCreate = () => {
   const [name, setName] = useState("");
@@ -15,6 +23,9 @@ export const VoucherCreate = () => {
   const [orderMinimumToUse, setOrderMinimumToUse] = useState("");
   const [orderApply, setOrderApply] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [open, setOpen] = useState(false);
+  const [amountCustomer, setAmountCustomer] = useState(0);
 
   const history = useHistory();
 
@@ -42,6 +53,16 @@ export const VoucherCreate = () => {
     setLoading(false);
   };
 
+  const handleClickCheck = async () => {
+    try {
+      const res = await checkVoucher({ orderApply });
+      setAmountCustomer(res?.length);
+    } catch (err) {
+      console.log("[checkVoucher] error", err);
+    }
+    setOpen(true);
+  };
+
   if (loading) return <Loader />;
 
   return (
@@ -55,7 +76,23 @@ export const VoucherCreate = () => {
         }}
       >
         <Typography>Thêm mới</Typography>
-        <ButtonList resource="vouchers" />
+        <div>
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: "#556afe",
+              color: "#fff",
+              marginRight: "5px",
+              padding: "3px 9px",
+            }}
+            onClick={handleClickCheck}
+            disabled={!orderApply}
+          >
+            <LiveHelpIcon fontSize="small" />
+            &nbsp; Kiểm tra
+          </Button>
+          <ButtonList resource="vouchers" />
+        </div>
       </div>
       <Card style={{ padding: 10 }}>
         <form onSubmit={handleSubmit}>
@@ -136,6 +173,31 @@ export const VoucherCreate = () => {
           </div>
         </form>
       </Card>
+      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="md">
+        <DialogTitle>Số lượng khách hàng được áp dụng voucher</DialogTitle>
+        <Divider />
+        <DialogContent>
+          <Grid container spacing={2}>
+            <Grid item md={12} xs={12}>
+              <TextField
+                margin="dense"
+                label="Số lượng"
+                value={amountCustomer}
+                type="text"
+                fullWidth
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Toastify />
     </div>
   );
