@@ -16,6 +16,7 @@ export default function List({
   columnAction = true,
   isLock = false,
   isExport = true,
+  isDelete = false,
 }) {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
@@ -35,6 +36,7 @@ export default function List({
           columnAction={columnAction}
           isLock={isLock}
           isExport={isExport}
+          isDelete={isDelete}
         />
       ) : (
         <MobileList
@@ -48,6 +50,7 @@ export default function List({
           columnAction={columnAction}
           isLock={isLock}
           isExport={isExport}
+          isDelete={isDelete}
         />
       )}
     </>

@@ -17,14 +17,15 @@ import { makeStyles } from "@material-ui/styles";
 import { ButtonExport, IconButtonDetail, IconButtonEdit } from "./Button";
 import { HeaderAction } from "./HeaderAction";
 import LockIcon from "@material-ui/icons/Lock";
-import { blockCustomer, blockUser } from "../apis";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { blockCustomer, blockUser, deleteVoucher } from "../apis";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import { getStatus } from "../utils";
 import { ButtonCreate } from "./Button";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { toast } from "react-toastify";
 import { Toastify } from "./Toastify";
-import Divider from '@material-ui/core/Divider';
+import Divider from "@material-ui/core/Divider";
 
 const useStyles = makeStyles((theme) => ({
   tableOverflow: {
@@ -49,7 +50,8 @@ export const DefaultList = ({
   dataCsv,
   columnAction,
   isLock,
-  isExport
+  isExport,
+  isDelete,
 }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
@@ -60,6 +62,9 @@ export const DefaultList = ({
 
   const [openCustomer, setOpenCustomer] = useState(false);
   const [idCustomer, setIdCustomer] = useState();
+
+  const [openDelete, setOpenDelete] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -80,7 +85,21 @@ export const DefaultList = ({
     setIdCustomer(row);
   };
 
-  const handleClick =async (row) => {
+  const handleOpenDelete = (row) => {
+    setOpenDelete(true);
+    setDeleteId(row.id);
+  };
+
+  const handleDeleteVoucher = async (id) => {
+    try {
+      await deleteVoucher(id);
+    } catch (err) {
+      console.log("[deleteVoucher] error", err);
+    }
+    setOpenDelete(false);
+  };
+
+  const handleClick = async (row) => {
     try {
       if (row.status === "STATUS_ACTIVE") {
         await blockUser(row.id, { status: "STATUS_BLOCKED" });
@@ -119,7 +138,9 @@ export const DefaultList = ({
         actions={
           <div className={classes.actions}>
             {isCreate && <ButtonCreate resource={resource} />}
-            {isExport && <ButtonExport columns={columns} transformCsv={dataCsv} />}
+            {isExport && (
+              <ButtonExport columns={columns} transformCsv={dataCsv} />
+            )}
           </div>
         }
       />
@@ -130,8 +151,8 @@ export const DefaultList = ({
         bodyClass={classes.tableOverflow}
       >
         {filter && cloneElement(filter)}
-      <Divider />
-      {data && data.length > 0 && (
+        <Divider />
+        {data && data.length > 0 && (
           <Typography style={{ margin: "10px" }}>
             Tổng số bản ghi: {data.length || 0}
           </Typography>
@@ -151,7 +172,7 @@ export const DefaultList = ({
                       {column.label}
                     </TableCell>
                   ))}
-                  <TableCell>{columnAction && 'Thao tác'}</TableCell>
+                  <TableCell>{columnAction && "Thao tác"}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -190,6 +211,20 @@ export const DefaultList = ({
                             <>
                               <IconButtonEdit resource={resource} row={row} />
                               <IconButtonDetail resource={resource} row={row} />
+                            </>
+                          )}
+                          {isDelete && (
+                            <>
+                              <Tooltip title="Xoá">
+                                <IconButton
+                                  onClick={() => handleOpenDelete(row)}
+                                >
+                                  <DeleteIcon
+                                    fontSize="small"
+                                    color="primary"
+                                  />
+                                </IconButton>
+                              </Tooltip>
                             </>
                           )}
                           {isBlock && row?.roles[0]?.id !== 1 ? (
@@ -277,6 +312,12 @@ export const DefaultList = ({
           message={"Bạn có chắc chắn muốn khoá/mở khoá khách hàng này?"}
           handleClose={() => setOpenCustomer(false)}
           handleClick={() => handleBlockCustomer(idCustomer)}
+        />
+        <ConfirmDialog
+          open={openDelete}
+          message={"Bạn có chắc chắn muốn xoá mã giảm giá này?"}
+          handleClose={() => setOpenDelete(false)}
+          handleClick={() => handleDeleteVoucher(deleteId)}
         />
         <Toastify />
       </Widget>

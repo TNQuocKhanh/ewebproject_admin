@@ -97,3 +97,13 @@ export const formatStringDate = (stringDate) => {
 
   return `${day}/${month}/${year} - ${hour}:${min}:${sec}`;
 };
+
+export const formatDDMMYYYY = (value) => {
+  const dd = value.slice(8, 10);
+  const mm = value.slice(5, 7);
+  const yyyy = value.slice(0, 4);
+
+  const formattedToday = dd + "/" + mm + "/" + yyyy;
+  return formattedToday;
+};
+

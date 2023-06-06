@@ -63,6 +63,8 @@ export const OrderEdit = () => {
   const [loading, setLoading] = useState(false);
   const [orderDetail, setOrderDetail] = useState([]);
 
+  const [refresh, setRefresh] = useState(false);
+
   const [open, setOpen] = useState(false);
   const [refundData, setRefundData] = useState({});
   const [fullName, setFullName] = useState("");
@@ -110,6 +112,7 @@ export const OrderEdit = () => {
       const res = await updateOrderRefund(refundData);
       if (res.vnp_ResponseCode === "00") {
         toast.success("Hoàn tiền thành công");
+        setRefresh(true);
       } else {
         toast.info("Có lỗi xảy ra, vui lòng thử lại sau");
       }
@@ -117,6 +120,7 @@ export const OrderEdit = () => {
       console.log("[handleSubmitRefund] Error", err);
     }
     setOpen(false);
+    setRefresh(true);
   };
 
   const getUserProfile = async () => {
@@ -141,7 +145,7 @@ export const OrderEdit = () => {
     getOrderDetail();
     getUserProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id, refresh]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -185,7 +189,7 @@ export const OrderEdit = () => {
       >
         <Typography>Cập nhật</Typography>
         <div>
-          {paymentMethod === "VNPAY" && (
+          {paymentMethod === "VNPAY" && status === "REFUND_PENDING" && (
             <Button
               variant="contained"
               style={{

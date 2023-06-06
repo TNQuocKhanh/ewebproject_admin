@@ -8,6 +8,7 @@ import {
   Grid,
   Tabs,
   Tab,
+  IconButton,
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
@@ -17,13 +18,15 @@ import {
   getListCategories,
   getListSupplier,
   updateExtraImageProduct,
+  deleteImageProduct,
 } from "../../apis";
 import { ButtonCustom, ButtonList, ButtonSave } from "../../components/Button";
-import { Loader, TabPanel } from "../../components";
+import { ConfirmDialog, Loader, TabPanel } from "../../components";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import { Toastify } from "../../components";
 import { toast } from "react-toastify";
+import ClearIcon from "@material-ui/icons/Clear";
 
 const ProductForm = () => {
   const [name, setName] = useState("");
@@ -333,6 +336,8 @@ const ProductForm = () => {
 function PreviewMultipleImages({ extra, image, loading }) {
   const [images, setImages] = useState(extra);
   const [imageChoose, setImageChoose] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [idDelete, setIdDelete] = useState(null);
 
   const params = useParams();
   const { id } = params;
@@ -358,6 +363,27 @@ function PreviewMultipleImages({ extra, image, loading }) {
     }
   };
 
+  const handleClickDelete = (id) => {
+    setOpen(true);
+    setIdDelete(id);
+  };
+
+  const handleDeleteImage = async () => {
+    try {
+      await deleteImageProduct(idDelete);
+      toast.success('Xoá ảnh thành công')
+    } catch (err) {
+      console.log("[deleteImageProduct] error", err);
+      toast.warning('Có lỗi xảy ra, vui lòng thử lại sau')
+    }
+    setOpen(false);
+  };
+
+  const handleClose = () => {
+    setIdDelete(null);
+    setOpen(false);
+  };
+
   if (loading) return <Loader />;
   return (
     <>
@@ -371,9 +397,23 @@ function PreviewMultipleImages({ extra, image, loading }) {
                 width: "200px",
                 height: "200px",
                 marginRight: 5,
+                position: "relative",
               }}
             >
-              <img alt="img" src={url} width="200px" height="200px" />
+              <img
+                alt="img"
+                src={url.extraImage}
+                width="200px"
+                height="200px"
+              />
+              <span style={{ position: "absolute", top: "10px", right: 0 }}>
+                <IconButton
+                  title="Xoá"
+                  onClick={() => handleClickDelete(url.id)}
+                >
+                  <ClearIcon />
+                </IconButton>
+              </span>
             </div>
           );
         })}
@@ -416,6 +456,12 @@ function PreviewMultipleImages({ extra, image, loading }) {
           </>
         )}
       </div>
+      <ConfirmDialog
+        open={open}
+        message={"Bạn có chắc chắn muốn xoá ảnh này?"}
+        handleClose={handleClose}
+        handleClick={handleDeleteImage}
+      />
       <Toastify />
     </>
   );
@@ -440,7 +486,7 @@ export const ProductEdit = () => {
     try {
       const res = await getProductById(Number(id));
       setMainImage(res.mainImage);
-      setExtraImage(res.productImages.map((it) => it.extraImage));
+      setExtraImage(res.productImages);
     } catch (e) {
       console.log("===Err", e);
     }

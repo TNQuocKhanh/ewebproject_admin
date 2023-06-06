@@ -6,10 +6,11 @@ import { ButtonCreate, IconButtonDetail, IconButtonEdit } from "./Button";
 import { HeaderAction } from "./HeaderAction";
 import _ from "lodash";
 import LockIcon from "@material-ui/icons/Lock";
-import { blockUser, blockCustomer } from "../apis";
+import { blockUser, blockCustomer, deleteVoucher } from "../apis";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import { getStatus } from "../utils";
 import { ConfirmDialog } from "./ConfirmDialog";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles((theme) => ({
   tableOverflow: {
@@ -33,7 +34,8 @@ export const MobileList = ({
   isBlock,
   columnAction,
   isLock,
-  isExport
+  isExport,
+  isDelete,
 }) => {
   const classes = useStyles();
 
@@ -42,6 +44,23 @@ export const MobileList = ({
 
   const [openCustomer, setOpenCustomer] = useState(false);
   const [idCustomer, setIdCustomer] = useState();
+
+  const [openDelete, setOpenDelete] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+
+  const handleOpenDelete = (row) => {
+    setOpenDelete(true);
+    setDeleteId(row.id);
+  };
+
+  const handleDeleteVoucher = async (id) => {
+    try {
+      await deleteVoucher(id);
+    } catch (err) {
+      console.log("[deleteVoucher] error", err);
+    }
+    setOpenDelete(false);
+  };
 
   const handleClick = (row) => {
     try {
@@ -55,7 +74,7 @@ export const MobileList = ({
     }
     setOpen(false);
   };
-  
+
   const handleBlockCustomer = async (row) => {
     try {
       if (row.status !== "STATUS_BLOCKED") {
@@ -73,7 +92,7 @@ export const MobileList = ({
     setOpen(true);
     setIdBlock(row);
   };
-  
+
   const handleOpenCustomer = (row) => {
     setOpenCustomer(true);
     setIdCustomer(row);
@@ -119,6 +138,13 @@ export const MobileList = ({
                     <IconButtonDetail resource={resource} row={it} />
                   </>
                 )}
+                {isDelete && (
+                  <>
+                    <IconButton onClick={() => handleOpenDelete(it)}>
+                      <DeleteIcon fontSize="small" color="primary" />
+                    </IconButton>
+                  </>
+                )}
                 {isBlock && it?.roles[0]?.id !== 1 ? (
                   <>
                     {it.status === "STATUS_BLOCKED" ? (
@@ -133,31 +159,21 @@ export const MobileList = ({
                   </>
                 ) : (
                   ""
-                  )}
+                )}
 
-                          {isLock && (
-                            <>
-                              {it.status === "STATUS_BLOCKED" ? (
-                                  <IconButton
-                                    onClick={() => handleOpenCustomer(it)}
-                                  >
-                                    <LockOpenIcon
-                                      fontSize="small"
-                                      color="primary"
-                                    />
-                                  </IconButton>
-                              ) : (
-                                  <IconButton
-                                    onClick={() => handleOpenCustomer(it)}
-                                  >
-                                    <LockIcon
-                                      fontSize="small"
-                                      color="primary"
-                                    />
-                                  </IconButton>
-                              )}
-                            </>
-                          )}
+                {isLock && (
+                  <>
+                    {it.status === "STATUS_BLOCKED" ? (
+                      <IconButton onClick={() => handleOpenCustomer(it)}>
+                        <LockOpenIcon fontSize="small" color="primary" />
+                      </IconButton>
+                    ) : (
+                      <IconButton onClick={() => handleOpenCustomer(it)}>
+                        <LockIcon fontSize="small" color="primary" />
+                      </IconButton>
+                    )}
+                  </>
+                )}
               </Grid>
             </Card>
           ))
@@ -175,6 +191,12 @@ export const MobileList = ({
           message={"Bạn có chắc chắn muốn khoá/mở khoá khách hàng này?"}
           handleClose={() => setOpenCustomer(false)}
           handleClick={() => handleBlockCustomer(idCustomer)}
+        />
+        <ConfirmDialog
+          open={openDelete}
+          message={"Bạn có chắc chắn muốn xoá mã giảm giá này?"}
+          handleClose={() => setOpenDelete(false)}
+          handleClick={() => handleDeleteVoucher(deleteId)}
         />
       </Widget>
     </>

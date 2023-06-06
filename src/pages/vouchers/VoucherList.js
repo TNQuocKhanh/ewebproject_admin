@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getListVouchers } from "../../apis";
-import { formatDateTime, formatPrice } from "../../utils";
+import { formatDateTime, formatDDMMYYYY, formatPrice } from "../../utils";
 import List from "../../components/List";
 import { Loader } from "../../components/Loader";
 import { Grid } from "@material-ui/core";
@@ -32,7 +32,7 @@ export const VoucherList = () => {
       const transform = res.map((it) => ({
         ...it,
         startDate: formatDateTime(it.startDate, false),
-        endDate: formatDateTime(it.endDate, false),
+        endDate: formatDDMMYYYY(it.endDate),
         voucherDiscount: formatPrice(it.voucherDiscount),
         orderMinimumToUse: formatPrice(it.orderMinimumToUse),
       }));
@@ -59,6 +59,7 @@ export const VoucherList = () => {
             data={data}
             title="Danh sách voucher"
             isExport={false}
+            isDelete={true}
           />
         </Grid>
       </Grid>

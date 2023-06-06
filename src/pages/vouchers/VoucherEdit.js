@@ -1,4 +1,12 @@
-import { TextField, Card, Grid, Typography } from "@material-ui/core";
+import {
+  TextField,
+  Card,
+  Grid,
+  Typography,
+  FormControl,
+  InputLabel,
+  Select,
+} from "@material-ui/core";
 import { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -14,6 +22,7 @@ export const VoucherEdit = () => {
   const [voucherDiscount, setVoucherDiscount] = useState("");
   const [orderMinimumToUse, setOrderMinimumToUse] = useState("");
   const [orderApply, setOrderApply] = useState("");
+  const [enabled, setEnabled] = useState("");
   const [loading, setLoading] = useState(false);
 
   const history = useHistory();
@@ -25,10 +34,11 @@ export const VoucherEdit = () => {
       const res = await getVoucherById(Number(params.id));
       setName(res.name);
       setStartDate(res.startDate.slice(0, 10));
-      setEndDate(res.endDate.slice(0,10));
+      setEndDate(res.endDate.slice(0, 10));
       setVoucherDiscount(res.voucherDiscount);
       setOrderMinimumToUse(res.orderMinimumToUse);
       setOrderApply(res.orderApply);
+      setEnabled(res.enabled);
     } catch (e) {
       console.log("[Get voucher detail] Error", e);
     }
@@ -45,12 +55,10 @@ export const VoucherEdit = () => {
     e.preventDefault();
     const data = {
       name,
-      startDate,
       endDate,
-      voucherDiscount,
-      orderMinimumToUse,
-      orderApply,
+      enabled: enabled === "true" ? true : false,
     };
+
     try {
       await updateVoucher(params.id, data);
       history.push("/vouchers");
@@ -99,6 +107,7 @@ export const VoucherEdit = () => {
                 value={voucherDiscount}
                 fullWidth
                 onChange={(e) => setVoucherDiscount(e.target.value)}
+                disabled
               />
             </Grid>
             <Grid item md={6} xs={12}>
@@ -108,6 +117,7 @@ export const VoucherEdit = () => {
                 required
                 label="Từ ngày"
                 variant="outlined"
+                disabled
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
                 InputLabelProps={{ shrink: true }}
@@ -121,6 +131,7 @@ export const VoucherEdit = () => {
                 label="Đến ngày"
                 variant="outlined"
                 value={endDate}
+                inputProps={{ min: startDate }}
                 onChange={(e) => setEndDate(e.target.value)}
                 InputLabelProps={{ shrink: true }}
               />
@@ -131,6 +142,7 @@ export const VoucherEdit = () => {
                 label="Số tiền đơn hàng tối thiểu"
                 variant="outlined"
                 required
+                disabled
                 value={orderMinimumToUse}
                 fullWidth
                 onChange={(e) => setOrderMinimumToUse(e.target.value)}
@@ -142,10 +154,29 @@ export const VoucherEdit = () => {
                 label="Giá trị đơn hàng đã mua được áp dụng"
                 variant="outlined"
                 required
+                disabled
                 value={orderApply}
                 fullWidth
                 onChange={(e) => setOrderApply(e.target.value)}
               />
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <FormControl fullWidth variant="outlined">
+                <InputLabel shrink htmlFor="outlined-age-native-simple">
+                  Trạng thái
+                </InputLabel>
+                <Select
+                  notched
+                  native
+                  value={enabled}
+                  onChange={(e) => setEnabled(e.target.value)}
+                  label="Trạng thái"
+                  InputLabelProps={{ shrink: true }}
+                >
+                  <option value={true}>Hoạt động</option>
+                  <option value={false}>Không hoạt động</option>
+                </Select>
+              </FormControl>
             </Grid>
           </Grid>
           <div style={{ margin: "20px 0" }}>

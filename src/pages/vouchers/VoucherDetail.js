@@ -15,6 +15,7 @@ const headers = [
   { id: "startDate", label: "Ngày bắt đầu" },
   { id: "endDate", label: "Ngày kết thúc" },
   { id: "enabled", label: "Trạng thái" },
+  { id: "orderApply", label: "Giá trị đơn hàng đã mua được áp dụng" },
 ];
 
 export const VoucherDetail = () => {
@@ -37,6 +38,7 @@ export const VoucherDetail = () => {
           orderMinimumToUse: formatPrice(res.orderMinimumToUse),
           startDate: formatDateTime(res.startDate, false),
           endDate: formatDateTime(res.endDate, false),
+          orderApply: formatPrice(res.orderApply),
         };
         setData(transform);
       }

@@ -110,3 +110,18 @@ export const getListExtraProducts = async () => {
 
   return res.json();
 };
+
+export const deleteImageProduct = async (id) => {
+  const auth = storage.load("auth");
+  const token = auth.accessToken;
+
+  const headers = new Headers();
+  headers.append("Authorization", `Bearer ${token}`);
+
+  const res = await fetch(`${API_URL}/product-image/delete/${id}`, {
+    method: "PUT",
+    headers,
+  });
+
+  return res.json();
+}

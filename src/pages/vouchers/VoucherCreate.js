@@ -18,6 +18,9 @@ export const VoucherCreate = () => {
 
   const history = useHistory();
 
+  const now = new Date();
+  const today = now.toISOString().split("T")[0];
+
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
@@ -88,6 +91,7 @@ export const VoucherCreate = () => {
                 variant="outlined"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
+                inputProps={{ min: today }}
                 InputLabelProps={{ shrink: true }}
               />
             </Grid>
@@ -99,6 +103,7 @@ export const VoucherCreate = () => {
                 label="Đến ngày"
                 variant="outlined"
                 value={endDate}
+                inputProps={{ min: startDate }}
                 onChange={(e) => setEndDate(e.target.value)}
                 InputLabelProps={{ shrink: true }}
               />

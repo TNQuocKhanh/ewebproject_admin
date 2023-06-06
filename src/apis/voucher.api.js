@@ -57,10 +57,26 @@ export const updateVoucher = async (id, data) => {
   headers.append("Content-Type", "application/json");
   headers.append("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${API_URL}/voucher/${id}`, {
+  const res = await fetch(`${API_URL}/voucher/update/${id}`, {
     method: "PUT",
     headers,
     body: JSON.stringify(data),
+  });
+
+  return res.json();
+};
+
+export const deleteVoucher = async (id) => {
+  const auth = storage.load("auth");
+  const token = auth.accessToken;
+
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
+  headers.append("Authorization", `Bearer ${token}`);
+
+  const res = await fetch(`${API_URL}/voucher/delete/${id}`, {
+    method: "PUT",
+    headers,
   });
 
   return res.json();
